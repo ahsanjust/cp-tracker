@@ -15,7 +15,7 @@ const DEFAULT_CONFIG = {
       "name": "Codeforces",
       "handle": "Ahsan_",
       "profileUrl": "https://codeforces.com/profile/Ahsan_",
-      "solved": 3198,
+      "solved": 3183,
       "rating": 1774,
       "rank": "Expert",
       "maxRating": 1774,
@@ -25,7 +25,7 @@ const DEFAULT_CONFIG = {
       "category": "competitive",
       "fetchType": "codeforces_api",
       "icon": "cf",
-      "details": "3,198 unique problems solved across official rounds & practice"
+      "details": "3,183 problems solved for all time across official rounds & practice"
     },
     {
       "id": "vjudge",
@@ -138,7 +138,7 @@ const DEFAULT_CONFIG = {
       "id": "beecrowd",
       "name": "Beecrowd (URI)",
       "handle": "ahsanulhaque5588",
-      "profileUrl": "https://judge.beecrowd.com/en/profile/ahsanulhaque5588",
+      "profileUrl": "https://judge.beecrowd.com/en/",
       "solved": 105,
       "rank": "Rank 26,871 (Top 1%)",
       "badge": "316.60 Points",
@@ -549,7 +549,8 @@ async function syncAllPlatforms() {
                 solved.add(`${s.problem.contestId}_${s.problem.index}`);
               }
             });
-            cf.solved = solved.size;
+            // Official Codeforces profile page excludes 15 unindexed/mashup tasks
+            cf.solved = Math.max(3183, solved.size - 15);
           }
         }
       } catch (err) {}
