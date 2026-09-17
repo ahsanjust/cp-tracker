@@ -25,9 +25,6 @@ const btnCancelSettings = document.getElementById('btn-cancel-settings');
 const btnSaveSettings = document.getElementById('btn-save-settings');
 const settingsModal = document.getElementById('settings-modal');
 const settingsFormContainer = document.getElementById('settings-form-container');
-const btnAvatarPreview = document.getElementById('btn-avatar-preview');
-const btnCloseAvatar = document.getElementById('btn-close-avatar');
-const avatarModal = document.getElementById('avatar-modal');
 const toastEl = document.getElementById('toast-message');
 const markdownBadgeSnippet = document.getElementById('markdown-badge-snippet');
 
@@ -87,10 +84,12 @@ function renderHero() {
     subText.textContent = `Across ${state.platforms.length} Online Judges`;
   }
 
-  // Update shareable badge code
-  const roundedK = Math.floor(total / 100) * 100;
-  const badgeUrl = `https://img.shields.io/badge/CP_Problems_Solved-${roundedK}%2B-blue?style=for-the-badge&logo=codeforces&logoColor=white`;
-  markdownBadgeSnippet.textContent = `![Problems Solved](${badgeUrl})`;
+  // Update shareable badge code if element exists
+  if (markdownBadgeSnippet) {
+    const roundedK = Math.floor(total / 100) * 100;
+    const badgeUrl = `https://img.shields.io/badge/CP_Problems_Solved-${roundedK}%2B-blue?style=for-the-badge&logo=codeforces&logoColor=white`;
+    markdownBadgeSnippet.textContent = `![Problems Solved](${badgeUrl})`;
+  }
 }
 
 // Get SVG or Initials for Platform
@@ -506,12 +505,8 @@ async function init() {
   btnCancelSettings.addEventListener('click', () => settingsModal.classList.remove('active'));
   btnSaveSettings.addEventListener('click', saveSettings);
 
-  btnAvatarPreview.addEventListener('click', () => avatarModal.classList.add('active'));
-  btnCloseAvatar.addEventListener('click', () => avatarModal.classList.remove('active'));
-
   window.addEventListener('click', (e) => {
     if (e.target === settingsModal) settingsModal.classList.remove('active');
-    if (e.target === avatarModal) avatarModal.classList.remove('active');
   });
 
   // Initial Render
