@@ -223,7 +223,7 @@
       "category": "competitive",
       "fetchType": "seriousoj_scraper",
       "icon": "soj",
-      "details": "Rating: 650 Expert • 272 Submissions • 89 Accepted • Band 500-700"
+      "details": "Rating: 650 Expert \u2022 272 Submissions \u2022 89 Accepted \u2022 Band 500-700"
     },
     {
       "id": "eolymp",
@@ -237,7 +237,7 @@
       "category": "practice",
       "fetchType": "eolymp_scraper",
       "icon": "eo",
-      "details": "European online olympiad platform • 9 Submissions • 3 Achievements"
+      "details": "European online olympiad platform \u2022 9 Submissions \u2022 3 Achievements"
     },
     {
       "id": "tlx",
