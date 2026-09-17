@@ -14,10 +14,10 @@
       "handle": "Ahsan_",
       "profileUrl": "https://codeforces.com/profile/Ahsan_",
       "solved": 3183,
-      "rating": 1774,
-      "rank": "Expert",
+      "rating": 1477,
+      "rank": "Specialist",
       "maxRating": 1774,
-      "badge": "Expert (1774)",
+      "badge": "Specialist (1477)",
       "color": "#3B82F6",
       "accentColor": "#60A5FA",
       "category": "competitive",
@@ -225,5 +225,6 @@
       "icon": "soj",
       "details": "Rating: 650 Expert \u2022 272 Submissions \u2022 89 Accepted \u2022 Band 500-700"
     }
-  ]
+  ],
+  "lastUpdated": "2026-09-17T20:23:47.745649+00:00"
 }
