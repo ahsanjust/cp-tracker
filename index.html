@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Competitive Programming Solved Hub — Ahsanul Haque</title>
+  <meta name="description" content="Dynamic problem-solving aggregator and dashboard tracking 5,500+ competitive programming problems solved by Ahsanul Haque across 13 online judges.">
+  <meta name="author" content="Ahsanul Haque">
+  
+  <!-- SEO & Social Sharing (LinkedIn, Twitter, Discord) -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ahsanjust.github.io/cp-tracker/">
+  <meta property="og:title" content="Ahsanul Haque — Competitive Programming Solved Hub (5,500+ Solved)">
+  <meta property="og:description" content="Explore live problem-solving statistics for Ahsanul Haque across Codeforces (Expert 1774), LeetCode (Guardian 2142), CodeChef (4★ 1900), AtCoder, VJudge, Toph, CSES and 13 online judges.">
+  <meta property="og:image" content="https://ahsanjust.github.io/cp-tracker/assets/og_preview.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Ahsanul Haque — Competitive Programming Solved Hub">
+  <meta name="twitter:description" content="5,500+ Problems Solved across 13 Online Judges | LeetCode Guardian | Codeforces Expert">
+  <meta name="twitter:image" content="https://ahsanjust.github.io/cp-tracker/assets/og_preview.png">
+  <link rel="icon" type="image/png" href="assets/avatar.png">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700;800&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- Navbar -->
+    <header class="navbar" id="main-navbar">
+      <div class="profile-brand">
+        <div class="avatar-wrapper">
+          <img src="assets/avatar.png" alt="Ahsanul Haque" class="avatar-img" id="user-avatar" onerror="this.src='https://via.placeholder.com/100'">
+          <span class="online-dot" title="Live Synced"></span>
+        </div>
+        <div class="brand-details">
+          <h1 id="user-display-name">Ahsanul Haque</h1>
+          <p class="brand-tagline" id="user-headline">LeetCode Guardian (2142) • Codeforces Expert (1774) • 2x ICPC Regionalist</p>
+        </div>
+      </div>
+      
+      <div class="nav-actions">
+        <button class="btn" id="btn-avatar-preview" title="View LinkedIn Profile Picture Upgrade">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          Avatar Preview
+        </button>
+        <button class="btn" id="btn-open-settings" title="Manage Handles and Manual Counts">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          Settings
+        </button>
+        <button class="btn btn-primary btn-sync" id="btn-sync-all" title="Fetch live stats from APIs">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="sync-spinner-icon"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+          <span id="sync-btn-text">Sync Live</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-banner" id="hero-section">
+      <div class="hero-top-row">
+        <div class="hero-meta">
+          <div class="badge-pill">
+            <span style="width: 8px; height: 8px; border-radius: 50%; background: #38bdf8; display: inline-block;"></span>
+            Competitive Programming Live Portfolio
+          </div>
+          <h2 class="hero-title">
+            Tracking <span class="gradient-text" id="hero-highlight-text">5,500+ Solved Tasks</span> Across All Judges
+          </h2>
+          <p class="hero-desc">
+            Aggregated in real-time across Codeforces, LeetCode, CodeChef, AtCoder, VJudge, Toph, CSES, LightOJ, SPOJ, HackerRank, Beecrowd, HackerEarth & Library Checker.
+          </p>
+        </div>
+
+        <!-- Grand Counter Box -->
+        <div class="counter-box" id="grand-counter-box">
+          <div class="counter-label">Total Problems Solved</div>
+          <div class="counter-val" id="total-solved-counter">0</div>
+          <div class="counter-sub" id="counter-sub-text">Across 13 Online Judges</div>
+        </div>
+      </div>
+
+      <!-- Highlights Ticker -->
+      <div class="highlights-ticker" id="highlights-container">
+        <div class="ticker-item">
+          🏆 <strong>ICPC Dhaka Regional:</strong> 34th (2025) & 63rd (2024)
+        </div>
+        <div class="ticker-item">
+          🥇 <strong>JUST IDPC:</strong> Champion (1st Place)
+        </div>
+        <div class="ticker-item">
+          🥈 <strong>NWU IUPC 2025:</strong> 1st Runner-Up
+        </div>
+        <div class="ticker-item">
+          ⚡ <strong>LeetCode Guardian:</strong> 2142 (Top 1.24%)
+        </div>
+        <div class="ticker-item">
+          🎯 <strong>Codeforces Expert:</strong> 1774 Max Rating
+        </div>
+        <div class="ticker-item">
+          🇧🇩 <strong>Toph:</strong> Rank #39 National
+        </div>
+      </div>
+    </section>
+
+    <!-- Controls Bar -->
+    <div class="controls-bar" id="controls-bar">
+      <div class="filter-pills" id="filter-pills-group">
+        <button class="filter-pill active" data-filter="all" id="filter-all">All Judges (13)</button>
+        <button class="filter-pill" data-filter="competitive" id="filter-competitive">Contests & Speed</button>
+        <button class="filter-pill" data-filter="practice" id="filter-practice">Interview & Prep</button>
+        <button class="filter-pill" data-filter="national" id="filter-national">National & Archives</button>
+      </div>
+
+      <div class="control-switches">
+        <div class="toggle-wrapper" title="Toggle between raw sum of all solves or deduplicated count excluding VJudge virtual solves">
+          <span>Deduplicate VJudge Solves</span>
+          <label class="switch" for="toggle-dedup">
+            <input type="checkbox" id="toggle-dedup">
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Platform Cards Grid -->
+    <main class="platform-grid" id="platform-grid-container" aria-label="Online Judge Cards">
+      <!-- Injected by JavaScript -->
+    </main>
+
+    <!-- Analytics Section -->
+    <section class="analytics-section" id="analytics-section">
+      <div class="analytics-card" id="card-platform-chart">
+        <div class="analytics-header">
+          <h3>Problems Distribution by Platform</h3>
+          <span class="badge-pill" style="margin-bottom:0">Live Breakdown</span>
+        </div>
+        <div class="chart-container">
+          <canvas id="platformDistributionChart"></canvas>
+        </div>
+      </div>
+
+      <div class="analytics-card" id="card-tier-chart">
+        <div class="analytics-header">
+          <h3>LeetCode & Codeforces Skill Tiers</h3>
+          <span class="badge-pill" style="margin-bottom:0">Guardian & Expert</span>
+        </div>
+        <div class="chart-container">
+          <canvas id="difficultyBreakdownChart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- Shareable Badges & Embed Section -->
+    <section class="share-section" id="share-section">
+      <h3>GitHub Profile & Portfolio Embeds</h3>
+      <p class="share-desc">Easily showcase your verified total solved count on your GitHub README or personal portfolio website.</p>
+      
+      <div class="form-group" style="margin-bottom: 12px;">
+        <label>Markdown Badge for README.md:</label>
+        <div class="code-snippet-box">
+          <code id="markdown-badge-snippet">![Problems Solved](https://img.shields.io/badge/CP_Problems_Solved-5500%2B-blue?style=for-the-badge&logo=codeforces&logoColor=white)</code>
+          <button class="btn" style="padding: 4px 12px; font-size: 0.78rem;" onclick="navigator.clipboard.writeText(document.getElementById('markdown-badge-snippet').innerText); showToast('Copied Markdown Badge!');">Copy</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Live JSON Data Endpoint:</label>
+        <div class="code-snippet-box">
+          <code>http://localhost:3333/api/config</code>
+          <button class="btn" style="padding: 4px 12px; font-size: 0.78rem;" onclick="navigator.clipboard.writeText('http://localhost:3333/api/config'); showToast('Copied API URL!');">Copy</button>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Settings Modal -->
+  <div class="modal-overlay" id="settings-modal" role="dialog" aria-modal="true" aria-labelledby="settings-modal-title">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="settings-modal-title">Edit Handles & Solved Counts</h3>
+        <button class="icon-btn" id="btn-close-settings" aria-label="Close Settings">✕</button>
+      </div>
+      <div id="settings-form-container">
+        <!-- Injected by JavaScript -->
+      </div>
+      <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
+        <button class="btn" id="btn-cancel-settings">Cancel</button>
+        <button class="btn btn-primary" id="btn-save-settings">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Avatar Preview Modal -->
+  <div class="modal-overlay" id="avatar-modal" role="dialog" aria-modal="true" aria-labelledby="avatar-modal-title">
+    <div class="modal-box" style="max-width: 800px;">
+      <div class="modal-header">
+        <h3 id="avatar-modal-title">LinkedIn Profile Picture Upgrade Comparison</h3>
+        <button class="icon-btn" id="btn-close-avatar" aria-label="Close Avatar Modal">✕</button>
+      </div>
+      <p style="color:var(--text-muted); font-size:0.88rem; margin-bottom:18px;">
+        Compare your new realistic backgrounds (preserving 100% facial features and blazer) inside the authentic LinkedIn circular avatar frame.
+      </p>
+      
+      <div style="text-align: center; margin-bottom: 20px;">
+        <img src="linkedin_avatar_circle_comparison.png" alt="LinkedIn Avatar Comparison" style="max-width: 100%; border-radius: 12px; border: 1px solid var(--border-subtle);" onerror="this.src='../linkedin_avatar_circle_comparison.png'">
+      </div>
+
+      <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+        <a href="../linkedin_profile_office.png" download="Ahsanul_Haque_Office.png" class="btn btn-primary">
+          Download Option 1 (Office Bokeh)
+        </a>
+        <a href="../linkedin_profile_studio.png" download="Ahsanul_Haque_Studio.png" class="btn">
+          Download Option 2 (Studio)
+        </a>
+        <a href="../linkedin_profile_minimal.png" download="Ahsanul_Haque_Minimal.png" class="btn">
+          Download Option 3 (Minimal)
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast-msg" id="toast-message" role="status" aria-live="polite">Settings updated successfully</div>
+
+  <!-- Main Logic -->
+  <script src="app.js"></script>
+</body>
+</html>
