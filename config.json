@@ -224,34 +224,6 @@
       "fetchType": "seriousoj_scraper",
       "icon": "soj",
       "details": "Rating: 650 Expert \u2022 272 Submissions \u2022 89 Accepted \u2022 Band 500-700"
-    },
-    {
-      "id": "eolymp",
-      "name": "Eolymp",
-      "handle": "user133660",
-      "profileUrl": "https://eolymp.com/users/user133660",
-      "solved": 4,
-      "badge": "3 Achievements",
-      "color": "#14B8A6",
-      "accentColor": "#2DD4BF",
-      "category": "practice",
-      "fetchType": "eolymp_scraper",
-      "icon": "eo",
-      "details": "European online olympiad platform \u2022 9 Submissions \u2022 3 Achievements"
-    },
-    {
-      "id": "tlx",
-      "name": "TLX TOKI",
-      "handle": "AhSaN",
-      "profileUrl": "https://tlx.toki.id/profiles/AhSaN",
-      "solved": 1,
-      "badge": "100 Pts Score",
-      "color": "#0284C7",
-      "accentColor": "#38BDF8",
-      "category": "competitive",
-      "fetchType": "tlx_cached",
-      "icon": "tlx",
-      "details": "Indonesian National Olympiad training & contest platform"
     }
   ]
 }

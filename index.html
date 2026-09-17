@@ -58,11 +58,7 @@
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
           LinkedIn
         </a>
-        <button class="btn" id="btn-open-settings" title="Manage Handles & Settings">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-          Settings
-        </button>
-        <button class="btn btn-primary btn-sync" id="btn-sync-all" title="Fetch live stats from APIs">
+        <button class="btn btn-primary btn-sync" id="btn-sync-all" title="Refresh statistics in real-time">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="sync-spinner-icon"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
           <span id="sync-btn-text">Sync Live</span>
         </button>
@@ -78,10 +74,10 @@
             Competitive Programming Live Portfolio
           </div>
           <h2 class="hero-title">
-            Tracking <span class="gradient-text" id="hero-highlight-text">5,500+ Solved Tasks</span> Across All Judges
+            Tracking <span class="gradient-text" id="hero-highlight-text">5,630+ Solved Tasks</span> Across All Judges
           </h2>
           <p class="hero-desc">
-            Aggregated in real-time across Codeforces, LeetCode, CodeChef, AtCoder, VJudge, Toph, CSES, LightOJ, Serious OJ, SPOJ, Beecrowd, HackerRank, HackerEarth, Library Checker, Eolymp & TLX.
+            Aggregated in real-time across Codeforces, LeetCode, CodeChef, AtCoder, VJudge, Toph, CSES, LightOJ, Serious OJ, SPOJ, Beecrowd, HackerRank, HackerEarth, and Library Checker.
           </p>
         </div>
 
@@ -89,7 +85,7 @@
         <div class="counter-box" id="grand-counter-box">
           <div class="counter-label">Total Problems Solved</div>
           <div class="counter-val" id="total-solved-counter">0</div>
-          <div class="counter-sub" id="counter-sub-text">Across 16 Online Judges</div>
+          <div class="counter-sub" id="counter-sub-text">Across 14 Online Judges</div>
         </div>
       </div>
 
@@ -114,12 +110,31 @@
           🇧🇩 <strong>Toph:</strong> Rank #39 National
         </div>
       </div>
+
+      <div class="hero-stats">
+        <div class="hero-stat-card">
+          <div class="hero-stat-val text-accent-blue">Expert (1774)</div>
+          <div class="hero-stat-lbl">Codeforces Peak</div>
+        </div>
+        <div class="hero-stat-card">
+          <div class="hero-stat-val text-accent-amber">Guardian (2142)</div>
+          <div class="hero-stat-lbl">LeetCode Top 1.2%</div>
+        </div>
+        <div class="hero-stat-card">
+          <div class="hero-stat-val text-accent-pink">Rank 34th</div>
+          <div class="hero-stat-lbl">ICPC Regionalist</div>
+        </div>
+        <div class="hero-stat-card">
+          <div class="hero-stat-val text-accent-emerald">Champion</div>
+          <div class="hero-stat-lbl">JUST IDPC 2024</div>
+        </div>
+      </div>
     </section>
 
     <!-- Controls Bar -->
-    <div class="controls-bar" id="controls-bar">
-      <div class="filter-pills" id="filter-pills-group">
-        <button class="filter-pill active" data-filter="all" id="filter-all">All Judges (16)</button>
+    <section class="controls-bar" aria-label="Filters and options">
+      <div class="filter-pills" role="tablist">
+        <button class="filter-pill active" data-filter="all" id="filter-all">All Judges (14)</button>
         <button class="filter-pill" data-filter="competitive" id="filter-competitive">Contests & Speed</button>
         <button class="filter-pill" data-filter="practice" id="filter-practice">Interview & Prep</button>
         <button class="filter-pill" data-filter="national" id="filter-national">National & Archives</button>
@@ -134,7 +149,7 @@
           </label>
         </div>
       </div>
-    </div>
+    </section>
 
     <!-- Platform Cards Grid -->
     <main class="platform-grid" id="platform-grid-container" aria-label="Online Judge Cards">
@@ -179,25 +194,8 @@
 
   </div>
 
-  <!-- Settings Modal -->
-  <div class="modal-overlay" id="settings-modal" role="dialog" aria-modal="true" aria-labelledby="settings-modal-title">
-    <div class="modal-box">
-      <div class="modal-header">
-        <h3 id="settings-modal-title">Edit Handles & Solved Counts</h3>
-        <button class="icon-btn" id="btn-close-settings" aria-label="Close Settings">✕</button>
-      </div>
-      <div id="settings-form-container">
-        <!-- Injected by JavaScript -->
-      </div>
-      <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
-        <button class="btn" id="btn-cancel-settings">Cancel</button>
-        <button class="btn btn-primary" id="btn-save-settings">Save Changes</button>
-      </div>
-    </div>
-  </div>
-
   <!-- Toast Notification -->
-  <div class="toast-msg" id="toast-message" role="status" aria-live="polite">Settings updated successfully</div>
+  <div class="toast-msg" id="toast-message" role="status" aria-live="polite">Statistics updated</div>
 
   <!-- Main Logic -->
   <script src="app.js"></script>
