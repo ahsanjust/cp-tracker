@@ -1,0 +1,76 @@
+name: Deploy & Daily Sync CP Tracker
+
+on:
+  push:
+    branches: [ main ]
+  schedule:
+    - cron: '0 0 * * *' # Daily at midnight UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  sync-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install requests
+        run: pip install requests
+
+      - name: Run Live Sync Engine
+        run: |
+          python3 -c "
+          import sync_server
+          cfg = sync_server.load_config()
+          print('Syncing platforms...')
+          updated_any = False
+          for p in cfg.get('platforms', []):
+              try:
+                  if sync_server.fetch_platform_live(p):
+                      print(f'Updated {p[\"id\"]}: {p[\"solved\"]}')
+                      updated_any = True
+              except Exception as e:
+                  print(f'Error syncing {p[\"id\"]}: {e}')
+          if updated_any:
+              sync_server.save_config(cfg)
+              print('Saved updated config.json')
+          "
+
+      - name: Commit & push updated stats
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          if [[ -n $(git status -s config.json) ]]; then
+            git add config.json
+            git commit -m "Auto-sync CP statistics [skip ci]"
+            git push
+          else
+            print "No stat changes detected."
+          fi
+        continue-on-error: true
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
