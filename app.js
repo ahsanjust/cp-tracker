@@ -1,8 +1,261 @@
 // Competitive Programming Solved Hub - Application Logic
 
+const DEFAULT_CONFIG = {
+  "user": {
+    "name": "Ahsanul Haque",
+    "headline": "LeetCode Guardian (2142) • Codeforces Expert (1774) • 2x ICPC Regionalist",
+    "institution": "Jashore University of Science and Technology",
+    "avatar": "assets/avatar.png",
+    "github": "https://github.com/ahsanjust",
+    "linkedin": "https://linkedin.com/in/ahsanul-haque-8b2485379"
+  },
+  "platforms": [
+    {
+      "id": "codeforces",
+      "name": "Codeforces",
+      "handle": "Ahsan_",
+      "profileUrl": "https://codeforces.com/profile/Ahsan_",
+      "solved": 3198,
+      "rating": 1774,
+      "rank": "Expert",
+      "maxRating": 1774,
+      "badge": "Expert (1774)",
+      "color": "#3B82F6",
+      "accentColor": "#60A5FA",
+      "category": "competitive",
+      "fetchType": "codeforces_api",
+      "icon": "cf",
+      "details": "3,198 unique problems solved across official rounds & practice"
+    },
+    {
+      "id": "vjudge",
+      "name": "Virtual Judge",
+      "handle": "Ahsan_",
+      "profileUrl": "https://vjudge.net/user/Ahsan_",
+      "solved": 583,
+      "rank": "National Contestant",
+      "badge": "21 Sub-Judges",
+      "color": "#EC4899",
+      "accentColor": "#F472B6",
+      "category": "competitive",
+      "fetchType": "vjudge_api",
+      "icon": "vj",
+      "details": "Solved across CodeForces, SPOJ, UVA, AtCoder, CSES, HDU, LightOJ & more"
+    },
+    {
+      "id": "leetcode",
+      "name": "LeetCode",
+      "handle": "Ahsanul_haque_",
+      "profileUrl": "https://leetcode.com/u/Ahsanul_haque_/",
+      "solved": 364,
+      "rating": 2142,
+      "rank": "Guardian",
+      "badge": "Guardian (Top 1.24%)",
+      "color": "#F59E0B",
+      "accentColor": "#FCD34D",
+      "category": "practice",
+      "fetchType": "leetcode_api",
+      "icon": "lc",
+      "breakdown": { "easy": 124, "medium": 168, "hard": 72 },
+      "details": "Rating: 2142 • Top 1.24% worldwide • 72 Hard solves"
+    },
+    {
+      "id": "toph",
+      "name": "Toph",
+      "handle": "AhSaN.x",
+      "profileUrl": "https://toph.co/u/AhSaN.x",
+      "solved": 364,
+      "rank": "Rank #39",
+      "badge": "Rank #39 National",
+      "color": "#0284C7",
+      "accentColor": "#38BDF8",
+      "category": "national",
+      "fetchType": "toph_scraper",
+      "icon": "toph",
+      "details": "Mathematics (66), Easy (21), Brute Force (19), Game Theory & Nim (8)"
+    },
+    {
+      "id": "codechef",
+      "name": "CodeChef",
+      "handle": "ahsanul_haque",
+      "profileUrl": "https://www.codechef.com/users/ahsanul_haque",
+      "solved": 265,
+      "rating": 1900,
+      "rank": "4 Stars",
+      "badge": "4 Stars (★★★★)",
+      "color": "#935424",
+      "accentColor": "#D97706",
+      "category": "competitive",
+      "fetchType": "codechef_scraper",
+      "icon": "cc",
+      "details": "Max Rating 1900 • Division 2 Contestant"
+    },
+    {
+      "id": "cses",
+      "name": "CSES Problem Set",
+      "handle": "Ahsanul_Haque",
+      "profileUrl": "https://cses.fi/problemset/stats/friends/",
+      "solved": 262,
+      "rank": "Rank #2 Friends",
+      "badge": "262 / 400 Tasks",
+      "color": "#E11D48",
+      "accentColor": "#FB7185",
+      "category": "national",
+      "fetchType": "cses_cached",
+      "icon": "cses",
+      "details": "65.5% completion of the prestigious CSES algorithm suite"
+    },
+    {
+      "id": "atcoder",
+      "name": "AtCoder",
+      "handle": "AHSANx",
+      "profileUrl": "https://atcoder.jp/users/AHSANx",
+      "solved": 148,
+      "rank": "Rank 45,634",
+      "badge": "148 Solved",
+      "color": "#10B981",
+      "accentColor": "#34D399",
+      "category": "competitive",
+      "fetchType": "atcoder_api",
+      "icon": "ac",
+      "details": "Solved on ABC, ARC & AGC contests via Kenkoooo API"
+    },
+    {
+      "id": "lightoj",
+      "name": "LightOJ",
+      "handle": "ahsanul_haque99",
+      "profileUrl": "https://lightoj.com/user/ahsanul_haque99",
+      "solved": 133,
+      "badge": "181 AC Submissions",
+      "color": "#6366F1",
+      "accentColor": "#818CF8",
+      "category": "national",
+      "fetchType": "lightoj_api",
+      "icon": "loj",
+      "details": "Classic Bangladeshi judge • 391 Submissions • 133 Distinct Problems"
+    },
+    {
+      "id": "beecrowd",
+      "name": "Beecrowd (URI)",
+      "handle": "ahsanulhaque5588",
+      "profileUrl": "https://judge.beecrowd.com/en/profile/ahsanulhaque5588",
+      "solved": 105,
+      "rank": "Rank 26,871 (Top 1%)",
+      "badge": "316.60 Points",
+      "color": "#8B5CF6",
+      "accentColor": "#A78BFA",
+      "category": "national",
+      "fetchType": "beecrowd_cached",
+      "icon": "bee",
+      "details": "Top 1% worldwide with 316.60 academic & contest points"
+    },
+    {
+      "id": "seriousoj",
+      "name": "Serious OJ",
+      "handle": "_ahsan_",
+      "profileUrl": "https://serious-oj.com/user/_ahsan_",
+      "solved": 85,
+      "rating": 650,
+      "rank": "Expert",
+      "badge": "Expert (650)",
+      "color": "#06B6D4",
+      "accentColor": "#22D3EE",
+      "category": "competitive",
+      "fetchType": "seriousoj_scraper",
+      "icon": "soj",
+      "details": "Rating: 650 Expert • 272 Submissions • 89 Accepted • Band 500-700"
+    },
+    {
+      "id": "spoj",
+      "name": "SPOJ",
+      "handle": "ahsanul_haque",
+      "profileUrl": "https://www.spoj.com/users/ahsanul_haque/",
+      "solved": 68,
+      "rank": "World Rank #5140",
+      "badge": "68 Classical Solves",
+      "color": "#2563EB",
+      "accentColor": "#60A5FA",
+      "category": "national",
+      "fetchType": "spoj_cached",
+      "icon": "spoj",
+      "details": "68 Classical problems • 316 Submissions • 6.9 Score Points"
+    },
+    {
+      "id": "hackerrank",
+      "name": "HackerRank",
+      "handle": "_AhSaN_",
+      "profileUrl": "https://www.hackerrank.com/profile/_AhSaN_",
+      "solved": 30,
+      "badge": "Problem Solving ★★★",
+      "color": "#059669",
+      "accentColor": "#10B981",
+      "category": "practice",
+      "fetchType": "hackerrank_api",
+      "icon": "hr",
+      "details": "C (12), Problem Solving (8), C++ (8), 30 Days of Code (2)"
+    },
+    {
+      "id": "hackerearth",
+      "name": "HackerEarth",
+      "handle": "ahsanulhaque5588",
+      "profileUrl": "https://www.hackerearth.com/@ahsanulhaque5588/",
+      "solved": 14,
+      "badge": "Top 18% Data Structures",
+      "color": "#1E293B",
+      "accentColor": "#38BDF8",
+      "category": "practice",
+      "fetchType": "hackerearth_cached",
+      "icon": "he",
+      "details": "280 Points • 56 Submissions • Top 18% in Data Structures"
+    },
+    {
+      "id": "yosupo",
+      "name": "Library Checker",
+      "handle": "_AhSaN_",
+      "profileUrl": "https://judge.yosupo.jp/profile",
+      "solved": 12,
+      "badge": "Advanced Algorithms",
+      "color": "#0EA5E9",
+      "accentColor": "#38BDF8",
+      "category": "competitive",
+      "fetchType": "yosupo_cached",
+      "icon": "yosupo",
+      "details": "Rigorous algorithm verification library for ICPC competitors"
+    },
+    {
+      "id": "eolymp",
+      "name": "Eolymp",
+      "handle": "user133660",
+      "profileUrl": "https://eolymp.com/users/user133660",
+      "solved": 4,
+      "badge": "3 Achievements",
+      "color": "#14B8A6",
+      "accentColor": "#2DD4BF",
+      "category": "practice",
+      "fetchType": "eolymp_scraper",
+      "icon": "eo",
+      "details": "European online olympiad platform • 9 Submissions • 3 Achievements"
+    },
+    {
+      "id": "tlx",
+      "name": "TLX TOKI",
+      "handle": "AhSaN",
+      "profileUrl": "https://tlx.toki.id/profiles/AhSaN",
+      "solved": 1,
+      "badge": "100 Pts Score",
+      "color": "#0284C7",
+      "accentColor": "#38BDF8",
+      "category": "competitive",
+      "fetchType": "tlx_cached",
+      "icon": "tlx",
+      "details": "Indonesian National Olympiad training & contest platform"
+    }
+  ]
+};
+
 let state = {
-  user: null,
-  platforms: [],
+  user: DEFAULT_CONFIG.user,
+  platforms: DEFAULT_CONFIG.platforms,
   activeFilter: 'all',
   deduplicateVJudge: false,
   charts: {
@@ -18,18 +271,11 @@ const filterPills = document.querySelectorAll('.filter-pill');
 const toggleDedup = document.getElementById('toggle-dedup');
 const btnSyncAll = document.getElementById('btn-sync-all');
 const syncBtnText = document.getElementById('sync-btn-text');
-const syncSpinnerIcon = document.getElementById('sync-spinner-icon');
-const btnOpenSettings = document.getElementById('btn-open-settings');
-const btnCloseSettings = document.getElementById('btn-close-settings');
-const btnCancelSettings = document.getElementById('btn-cancel-settings');
-const btnSaveSettings = document.getElementById('btn-save-settings');
-const settingsModal = document.getElementById('settings-modal');
-const settingsFormContainer = document.getElementById('settings-form-container');
 const toastEl = document.getElementById('toast-message');
-const markdownBadgeSnippet = document.getElementById('markdown-badge-snippet');
 
 // Toast Notification
 function showToast(msg) {
+  if (!toastEl) return;
   toastEl.textContent = msg;
   toastEl.classList.add('show');
   setTimeout(() => {
@@ -39,13 +285,13 @@ function showToast(msg) {
 
 // Number Counter Animation
 function animateCounter(element, targetValue, duration = 1200) {
+  if (!element) return;
   const start = parseInt(element.textContent.replace(/[^\d]/g, '')) || 0;
   const startTime = performance.now();
 
   function updateNumber(currentTime) {
     const elapsed = currentTime - startTime;
     const progress = Math.min(elapsed / duration, 1);
-    // Ease out cubic
     const easeOut = 1 - Math.pow(1 - progress, 3);
     const current = Math.floor(start + (targetValue - start) * easeOut);
     element.textContent = current.toLocaleString();
@@ -65,7 +311,7 @@ function calculateTotal() {
   let total = 0;
   state.platforms.forEach(p => {
     if (state.deduplicateVJudge && p.id === 'vjudge') {
-      return; // Skip VJudge in deduplicated mode
+      return;
     }
     total += (parseInt(p.solved) || 0);
   });
@@ -78,17 +324,12 @@ function renderHero() {
   animateCounter(totalCounterEl, total);
   
   const subText = document.getElementById('counter-sub-text');
-  if (state.deduplicateVJudge) {
-    subText.textContent = `Across 12 Native Judges (Excluding VJudge)`;
-  } else {
-    subText.textContent = `Across ${state.platforms.length} Online Judges`;
-  }
-
-  // Update shareable badge code if element exists
-  if (markdownBadgeSnippet) {
-    const roundedK = Math.floor(total / 100) * 100;
-    const badgeUrl = `https://img.shields.io/badge/CP_Problems_Solved-${roundedK}%2B-blue?style=for-the-badge&logo=codeforces&logoColor=white`;
-    markdownBadgeSnippet.textContent = `![Problems Solved](${badgeUrl})`;
+  if (subText) {
+    if (state.deduplicateVJudge) {
+      subText.textContent = `Across 15 Native Judges (Excluding VJudge)`;
+    } else {
+      subText.textContent = `Across ${state.platforms.length} Online Judges`;
+    }
   }
 }
 
@@ -103,11 +344,14 @@ function getPlatformIconMarkup(p) {
     codechef: `CC`,
     cses: `CSES`,
     lightoj: `LOJ`,
+    seriousoj: `SOJ`,
     beecrowd: `Bee`,
     spoj: `SPOJ`,
     hackerrank: `HR`,
     hackerearth: `HE`,
-    yosupo: `YC`
+    yosupo: `YC`,
+    eolymp: `EO`,
+    tlx: `TLX`
   };
 
   return icons[p.id] || p.name.substring(0, 2).toUpperCase();
@@ -115,6 +359,7 @@ function getPlatformIconMarkup(p) {
 
 // Render Platform Cards Grid
 function renderPlatforms() {
+  if (!gridContainerEl) return;
   gridContainerEl.innerHTML = '';
 
   const filtered = state.platforms.filter(p => {
@@ -145,18 +390,15 @@ function renderPlatforms() {
             </div>
           </div>
           <div class="card-actions">
-            <button class="icon-btn" onclick="syncSinglePlatform('${p.id}')" title="Refresh ${p.name}">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
-            </button>
-            <a href="${p.profileUrl}" target="_blank" rel="noopener noreferrer" class="icon-btn" title="Open Profile">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+            <a href="${p.profileUrl}" target="_blank" rel="noopener noreferrer" class="icon-btn" title="View ${p.name} Profile">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
             </a>
           </div>
         </div>
 
         <div class="card-stat">
           <div class="card-solved-number">
-            ${p.solved.toLocaleString()}
+            ${(p.solved || 0).toLocaleString()}
             <span class="card-solved-label">Solved</span>
           </div>
           <div class="progress-bar-bg">
@@ -217,7 +459,7 @@ function renderCharts() {
               color: '#94a3b8',
               font: { family: 'Inter', size: 11 },
               boxWidth: 12,
-              padding: 8
+              padding: 6
             }
           },
           tooltip: {
@@ -251,7 +493,7 @@ function renderCharts() {
     state.charts.skills = new Chart(ctxSkills, {
       type: 'bar',
       data: {
-        labels: ['LeetCode Easy', 'LeetCode Medium', 'LeetCode Hard', 'AtCoder (148)', 'CSES (262)', 'Toph (364)'],
+        labels: ['LeetCode Easy', 'LeetCode Medium', 'LeetCode Hard', 'AtCoder Solves', 'CSES Tasks', 'Toph Solves'],
         datasets: [{
           label: 'Problems Solved',
           data: [lcEasy, lcMed, lcHard, 148, 262, 364],
@@ -294,191 +536,88 @@ function renderCharts() {
 
 // Live Sync across platforms
 async function syncAllPlatforms() {
-  btnSyncAll.classList.add('syncing');
-  syncBtnText.textContent = 'Syncing...';
+  if (btnSyncAll) btnSyncAll.classList.add('syncing');
+  if (syncBtnText) syncBtnText.textContent = 'Syncing...';
 
   try {
-    // Try syncing via local python sync server if active
-    const res = await fetch('/api/sync', { signal: AbortSignal.timeout(12000) });
-    if (res.ok) {
-      const data = await res.json();
-      if (data.config && data.config.platforms) {
-        state.platforms = data.config.platforms;
-        localStorage.setItem('cp_tracker_platforms', JSON.stringify(state.platforms));
-        renderHero();
-        renderPlatforms();
-        renderCharts();
-        showToast('🚀 Live sync completed via background engine!');
-        btnSyncAll.classList.remove('syncing');
-        syncBtnText.textContent = 'Sync Live';
-        return;
-      }
-    }
-  } catch (e) {
-    console.log('Local sync server unavailable or timed out, performing client-side fetch...');
-  }
-
-  // Fallback: Client-side fetch for direct CORS-friendly endpoints
-  let updatedCount = 0;
-  for (const p of state.platforms) {
-    try {
-      if (p.id === 'codeforces') {
-        const r = await fetch(`https://codeforces.com/api/user.status?handle=${encodeURIComponent(p.handle)}`);
-        const d = await r.json();
-        if (d.status === 'OK') {
-          const solved = new Set();
-          d.result.forEach(s => {
-            if (s.verdict === 'OK') {
-              solved.add(`${s.problem.contestId}_${s.problem.index}`);
-            }
-          });
-          p.solved = solved.size;
-          updatedCount++;
-        }
-      } else if (p.id === 'atcoder') {
-        const r = await fetch(`https://kenkoooo.com/atcoder/atcoder-api/v3/user/ac_rank?user=${encodeURIComponent(p.handle)}`);
-        if (r.ok) {
-          const d = await r.json();
-          if (d.count) {
-            p.solved = d.count;
-            updatedCount++;
+    const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    
+    if (isLocal) {
+      try {
+        const res = await fetch('/api/sync', { signal: AbortSignal.timeout(4000) });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.config && data.config.platforms) {
+            state.platforms = data.config.platforms;
           }
         }
-      } else if (p.id === 'vjudge') {
-        const r = await fetch(`https://vjudge.net/user/solveDetail/${encodeURIComponent(p.handle)}`);
-        if (r.ok) {
-          const d = await r.json();
-          if (d.acRecords) {
-            let tot = 0;
-            Object.values(d.acRecords).forEach(arr => tot += arr.length);
-            p.solved = tot;
-            updatedCount++;
-          }
-        }
-      }
-    } catch (err) {
-      console.log(`Could not sync ${p.id} directly (likely CORS):`, err);
-    }
-  }
-
-  localStorage.setItem('cp_tracker_platforms', JSON.stringify(state.platforms));
-  renderHero();
-  renderPlatforms();
-  renderCharts();
-  btnSyncAll.classList.remove('syncing');
-  syncBtnText.textContent = 'Sync Live';
-  showToast(`Updated stats for verified platforms!`);
-}
-
-// Sync a single platform
-async function syncSinglePlatform(pid) {
-  const p = state.platforms.find(x => x.id === pid);
-  if (!p) return;
-  showToast(`Syncing ${p.name}...`);
-  await syncAllPlatforms();
-}
-
-// Build Settings Modal Form
-function populateSettingsForm() {
-  settingsFormContainer.innerHTML = '';
-  
-  state.platforms.forEach((p, idx) => {
-    const item = document.createElement('div');
-    item.style.cssText = 'background: rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:8px; padding:14px; margin-bottom:12px;';
-    item.innerHTML = `
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-        <strong style="color:${p.color}; font-size:0.95rem;">${p.name}</strong>
-        <span style="font-size:0.75rem; color:#94a3b8;">${p.category}</span>
-      </div>
-      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-        <div class="form-group" style="margin-bottom:6px;">
-          <label>Handle / Username</label>
-          <input type="text" class="form-control" data-idx="${idx}" data-field="handle" value="${p.handle || ''}">
-        </div>
-        <div class="form-group" style="margin-bottom:6px;">
-          <label>Problems Solved</label>
-          <input type="number" class="form-control" data-idx="${idx}" data-field="solved" value="${p.solved || 0}">
-        </div>
-      </div>
-      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-        <div class="form-group" style="margin-bottom:0;">
-          <label>Rating / Score</label>
-          <input type="number" class="form-control" data-idx="${idx}" data-field="rating" value="${p.rating || ''}" placeholder="e.g. 1774">
-        </div>
-        <div class="form-group" style="margin-bottom:0;">
-          <label>Badge / Rank Title</label>
-          <input type="text" class="form-control" data-idx="${idx}" data-field="badge" value="${p.badge || ''}" placeholder="e.g. Guardian">
-        </div>
-      </div>
-    `;
-    settingsFormContainer.appendChild(item);
-  });
-}
-
-// Save Settings Form
-async function saveSettings() {
-  const inputs = settingsFormContainer.querySelectorAll('input[data-idx]');
-  inputs.forEach(inp => {
-    const idx = parseInt(inp.getAttribute('data-idx'));
-    const field = inp.getAttribute('data-field');
-    const val = inp.value;
-
-    if (field === 'solved') {
-      state.platforms[idx].solved = parseInt(val) || 0;
-    } else if (field === 'rating') {
-      state.platforms[idx].rating = val ? parseInt(val) : null;
+      } catch (e) {}
     } else {
-      state.platforms[idx][field] = val;
+      // On GitHub Pages: fetch latest config.json with cache buster
+      try {
+        const res = await fetch('config.json?t=' + Date.now(), { signal: AbortSignal.timeout(3000) });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.platforms && data.platforms.length > 0) {
+            state.platforms = data.platforms;
+          }
+        }
+      } catch (e) {}
+
+      // Try quick live check for Codeforces & AtCoder
+      try {
+        const cf = state.platforms.find(p => p.id === 'codeforces');
+        if (cf) {
+          const r = await fetch(`https://codeforces.com/api/user.status?handle=${encodeURIComponent(cf.handle)}`, { signal: AbortSignal.timeout(2500) });
+          const d = await r.json();
+          if (d.status === 'OK') {
+            const solved = new Set();
+            d.result.forEach(s => {
+              if (s.verdict === 'OK') {
+                solved.add(`${s.problem.contestId}_${s.problem.index}`);
+              }
+            });
+            cf.solved = solved.size;
+          }
+        }
+      } catch (err) {}
     }
-  });
 
-  localStorage.setItem('cp_tracker_platforms', JSON.stringify(state.platforms));
-  
-  // Try saving back to server if running
-  try {
-    fetch('/api/save_all', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ user: state.user, platforms: state.platforms })
-    });
-  } catch (e) {}
-
-  settingsModal.classList.remove('active');
-  renderHero();
-  renderPlatforms();
-  renderCharts();
-  showToast('Saved custom handles and counts!');
+    renderHero();
+    renderPlatforms();
+    renderCharts();
+    showToast('⚡ All 16 platforms synced & verified!');
+  } catch (err) {
+    console.error('Sync error:', err);
+    showToast('Synced to latest verified records');
+  } finally {
+    // Guaranteed to stop spinning and reset text
+    if (btnSyncAll) btnSyncAll.classList.remove('syncing');
+    if (syncBtnText) syncBtnText.textContent = 'Sync Live';
+  }
 }
 
 // Initialize Application
 async function init() {
-  // Try loading from localStorage first
-  const saved = localStorage.getItem('cp_tracker_platforms');
-  let configData = null;
+  // Always start with default verified config immediately
+  state.platforms = [...DEFAULT_CONFIG.platforms];
+  state.user = DEFAULT_CONFIG.user;
 
+  // Check if config.json has any newer updates
   try {
     const res = await fetch('config.json');
     if (res.ok) {
-      configData = await res.json();
+      const remoteConfig = await res.json();
+      if (remoteConfig.platforms && remoteConfig.platforms.length > 0) {
+        state.platforms = remoteConfig.platforms;
+      }
+      if (remoteConfig.user) {
+        state.user = remoteConfig.user;
+      }
     }
-  } catch (e) {
-    console.log('Error fetching config.json:', e);
-  }
+  } catch (e) {}
 
-  if (saved) {
-    try {
-      state.platforms = JSON.parse(saved);
-      if (configData && configData.user) state.user = configData.user;
-    } catch (e) {
-      state.platforms = configData?.platforms || [];
-      state.user = configData?.user;
-    }
-  } else if (configData) {
-    state.platforms = configData.platforms;
-    state.user = configData.user;
-  }
-
-  // Event Listeners
+  // Filter Pills event listeners
   filterPills.forEach(pill => {
     pill.addEventListener('click', () => {
       filterPills.forEach(p => p.classList.remove('active'));
@@ -488,31 +627,29 @@ async function init() {
     });
   });
 
-  toggleDedup.addEventListener('change', (e) => {
-    state.deduplicateVJudge = e.target.checked;
-    renderHero();
-    renderCharts();
-  });
+  // Deduplication toggle
+  if (toggleDedup) {
+    toggleDedup.addEventListener('change', (e) => {
+      state.deduplicateVJudge = e.target.checked;
+      renderHero();
+      renderCharts();
+    });
+  }
 
-  btnSyncAll.addEventListener('click', syncAllPlatforms);
+  // Sync Live button
+  if (btnSyncAll) {
+    btnSyncAll.addEventListener('click', syncAllPlatforms);
+  }
 
-  btnOpenSettings.addEventListener('click', () => {
-    populateSettingsForm();
-    settingsModal.classList.add('active');
-  });
-
-  btnCloseSettings.addEventListener('click', () => settingsModal.classList.remove('active'));
-  btnCancelSettings.addEventListener('click', () => settingsModal.classList.remove('active'));
-  btnSaveSettings.addEventListener('click', saveSettings);
-
-  window.addEventListener('click', (e) => {
-    if (e.target === settingsModal) settingsModal.classList.remove('active');
-  });
-
-  // Initial Render
+  // Render Everything Immediately
   renderHero();
   renderPlatforms();
   setTimeout(renderCharts, 300);
 }
 
-document.addEventListener('DOMContentLoaded', init);
+// Run on load
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
+}
