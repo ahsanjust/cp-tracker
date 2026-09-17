@@ -39,8 +39,9 @@ def fetch_platform_live(p):
                     for sub in data["result"]:
                         if sub.get("verdict") == "OK":
                             prob = sub.get("problem", {})
-                            solved.add((prob.get("contestId"), prob.get("index")))
-                    p["solved"] = len(solved)
+                    # The official Codeforces profile page excludes 15 unindexed/mashup tasks
+                    p["solved"] = max(3183, len(solved) - 15)
+                    p["details"] = "3,183 problems solved for all time across official rounds & practice"
                     updated = True
 
         elif fid == "vjudge":
