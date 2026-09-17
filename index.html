@@ -6,6 +6,27 @@
   <title>Competitive Programming Solved Hub — Ahsanul Haque</title>
   <meta name="description" content="Dynamic problem-solving aggregator and dashboard tracking 5,616+ competitive programming problems solved by Ahsanul Haque across 14 online judges.">
   <meta name="author" content="Ahsanul Haque">
+  <meta name="theme-color" content="#07090e">
+  <link rel="canonical" href="https://ahsanjust.github.io/cp-tracker/">
+  <meta name="keywords" content="competitive programming, codeforces expert, leetcode guardian, ICPC, problem solving portfolio, Ahsanul Haque">
+  
+  <!-- Structured data for Google / LinkedIn -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Ahsanul Haque",
+    "url": "https://ahsanjust.github.io/cp-tracker/",
+    "jobTitle": "Competitive Programmer",
+    "alumniOf": "Jashore University of Science and Technology",
+    "sameAs": [
+      "https://github.com/ahsanjust",
+      "https://www.linkedin.com/in/ahsanul-haque-8b2485379/",
+      "https://codeforces.com/profile/Ahsan_",
+      "https://leetcode.com/u/Ahsanul_haque_/"
+    ]
+  }
+  </script>
   
   <!-- SEO & Social Sharing (LinkedIn, Twitter, Discord) -->
   <meta property="og:type" content="website">
@@ -26,13 +47,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700;800&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
   
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <!-- Chart.js (deferred so first paint is instant) -->
+  <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   
   <!-- Stylesheet -->
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <a class="skip-link" href="#platform-grid-container">Skip to judges</a>
 
   <div class="container">
     
@@ -40,7 +62,7 @@
     <header class="navbar" id="main-navbar">
       <div class="profile-brand">
         <div class="avatar-wrapper">
-          <img src="assets/avatar.png" alt="Ahsanul Haque" class="avatar-img" id="user-avatar" onerror="this.src='https://via.placeholder.com/100'">
+          <img src="assets/avatar.png" alt="Portrait of Ahsanul Haque" class="avatar-img" id="user-avatar" loading="eager" decoding="async" onerror="this.src='https://via.placeholder.com/100'">
           <span class="online-dot" title="Live Synced"></span>
         </div>
         <div class="brand-details">
@@ -79,6 +101,12 @@
           <p class="hero-desc">
             Aggregated in real-time across Codeforces, LeetCode, CodeChef, AtCoder, VJudge, Toph, CSES, LightOJ, Serious OJ, SPOJ, Beecrowd, HackerRank, HackerEarth, and Library Checker.
           </p>
+          <div class="hero-ctas">
+            <a class="btn btn-primary" href="https://codeforces.com/profile/Ahsan_" target="_blank" rel="noopener noreferrer">View Codeforces</a>
+            <a class="btn" href="https://leetcode.com/u/Ahsanul_haque_/" target="_blank" rel="noopener noreferrer">View LeetCode</a>
+            <a class="btn" href="https://github.com/ahsanjust" target="_blank" rel="noopener noreferrer">GitHub</a>
+          </div>
+          <p class="hero-sync-line"><span class="live-dot" aria-hidden="true"></span><time id="last-updated">Verified records • Live sync ready</time><span class="dot-sep">•</span><span id="results-count">14 judges</span></p>
         </div>
 
         <!-- Grand Counter Box -->
@@ -114,12 +142,27 @@
 
     <!-- Controls Bar -->
     <section class="controls-bar" aria-label="Filters and options">
-      <div class="filter-pills" role="tablist">
-        <button class="filter-pill active" data-filter="all" id="filter-all">All Judges (14)</button>
-        <button class="filter-pill" data-filter="competitive" id="filter-competitive">Contests & Speed</button>
-        <button class="filter-pill" data-filter="practice" id="filter-practice">Interview & Prep</button>
-        <button class="filter-pill" data-filter="national" id="filter-national">National & Archives</button>
+      <div class="filter-pills" role="tablist" aria-label="Filter judges by category">
+        <button class="filter-pill active" data-filter="all" id="filter-all" role="tab" aria-selected="true">All Judges (14)</button>
+        <button class="filter-pill" data-filter="competitive" id="filter-competitive" role="tab" aria-selected="false">Contests & Speed</button>
+        <button class="filter-pill" data-filter="practice" id="filter-practice" role="tab" aria-selected="false">Interview & Prep</button>
+        <button class="filter-pill" data-filter="national" id="filter-national" role="tab" aria-selected="false">National & Archives</button>
       </div>
+
+      <div class="controls-right">
+        <div class="search-box">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="search" id="search-judges" placeholder="Search judges..." aria-label="Search judges" autocomplete="off">
+        </div>
+        <div class="sort-box">
+          <label for="sort-judges" class="visually-hidden">Sort judges</label>
+          <select id="sort-judges" aria-label="Sort judges">
+            <option value="solved-desc">Most solved</option>
+            <option value="solved-asc">Fewest solved</option>
+            <option value="rating-desc">Highest rating</option>
+            <option value="name-asc">Name A–Z</option>
+          </select>
+        </div>
 
       <div class="control-switches">
         <div class="toggle-wrapper" title="Toggle between raw sum of all solves or deduplicated count excluding VJudge virtual solves">
@@ -129,6 +172,7 @@
             <span class="slider"></span>
           </label>
         </div>
+      </div>
       </div>
     </section>
 
@@ -160,17 +204,32 @@
       </div>
     </section>
 
+    <!-- Share Section -->
+    <section class="share-section" aria-label="Share this portfolio">
+      <h3>Share this portfolio</h3>
+      <p class="share-desc">Recruiters and teammates can verify every number — link directly to live profiles.</p>
+      <div class="share-actions">
+        <button class="btn" id="btn-copy-link">🔗 Copy portfolio link</button>
+        <button class="btn" id="btn-copy-embed">📋 Copy embed badge</button>
+        <a class="btn" href="https://www.linkedin.com/in/ahsanul-haque-8b2485379/" target="_blank" rel="noopener noreferrer">Connect on LinkedIn</a>
+      </div>
+      <div class="code-snippet-box">
+        <code>https://ahsanjust.github.io/cp-tracker/</code>
+        <span class="embed-hint">live • verified daily</span>
+      </div>
+    </section>
+
     <!-- Executive Footer -->
-    <footer class="footer-bar" id="main-footer" style="margin-top: 48px; padding: 24px 0; border-top: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; color: var(--text-muted); font-size: 0.85rem;">
-      <div>
-        <strong style="color: #fff;">Ahsanul Haque</strong> • Competitive Programmer & Problem Solver • CSE @ JUST
+    <footer class="footer-bar" id="main-footer">
+      <div class="footer-brand">
+        <strong>Ahsanul Haque</strong> • Competitive Programmer & Problem Solver • CSE @ JUST
       </div>
-      <div style="display: flex; gap: 16px; align-items: center;">
-        <a href="https://codeforces.com/profile/Ahsan_" target="_blank" rel="noopener noreferrer" style="color: var(--blue); text-decoration: none;">Codeforces</a>
-        <a href="https://leetcode.com/u/Ahsanul_haque_/" target="_blank" rel="noopener noreferrer" style="color: var(--amber); text-decoration: none;">LeetCode</a>
-        <a href="https://github.com/ahsanjust" target="_blank" rel="noopener noreferrer" style="color: var(--cyan); text-decoration: none;">GitHub</a>
-        <a href="https://www.linkedin.com/in/ahsanul-haque-8b2485379/" target="_blank" rel="noopener noreferrer" style="color: #38bdf8; text-decoration: none;">LinkedIn</a>
-      </div>
+      <nav class="footer-links" aria-label="Profile links">
+        <a href="https://codeforces.com/profile/Ahsan_" target="_blank" rel="noopener noreferrer" class="footer-link cf">Codeforces</a>
+        <a href="https://leetcode.com/u/Ahsanul_haque_/" target="_blank" rel="noopener noreferrer" class="footer-link lc">LeetCode</a>
+        <a href="https://github.com/ahsanjust" target="_blank" rel="noopener noreferrer" class="footer-link gh">GitHub</a>
+        <a href="https://www.linkedin.com/in/ahsanul-haque-8b2485379/" target="_blank" rel="noopener noreferrer" class="footer-link li">LinkedIn</a>
+      </nav>
     </footer>
 
   </div>
@@ -179,6 +238,6 @@
   <div class="toast-msg" id="toast-message" role="status" aria-live="polite">Statistics updated</div>
 
   <!-- Main Logic -->
-  <script src="app.js"></script>
+  <script defer src="app.js"></script>
 </body>
 </html>

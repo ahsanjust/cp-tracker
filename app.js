@@ -229,7 +229,10 @@ let state = {
   user: DEFAULT_CONFIG.user,
   platforms: DEFAULT_CONFIG.platforms,
   activeFilter: 'all',
+  searchQuery: '',
+  sortBy: 'solved-desc',
   deduplicateVJudge: false,
+  lastUpdated: null,
   charts: {
     distribution: null,
     skills: null
@@ -244,6 +247,10 @@ const toggleDedup = document.getElementById('toggle-dedup');
 const btnSyncAll = document.getElementById('btn-sync-all');
 const syncBtnText = document.getElementById('sync-btn-text');
 const toastEl = document.getElementById('toast-message');
+const searchInputEl = document.getElementById('search-judges');
+const sortSelectEl = document.getElementById('sort-judges');
+const lastUpdatedEl = document.getElementById('last-updated');
+const resultsCountEl = document.getElementById('results-count');
 
 // Toast Notification
 function showToast(msg) {
@@ -303,43 +310,119 @@ function renderHero() {
       subText.textContent = `Across ${state.platforms.length} Online Judges`;
     }
   }
+
+  renderLastUpdated();
 }
 
-// Get SVG or Initials for Platform
+function renderLastUpdated() {
+  if (!lastUpdatedEl) return;
+  if (!state.lastUpdated) {
+    lastUpdatedEl.textContent = 'Verified records • Live sync ready';
+    return;
+  }
+  try {
+    const d = new Date(state.lastUpdated);
+    const fmt = d.toLocaleString(undefined, {
+      year: 'numeric', month: 'short', day: 'numeric',
+      hour: '2-digit', minute: '2-digit'
+    });
+    lastUpdatedEl.textContent = `Last synced: ${fmt}`;
+    lastUpdatedEl.setAttribute('datetime', state.lastUpdated);
+  } catch (e) {
+    lastUpdatedEl.textContent = 'Verified records • Live sync ready';
+  }
+}
+
+// Reveal-on-scroll for cards (respects reduced motion)
+let revealObserver = null;
+function initRevealObserver() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (!('IntersectionObserver' in window)) return;
+  revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach((en) => {
+      if (en.isIntersecting) {
+        en.target.classList.add('revealed');
+        revealObserver.unobserve(en.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -20px 0px' });
+}
+
+// Get SVG or Initials for Platform — real brand marks, text fallback only
 function getPlatformIconMarkup(p) {
+  const svgWrap = (inner) => `<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">${inner}</svg>`;
+  const strokeWrap = (inner) => `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${inner}</svg>`;
   const icons = {
-    codeforces: `<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><rect x="1.5" y="9" width="5" height="13.5" rx="1.5"/><rect x="9.5" y="4.5" width="5" height="18" rx="1.5"/><rect x="17.5" y="1" width="5" height="21.5" rx="1.5"/></svg>`,
-    leetcode: `<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M16.1 1.7a1.5 1.5 0 0 0-2.1.2L7 9.8a6.5 6.5 0 0 0 0 9.2l1.6 1.6a6.5 6.5 0 0 0 9.2 0l3-3a1.5 1.5 0 0 0-2.1-2.1l-3 3a3.5 3.5 0 0 1-5 0l-1.6-1.6a3.5 3.5 0 0 1 0-5l7-7.9a1.5 1.5 0 0 0-.2-2.1z"/></svg>`,
-    atcoder: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 22h20L12 2zm0 6l5 10H7l5-10z"/></svg>`,
-    vjudge: `VJ`,
-    toph: `Toph`,
-    codechef: `CC`,
-    cses: `CSES`,
-    lightoj: `LOJ`,
-    seriousoj: `SOJ`,
-    beecrowd: `Bee`,
-    spoj: `SPOJ`,
-    hackerrank: `HR`,
-    hackerearth: `HE`,
-    yosupo: `YC`,
-    eolymp: `EO`,
-    tlx: `TLX`
+    codeforces: svgWrap(`<rect x="2" y="9" width="4.5" height="13" rx="1.2"/><rect x="9.5" y="5" width="4.5" height="17" rx="1.2"/><rect x="17" y="2" width="4.5" height="20" rx="1.2"/>`),
+    leetcode: svgWrap(`<path d="M13.2 2.3 4.9 10.6c-.4.4-.6.9-.6 1.5v.5c0 .6.2 1.1.6 1.5l2 2c.8.8 2.1.8 2.9 0l.4-.4 2.4 2.4-.6.6c-2 2-5.3 2-7.3 0l-2-2a5.1 5.1 0 0 1 0-7.2l8.3-8.3c.4-.4 1-.4 1.4 0l.2.2c.4.4.4 1 0 1.4Zm6.6 6.6-2.5 2.5c-.4.4-.4 1 0 1.4l1.2 1.2c.4.4.4 1 0 1.4l-4.1 4.1c-.8.8-2.1.8-2.9 0l-1.2-1.2 2.5-2.5 1.2 1.2c.4.4 1 .4 1.4 0l2.7-2.7-1.2-1.2 2.9-2.9c.4-.4 1-.4 1.4 0l.2.2c.4.4.4 1 0 1.4Z"/>`),
+    atcoder: strokeWrap(`<path d="M12 3 3 20h18L12 3Zm0 5.2L16.2 17H7.8L12 8.2Z"/>`),
+    codechef: svgWrap(`<path d="M7.5 4h9v2.5H14v12h-2v2.5h5.5V23.5H4v-2.5h5.5V18.5h-2v-12H5.5V4h2Z" transform="scale(.95) translate(.5 0)"/><path d="M18 6.5c1.5 0 2.7 2.7 2.7 6s-1.2 6-2.7 6" fill="none" stroke="currentColor" stroke-width="1.6"/>`),
+    toph: svgWrap(`<path d="M4 5h16v3H4zM6 9h12v2.5c0 3.5-2.5 6-6 6s-6-2.5-6-6V9Zm6 6.5a1.8 1.8 0 1 0 0-3.6 1.8 1.8 0 0 0 0 3.6Z"/>`),
+    vjudge: svgWrap(`<path d="M3 5h18l-9 14L3 5Zm4.2 2L12 14.6 16.8 7H7.2Z"/>`),
+    cses: `<span style="font-size:.72rem;letter-spacing:-.02em">CSES</span>`,
+    lightoj: strokeWrap(`<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3.2 2"/>`),
+    beecrowd: svgWrap(`<path d="M12 2 3 7v10l9 5 9-5V7l-9-5Zm0 2.3L18.7 8 12 11.7 5.3 8 12 4.3ZM5 9.7l6 3.4v6.6l-6-3.4V9.7Zm8 10v-6.6l6-3.4v6.6l-6 3.4Z"/>`),
+    spoj: svgWrap(`<path d="M4 4h16v4H4zM4 10h16v4H4zM4 16h10v4H4z"/>`),
+    hackerrank: svgWrap(`<path d="M6 3h3v7.2L15.5 3H19l-6.8 8L19.2 21h-3.6L9 13.6V21H6V3Z"/>`),
+    hackerearth: svgWrap(`<path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm-3.5 6h7v2h-7zM7 11h10v2H7zM8.5 15h7v2h-7z"/>`),
+    seriousoj: strokeWrap(`<path d="M13 2 4.5 13.5H11L10 22l8.5-11.5H12L13 2Z"/>`),
+    yosupo: strokeWrap(`<path d="M5 19V5h14v14H5Zm3-9h8M8 13h8"/>`),
   };
 
   return icons[p.id] || p.name.substring(0, 2).toUpperCase();
 }
 
-// Render Platform Cards Grid
+// Render Platform Cards Grid — filter + search + sort
 function renderPlatforms() {
   if (!gridContainerEl) return;
   gridContainerEl.innerHTML = '';
 
-  const filtered = state.platforms.filter(p => {
-    if (state.activeFilter === 'all') return true;
-    return p.category === state.activeFilter;
+  const q = (state.searchQuery || '').trim().toLowerCase();
+
+  let filtered = state.platforms.filter(p => {
+    if (state.activeFilter !== 'all' && p.category !== state.activeFilter) return false;
+    if (q) {
+      const hay = `${p.name} ${p.handle} ${p.badge || ''} ${p.rank || ''}`.toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
   });
 
-  const maxSolves = Math.max(...state.platforms.map(p => p.solved || 0));
+  // Sort
+  const by = state.sortBy || 'solved-desc';
+  filtered = [...filtered].sort((a, b) => {
+    if (by === 'solved-asc') return (a.solved || 0) - (b.solved || 0);
+    if (by === 'name-asc') return a.name.localeCompare(b.name);
+    if (by === 'rating-desc') return (b.rating || 0) - (a.rating || 0);
+    return (b.solved || 0) - (a.solved || 0); // solved-desc default
+  });
+
+  if (resultsCountEl) {
+    resultsCountEl.textContent = filtered.length === state.platforms.length
+      ? `${filtered.length} judges`
+      : `${filtered.length} of ${state.platforms.length} judges`;
+  }
+
+  if (filtered.length === 0) {
+    gridContainerEl.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">🔍</div>
+        <h3>No judges match your search</h3>
+        <p>Try a different keyword or clear filters to see all ${state.platforms.length} platforms.</p>
+        <button class="btn" id="btn-clear-search">Clear search & filters</button>
+      </div>`;
+    const clr = document.getElementById('btn-clear-search');
+    if (clr) clr.addEventListener('click', () => {
+      state.searchQuery = '';
+      state.activeFilter = 'all';
+      if (searchInputEl) searchInputEl.value = '';
+      filterPills.forEach(p => p.classList.toggle('active', p.getAttribute('data-filter') === 'all'));
+      renderPlatforms();
+    });
+    return;
+  }
+
+  const maxSolves = Math.max(...state.platforms.map(p => p.solved || 0), 1);
 
   filtered.forEach(p => {
     const card = document.createElement('article');
@@ -391,12 +474,23 @@ function renderPlatforms() {
     `;
 
     gridContainerEl.appendChild(card);
+    if (revealObserver) revealObserver.observe(card);
+    else card.classList.add('revealed');
   });
 }
 
 // Render Analytics Charts with Chart.js
+let chartRetryCount = 0;
 function renderCharts() {
-  if (!window.Chart) return;
+  if (!window.Chart) {
+    // Chart.js is deferred — retry a few times before giving up
+    if (chartRetryCount < 10) {
+      chartRetryCount += 1;
+      setTimeout(renderCharts, 400);
+    }
+    return;
+  }
+  chartRetryCount = 0;
 
   // 1. Distribution Donut Chart
   const ctxDist = document.getElementById('platformDistributionChart');
@@ -426,7 +520,7 @@ function renderCharts() {
         maintainAspectRatio: false,
         plugins: {
           legend: {
-            position: 'right',
+            position: window.innerWidth < 700 ? 'bottom' : 'right',
             labels: {
               color: '#94a3b8',
               font: { family: 'Inter', size: 11 },
@@ -450,25 +544,26 @@ function renderCharts() {
     });
   }
 
-  // 2. Skill Tiers & Difficulty Chart
+  // 2. Skill Tiers & Difficulty Chart — fully driven by live state
   const ctxSkills = document.getElementById('difficultyBreakdownChart');
   if (ctxSkills) {
     if (state.charts.skills) {
       state.charts.skills.destroy();
     }
 
+    const getSolved = (id) => state.platforms.find(p => p.id === id)?.solved || 0;
     const lcPlatform = state.platforms.find(p => p.id === 'leetcode');
-    const lcEasy = lcPlatform?.breakdown?.easy || 124;
-    const lcMed = lcPlatform?.breakdown?.medium || 168;
-    const lcHard = lcPlatform?.breakdown?.hard || 72;
+    const lcEasy = lcPlatform?.breakdown?.easy || 0;
+    const lcMed = lcPlatform?.breakdown?.medium || 0;
+    const lcHard = lcPlatform?.breakdown?.hard || 0;
 
     state.charts.skills = new Chart(ctxSkills, {
       type: 'bar',
       data: {
-        labels: ['LeetCode Easy', 'LeetCode Medium', 'LeetCode Hard', 'AtCoder Solves', 'CSES Tasks', 'Toph Solves'],
+        labels: ['LC Easy', 'LC Medium', 'LC Hard', 'AtCoder', 'CSES', 'Toph'],
         datasets: [{
           label: 'Problems Solved',
-          data: [lcEasy, lcMed, lcHard, 148, 262, 364],
+          data: [lcEasy, lcMed, lcHard, getSolved('atcoder'), getSolved('cses'), getSolved('toph')],
           backgroundColor: [
             '#10b981', // Easy - Emerald
             '#f59e0b', // Medium - Amber
@@ -508,7 +603,10 @@ function renderCharts() {
 
 // Live Sync across platforms
 async function syncAllPlatforms() {
-  if (btnSyncAll) btnSyncAll.classList.add('syncing');
+  if (btnSyncAll) {
+    btnSyncAll.classList.add('syncing');
+    btnSyncAll.setAttribute('aria-busy', 'true');
+  }
   if (syncBtnText) syncBtnText.textContent = 'Syncing...';
 
   try {
@@ -516,44 +614,69 @@ async function syncAllPlatforms() {
     
     if (isLocal) {
       try {
-        const res = await fetch('/api/sync', { signal: AbortSignal.timeout(4000) });
+        const res = await fetch('/api/sync', { signal: AbortSignal.timeout(8000) });
         if (res.ok) {
           const data = await res.json();
           if (data.config && data.config.platforms) {
             state.platforms = data.config.platforms;
+          }
+          if (data.config && data.config.lastUpdated) {
+            state.lastUpdated = data.config.lastUpdated;
           }
         }
       } catch (e) {}
     } else {
       // On GitHub Pages: fetch latest config.json with cache buster
       try {
-        const res = await fetch('config.json?t=' + Date.now(), { signal: AbortSignal.timeout(3000) });
+        const res = await fetch('config.json?t=' + Date.now(), { signal: AbortSignal.timeout(4000) });
         if (res.ok) {
           const data = await res.json();
           if (data.platforms && data.platforms.length > 0) {
             state.platforms = data.platforms;
           }
+          if (data.lastUpdated) state.lastUpdated = data.lastUpdated;
         }
       } catch (e) {}
 
-      // Try quick live check for Codeforces & AtCoder
+      // Try quick live check for Codeforces (never regress below verified count)
       try {
         const cf = state.platforms.find(p => p.id === 'codeforces');
         if (cf) {
-          const r = await fetch(`https://codeforces.com/api/user.status?handle=${encodeURIComponent(cf.handle)}`, { signal: AbortSignal.timeout(2500) });
+          const r = await fetch(`https://codeforces.com/api/user.status?handle=${encodeURIComponent(cf.handle)}`, { signal: AbortSignal.timeout(4000) });
           const d = await r.json();
           if (d.status === 'OK') {
             const solved = new Set();
             d.result.forEach(s => {
-              if (s.verdict === 'OK') {
+              if (s.verdict === 'OK' && s.problem) {
                 solved.add(`${s.problem.contestId}_${s.problem.index}`);
               }
             });
-            // Official Codeforces profile page excludes 15 unindexed/mashup tasks
-            cf.solved = Math.max(3183, solved.size - 15);
+            // Official Codeforces profile page excludes ~15 unindexed/mashup tasks
+            const liveCount = Math.max(0, solved.size - 15);
+            const prev = parseInt(cf.solved) || 0;
+            if (liveCount > prev) {
+              cf.solved = liveCount;
+              cf.details = `${liveCount.toLocaleString()} problems solved for all time across official rounds & practice`;
+            }
           }
+          // Refresh rating / rank too
+          try {
+            const ri = await fetch(`https://codeforces.com/api/user.info?handles=${encodeURIComponent(cf.handle)}`, { signal: AbortSignal.timeout(3000) });
+            const di = await ri.json();
+            if (di.status === 'OK' && di.result && di.result[0]) {
+              const u = di.result[0];
+              if (u.rating) cf.rating = u.rating;
+              if (u.maxRating) cf.maxRating = u.maxRating;
+              if (u.rank) {
+                const title = u.rank.charAt(0).toUpperCase() + u.rank.slice(1);
+                cf.rank = title;
+                cf.badge = `${title} (${cf.rating || u.rating})`;
+              }
+            }
+          } catch (e) {}
         }
       } catch (err) {}
+      if (!state.lastUpdated) state.lastUpdated = new Date().toISOString();
     }
 
     renderHero();
@@ -565,13 +688,46 @@ async function syncAllPlatforms() {
     showToast('Synced to latest verified records');
   } finally {
     // Guaranteed to stop spinning and reset text
-    if (btnSyncAll) btnSyncAll.classList.remove('syncing');
+    if (btnSyncAll) {
+      btnSyncAll.classList.remove('syncing');
+      btnSyncAll.removeAttribute('aria-busy');
+    }
     if (syncBtnText) syncBtnText.textContent = 'Sync Live';
+  }
+}
+
+// Share helpers — copy link / embed badge
+function initShareHelpers() {
+  const btnCopy = document.getElementById('btn-copy-link');
+  const btnEmbed = document.getElementById('btn-copy-embed');
+  const url = 'https://ahsanjust.github.io/cp-tracker/';
+  if (btnCopy) {
+    btnCopy.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(url);
+        showToast('🔗 Portfolio link copied to clipboard!');
+      } catch (e) {
+        showToast(url);
+      }
+    });
+  }
+  if (btnEmbed) {
+    btnEmbed.addEventListener('click', async () => {
+      const md = `[![CP Tracker — 5,616+ Solved](${url}assets/og_preview.png)](${url})`;
+      try {
+        await navigator.clipboard.writeText(md);
+        showToast('📋 Embed markdown copied!');
+      } catch (e) {
+        showToast('Copy failed — select manually');
+      }
+    });
   }
 }
 
 // Initialize Application
 async function init() {
+  initRevealObserver();
+
   // Always start with default verified config immediately
   state.platforms = [...DEFAULT_CONFIG.platforms];
   state.user = DEFAULT_CONFIG.user;
@@ -587,18 +743,45 @@ async function init() {
       if (remoteConfig.user) {
         state.user = remoteConfig.user;
       }
+      if (remoteConfig.lastUpdated) {
+        state.lastUpdated = remoteConfig.lastUpdated;
+      }
     }
   } catch (e) {}
 
-  // Filter Pills event listeners
+  // Filter Pills event listeners (with aria-selected)
   filterPills.forEach(pill => {
     pill.addEventListener('click', () => {
-      filterPills.forEach(p => p.classList.remove('active'));
+      filterPills.forEach(p => {
+        p.classList.remove('active');
+        p.setAttribute('aria-selected', 'false');
+      });
       pill.classList.add('active');
+      pill.setAttribute('aria-selected', 'true');
       state.activeFilter = pill.getAttribute('data-filter');
       renderPlatforms();
     });
   });
+
+  // Search
+  if (searchInputEl) {
+    let debounce = null;
+    searchInputEl.addEventListener('input', (e) => {
+      clearTimeout(debounce);
+      debounce = setTimeout(() => {
+        state.searchQuery = e.target.value || '';
+        renderPlatforms();
+      }, 160);
+    });
+  }
+
+  // Sort
+  if (sortSelectEl) {
+    sortSelectEl.addEventListener('change', (e) => {
+      state.sortBy = e.target.value;
+      renderPlatforms();
+    });
+  }
 
   // Deduplication toggle
   if (toggleDedup) {
@@ -614,10 +797,17 @@ async function init() {
     btnSyncAll.addEventListener('click', syncAllPlatforms);
   }
 
+  initShareHelpers();
+
   // Render Everything Immediately
   renderHero();
   renderPlatforms();
   setTimeout(renderCharts, 300);
+  window.addEventListener('resize', () => {
+    // Re-render charts once after resize settles so legends adapt to mobile
+    clearTimeout(window.__cpResizeT);
+    window.__cpResizeT = setTimeout(renderCharts, 250);
+  });
 }
 
 // Run on load
