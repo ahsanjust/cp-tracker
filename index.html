@@ -50,11 +50,15 @@
       </div>
       
       <div class="nav-actions">
-        <button class="btn" id="btn-avatar-preview" title="View LinkedIn Profile Picture Upgrade">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-          Avatar Preview
-        </button>
-        <button class="btn" id="btn-open-settings" title="Manage Handles and Manual Counts">
+        <a href="https://github.com/ahsanjust" target="_blank" rel="noopener noreferrer" class="btn" title="GitHub Profile">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          GitHub
+        </a>
+        <a href="https://www.linkedin.com/in/ahsanul-haque-8b2485379/" target="_blank" rel="noopener noreferrer" class="btn" title="LinkedIn Profile">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          LinkedIn
+        </a>
+        <button class="btn" id="btn-open-settings" title="Manage Handles & Settings">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
           Settings
         </button>
@@ -160,27 +164,18 @@
       </div>
     </section>
 
-    <!-- Shareable Badges & Embed Section -->
-    <section class="share-section" id="share-section">
-      <h3>GitHub Profile & Portfolio Embeds</h3>
-      <p class="share-desc">Easily showcase your verified total solved count on your GitHub README or personal portfolio website.</p>
-      
-      <div class="form-group" style="margin-bottom: 12px;">
-        <label>Markdown Badge for README.md:</label>
-        <div class="code-snippet-box">
-          <code id="markdown-badge-snippet">![Problems Solved](https://img.shields.io/badge/CP_Problems_Solved-5500%2B-blue?style=for-the-badge&logo=codeforces&logoColor=white)</code>
-          <button class="btn" style="padding: 4px 12px; font-size: 0.78rem;" onclick="navigator.clipboard.writeText(document.getElementById('markdown-badge-snippet').innerText); showToast('Copied Markdown Badge!');">Copy</button>
-        </div>
+    <!-- Executive Footer -->
+    <footer class="footer-bar" id="main-footer" style="margin-top: 48px; padding: 24px 0; border-top: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; color: var(--text-muted); font-size: 0.85rem;">
+      <div>
+        <strong style="color: #fff;">Ahsanul Haque</strong> • Competitive Programmer & Problem Solver • CSE @ JUST
       </div>
-
-      <div class="form-group">
-        <label>Live JSON Data Endpoint:</label>
-        <div class="code-snippet-box">
-          <code>http://localhost:3333/api/config</code>
-          <button class="btn" style="padding: 4px 12px; font-size: 0.78rem;" onclick="navigator.clipboard.writeText('http://localhost:3333/api/config'); showToast('Copied API URL!');">Copy</button>
-        </div>
+      <div style="display: flex; gap: 16px; align-items: center;">
+        <a href="https://codeforces.com/profile/Ahsan_" target="_blank" rel="noopener noreferrer" style="color: var(--blue); text-decoration: none;">Codeforces</a>
+        <a href="https://leetcode.com/u/Ahsanul_haque_/" target="_blank" rel="noopener noreferrer" style="color: var(--amber); text-decoration: none;">LeetCode</a>
+        <a href="https://github.com/ahsanjust" target="_blank" rel="noopener noreferrer" style="color: var(--cyan); text-decoration: none;">GitHub</a>
+        <a href="https://www.linkedin.com/in/ahsanul-haque-8b2485379/" target="_blank" rel="noopener noreferrer" style="color: #38bdf8; text-decoration: none;">LinkedIn</a>
       </div>
-    </section>
+    </footer>
 
   </div>
 
@@ -197,35 +192,6 @@
       <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
         <button class="btn" id="btn-cancel-settings">Cancel</button>
         <button class="btn btn-primary" id="btn-save-settings">Save Changes</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Avatar Preview Modal -->
-  <div class="modal-overlay" id="avatar-modal" role="dialog" aria-modal="true" aria-labelledby="avatar-modal-title">
-    <div class="modal-box" style="max-width: 800px;">
-      <div class="modal-header">
-        <h3 id="avatar-modal-title">LinkedIn Profile Picture Upgrade Comparison</h3>
-        <button class="icon-btn" id="btn-close-avatar" aria-label="Close Avatar Modal">✕</button>
-      </div>
-      <p style="color:var(--text-muted); font-size:0.88rem; margin-bottom:18px;">
-        Compare your new realistic backgrounds (preserving 100% facial features and blazer) inside the authentic LinkedIn circular avatar frame.
-      </p>
-      
-      <div style="text-align: center; margin-bottom: 20px;">
-        <img src="linkedin_avatar_circle_comparison.png" alt="LinkedIn Avatar Comparison" style="max-width: 100%; border-radius: 12px; border: 1px solid var(--border-subtle);" onerror="this.src='../linkedin_avatar_circle_comparison.png'">
-      </div>
-
-      <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-        <a href="../linkedin_profile_office.png" download="Ahsanul_Haque_Office.png" class="btn btn-primary">
-          Download Option 1 (Office Bokeh)
-        </a>
-        <a href="../linkedin_profile_studio.png" download="Ahsanul_Haque_Studio.png" class="btn">
-          Download Option 2 (Studio)
-        </a>
-        <a href="../linkedin_profile_minimal.png" download="Ahsanul_Haque_Minimal.png" class="btn">
-          Download Option 3 (Minimal)
-        </a>
       </div>
     </div>
   </div>
