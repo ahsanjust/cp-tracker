@@ -59,7 +59,7 @@ jobs:
             git commit -m "Auto-sync CP statistics [skip ci]"
             git push
           else
-            print "No stat changes detected."
+            echo "No stat changes detected."
           fi
         continue-on-error: true
 
