@@ -1,9 +1,9 @@
 # Competitive Programming Solved Hub ⚡
 
-> **Dynamic real-time problem-solving portfolio tracking 5,500+ solved problems across 13 online judges.**
+> **Dynamic real-time problem-solving portfolio tracking 5,630+ solved problems across 14 online judges.**
 
 [![Live Demo](https://img.shields.io/badge/Live_Demo-ahsanjust.github.io/cp--tracker-blue?style=for-the-badge&logo=githubpages&logoColor=white)](https://ahsanjust.github.io/cp-tracker/)
-[![Total Solved](https://img.shields.io/badge/Problems_Solved-5500%2B-emerald?style=for-the-badge&logo=codeforces&logoColor=white)](https://ahsanjust.github.io/cp-tracker/)
+[![Total Solved](https://img.shields.io/badge/Problems_Solved-5630%2B-emerald?style=for-the-badge&logo=codeforces&logoColor=white)](https://ahsanjust.github.io/cp-tracker/)
 [![LeetCode Guardian](https://img.shields.io/badge/LeetCode-Guardian_2142-amber?style=for-the-badge&logo=leetcode&logoColor=white)](https://leetcode.com/u/Ahsanul_haque_/)
 [![Codeforces Expert](https://img.shields.io/badge/Codeforces-Expert_1774-blue?style=for-the-badge&logo=codeforces&logoColor=white)](https://codeforces.com/profile/Ahsan_)
 
@@ -43,9 +43,7 @@
 | **HackerRank** | [`_AhSaN_`](https://www.hackerrank.com/profile/_AhSaN_) | **30** | Problem Solving ★★★ | Official REST API |
 | **HackerEarth** | [`ahsanulhaque5588`](https://www.hackerearth.com/@ahsanulhaque5588/) | **14** | Top 18% Data Structures | Web Scraper / Sync |
 | **Library Checker** | [`_AhSaN_`](https://judge.yosupo.jp/profile) | **12** | Advanced Algorithms | Cached / Sync |
-| **Eolymp** | [`user133660`](https://eolymp.com/users/user133660) | **4** | 3 Achievements | Web Scraper / Sync |
-| **TLX TOKI** | [`AhSaN`](https://tlx.toki.id/profiles/AhSaN) | **1** | 100 Pts Score | Cached / Sync |
-
+ 
 ---
 
 ## 🛠️ Features
@@ -53,7 +51,6 @@
 - **Deduplication Mode**: Toggle to view either the full grand total or the deduplicated count excluding VJudge virtual submissions.
 - **Glassmorphic Obsidian Dark Theme**: Tailored with brand color glowing borders and sleek micro-animations.
 - **Automated Daily Sync**: GitHub Actions runs daily at midnight UTC to query live APIs, update numbers, and redeploy.
-- **Settings & Config Modal**: In-app interface to update handles, edit counts, or add new platforms.
 
 ---
 

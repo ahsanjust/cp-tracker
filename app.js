@@ -221,34 +221,6 @@ const DEFAULT_CONFIG = {
       "fetchType": "yosupo_cached",
       "icon": "yosupo",
       "details": "Rigorous algorithm verification library for ICPC competitors"
-    },
-    {
-      "id": "eolymp",
-      "name": "Eolymp",
-      "handle": "user133660",
-      "profileUrl": "https://eolymp.com/users/user133660",
-      "solved": 4,
-      "badge": "3 Achievements",
-      "color": "#14B8A6",
-      "accentColor": "#2DD4BF",
-      "category": "practice",
-      "fetchType": "eolymp_scraper",
-      "icon": "eo",
-      "details": "European online olympiad platform • 9 Submissions • 3 Achievements"
-    },
-    {
-      "id": "tlx",
-      "name": "TLX TOKI",
-      "handle": "AhSaN",
-      "profileUrl": "https://tlx.toki.id/profiles/AhSaN",
-      "solved": 1,
-      "badge": "100 Pts Score",
-      "color": "#0284C7",
-      "accentColor": "#38BDF8",
-      "category": "competitive",
-      "fetchType": "tlx_cached",
-      "icon": "tlx",
-      "details": "Indonesian National Olympiad training & contest platform"
     }
   ]
 };
@@ -326,7 +298,7 @@ function renderHero() {
   const subText = document.getElementById('counter-sub-text');
   if (subText) {
     if (state.deduplicateVJudge) {
-      subText.textContent = `Across 15 Native Judges (Excluding VJudge)`;
+      subText.textContent = `Across ${state.platforms.length - 1} Native Judges (Excluding VJudge)`;
     } else {
       subText.textContent = `Across ${state.platforms.length} Online Judges`;
     }
@@ -586,7 +558,7 @@ async function syncAllPlatforms() {
     renderHero();
     renderPlatforms();
     renderCharts();
-    showToast('⚡ All 16 platforms synced & verified!');
+    showToast(`⚡ All ${state.platforms.length} platforms synced & verified!`);
   } catch (err) {
     console.error('Sync error:', err);
     showToast('Synced to latest verified records');
