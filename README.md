@@ -38,10 +38,13 @@
 | **AtCoder** | [`AHSANx`](https://atcoder.jp/users/AHSANx) | **148** | Rank 45,634 | Kenkoooo API |
 | **LightOJ** | [`ahsanul_haque99`](https://lightoj.com/user/ahsanul_haque99) | **133** | 181 ACs | Official REST API |
 | **Beecrowd (URI)** | [`ahsanulhaque5588`](https://judge.beecrowd.com/en/profile/ahsanulhaque5588) | **105** | 316.60 Points (Top 1%) | Cached / Sync |
+| **Serious OJ** | [`_ahsan_`](https://serious-oj.com/user/_ahsan_) | **85** | Rating 650 (Expert) | Web Scraper / Sync |
 | **SPOJ** | [`ahsanul_haque`](https://www.spoj.com/users/ahsanul_haque/) | **68** | World Rank #5140 | Cached / Sync |
 | **HackerRank** | [`_AhSaN_`](https://www.hackerrank.com/profile/_AhSaN_) | **30** | Problem Solving ★★★ | Official REST API |
-| **HackerEarth** | [`ahsanulhaque5588`](https://www.hackerearth.com/@ahsanulhaque5588/) | **14** | Top 18% Data Structures | Cached / Sync |
+| **HackerEarth** | [`ahsanulhaque5588`](https://www.hackerearth.com/@ahsanulhaque5588/) | **14** | Top 18% Data Structures | Web Scraper / Sync |
 | **Library Checker** | [`_AhSaN_`](https://judge.yosupo.jp/profile) | **12** | Advanced Algorithms | Cached / Sync |
+| **Eolymp** | [`user133660`](https://eolymp.com/users/user133660) | **4** | 3 Achievements | Web Scraper / Sync |
+| **TLX TOKI** | [`AhSaN`](https://tlx.toki.id/profiles/AhSaN) | **1** | 100 Pts Score | Cached / Sync |
 
 ---
 

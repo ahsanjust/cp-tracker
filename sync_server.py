@@ -129,6 +129,26 @@ def fetch_platform_live(p):
                     p["solved"] = tot
                     updated = True
 
+        elif fid == "seriousoj":
+            url = f"https://serious-oj.com/user/{urllib.parse.quote(handle)}"
+            req = urllib.request.Request(url, headers=headers)
+            with urllib.request.urlopen(req, timeout=10) as resp:
+                html = resp.read().decode("utf-8", errors="ignore")
+                m = re.search(r"Solved.*?</dt>\s*<dd[^>]*>(\d+)</dd>", html, re.DOTALL)
+                if m:
+                    p["solved"] = int(m.group(1))
+                    updated = True
+
+        elif fid == "hackerearth":
+            url = f"https://www.hackerearth.com/@{urllib.parse.quote(handle)}/"
+            req = urllib.request.Request(url, headers=headers)
+            with urllib.request.urlopen(req, timeout=10) as resp:
+                html = resp.read().decode("utf-8", errors="ignore")
+                m = re.search(r"(\d+)\s*Problems Solved", html, re.IGNORECASE)
+                if m:
+                    p["solved"] = int(m.group(1))
+                    updated = True
+
     except Exception as e:
         print(f"[{fid}] live sync note: {e}")
 

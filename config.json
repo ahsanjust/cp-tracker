@@ -208,6 +208,50 @@
       "fetchType": "yosupo_cached",
       "icon": "yosupo",
       "details": "Rigorous algorithm verification library for ICPC competitors"
+    },
+    {
+      "id": "seriousoj",
+      "name": "Serious OJ",
+      "handle": "_ahsan_",
+      "profileUrl": "https://serious-oj.com/user/_ahsan_",
+      "solved": 85,
+      "rating": 650,
+      "rank": "Expert",
+      "badge": "Expert (650)",
+      "color": "#06B6D4",
+      "accentColor": "#22D3EE",
+      "category": "competitive",
+      "fetchType": "seriousoj_scraper",
+      "icon": "soj",
+      "details": "Rating: 650 Expert • 272 Submissions • 89 Accepted • Band 500-700"
+    },
+    {
+      "id": "eolymp",
+      "name": "Eolymp",
+      "handle": "user133660",
+      "profileUrl": "https://eolymp.com/users/user133660",
+      "solved": 4,
+      "badge": "3 Achievements",
+      "color": "#14B8A6",
+      "accentColor": "#2DD4BF",
+      "category": "practice",
+      "fetchType": "eolymp_scraper",
+      "icon": "eo",
+      "details": "European online olympiad platform • 9 Submissions • 3 Achievements"
+    },
+    {
+      "id": "tlx",
+      "name": "TLX TOKI",
+      "handle": "AhSaN",
+      "profileUrl": "https://tlx.toki.id/profiles/AhSaN",
+      "solved": 1,
+      "badge": "100 Pts Score",
+      "color": "#0284C7",
+      "accentColor": "#38BDF8",
+      "category": "competitive",
+      "fetchType": "tlx_cached",
+      "icon": "tlx",
+      "details": "Indonesian National Olympiad training & contest platform"
     }
   ]
 }
