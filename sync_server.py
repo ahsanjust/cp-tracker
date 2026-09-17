@@ -6,8 +6,8 @@ import os
 import re
 import urllib.parse
 import urllib.request
-import threading
 import sys
+from datetime import datetime, timezone
 
 PORT = 3333
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -18,6 +18,11 @@ def load_config():
         return json.load(f)
 
 def save_config(data):
+    # Stamp every save so the frontend can show "Last synced"
+    try:
+        data["lastUpdated"] = datetime.now(timezone.utc).isoformat()
+    except Exception:
+        pass
     with open(CONFIG_FILE, "w") as f:
         json.dump(data, f, indent=2)
 
@@ -39,10 +44,36 @@ def fetch_platform_live(p):
                     for sub in data["result"]:
                         if sub.get("verdict") == "OK":
                             prob = sub.get("problem", {})
-                    # The official Codeforces profile page excludes 15 unindexed/mashup tasks
-                    p["solved"] = max(3183, len(solved) - 15)
-                    p["details"] = "3,183 problems solved for all time across official rounds & practice"
+                            contest_id = prob.get("contestId", "gym")
+                            index = prob.get("index", "?")
+                            solved.add(f"{contest_id}_{index}")
+                    # The official Codeforces profile page excludes
+                    # ~15 unindexed / mashup tasks counted by the API.
+                    api_unique = max(0, len(solved) - 15)
+                    prev = int(p.get("solved") or 0)
+                    # Never regress below the last verified count.
+                    p["solved"] = max(prev, api_unique)
+                    p["details"] = f"{p['solved']:,} problems solved for all time across official rounds & practice"
                     updated = True
+            # Also refresh live rating / rank (best-effort, never fails sync)
+            try:
+                info_url = f"https://codeforces.com/api/user.info?handles={urllib.parse.quote(handle)}"
+                info_req = urllib.request.Request(info_url, headers=headers)
+                with urllib.request.urlopen(info_req, timeout=10) as iresp:
+                    idata = json.loads(iresp.read().decode())
+                    if idata.get("status") == "OK" and idata.get("result"):
+                        u = idata["result"][0]
+                        if u.get("rating"):
+                            p["rating"] = int(u["rating"])
+                        if u.get("maxRating"):
+                            p["maxRating"] = int(u["maxRating"])
+                        if u.get("rank"):
+                            # Keep human-readable "Expert (1774)" badge in sync
+                            rank_title = u["rank"].capitalize()
+                            p["rank"] = rank_title
+                            p["badge"] = f"{rank_title} ({p.get('rating', u.get('rating'))})"
+            except Exception as e:
+                print(f"[codeforces] rating refresh note: {e}")
 
         elif fid == "vjudge":
             url = f"https://vjudge.net/user/solveDetail/{urllib.parse.quote(handle)}"
