@@ -28,7 +28,7 @@
         details: 'Solved across CodeForces, SPOJ, UVA, AtCoder, CSES, HDU, LightOJ & more' },
       { id: 'leetcode', name: 'LeetCode', handle: 'Ahsanul_haque_', profileUrl: 'https://leetcode.com/u/Ahsanul_haque_/', solved: 364, rating: 2142, rank: 'Guardian', badge: 'Guardian (Top 1.24%)', color: '#F59E0B', accentColor: '#FCD34D', category: 'practice', fetchType: 'leetcode_api', breakdown: { easy: 124, medium: 168, hard: 72 },
         details: 'Rating: 2142 • Top 1.24% worldwide • 72 Hard solves' },
-      { id: 'toph', name: 'Toph', handle: 'AhSaN.x', profileUrl: 'https://toph.co/u/AhSaN.x', solved: 364, rank: 'Rank #39', badge: 'Rank #39 National', color: '#0284C7', accentColor: '#38BDF8', category: 'national', fetchType: 'toph_scraper',
+      { id: 'toph', name: 'Toph', handle: 'AhSaN.x', profileUrl: 'https://toph.co/u/AhSaN.x', solved: 364, badge: '364 Solved', color: '#0284C7', accentColor: '#38BDF8', category: 'national', fetchType: 'toph_scraper',
         details: 'Mathematics (66), Easy (21), Brute Force (19), Game Theory & Nim (8)' },
       { id: 'codechef', name: 'CodeChef', handle: 'ahsanul_haque', profileUrl: 'https://www.codechef.com/users/ahsanul_haque', solved: 265, rating: 1900, rank: '4 Stars', badge: '4 Stars (★★★★)', color: '#935424', accentColor: '#D97706', category: 'competitive', fetchType: 'codechef_scraper',
         details: 'Max Rating 1900 • Division 2 Contestant' },

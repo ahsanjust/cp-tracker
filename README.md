@@ -21,7 +21,6 @@
   - ⚡ **LeetCode Guardian:** Rating 2142 (Top 1.24% worldwide)
   - 🎯 **Codeforces Expert:** Rating 1774
   - 🌟 **CodeChef 4 Stars:** Rating 1900
-  - 🇧🇩 **Toph:** Rank #39 National
 
 ---
 
@@ -32,7 +31,7 @@
 | **Codeforces** | [`Ahsan_`](https://codeforces.com/profile/Ahsan_) | **3,183** | 1774 (Expert) | Live REST API |
 | **Virtual Judge** | [`Ahsan_`](https://vjudge.net/user/Ahsan_) | **583** | 21 Sub-Judges | Live REST API |
 | **LeetCode** | [`Ahsanul_haque_`](https://leetcode.com/u/Ahsanul_haque_/) | **364** | 2142 (Guardian) | GraphQL API |
-| **Toph** | [`AhSaN.x`](https://toph.co/u/AhSaN.x) | **364** | Rank #39 | Web Scraper / Sync |
+| **Toph** | [`AhSaN.x`](https://toph.co/u/AhSaN.x) | **364** | 364 Solved | Web Scraper / Sync |
 | **CodeChef** | [`ahsanul_haque`](https://www.codechef.com/users/ahsanul_haque) | **265** | 1900 (4★) | Web Scraper / Sync |
 | **CSES** | [`Ahsanul_Haque`](https://cses.fi/problemset/list/) | **262** | 262 Solved (65.5%) | Cached / Sync |
 | **AtCoder** | [`AHSANx`](https://atcoder.jp/users/AHSANx) | **148** | Rank 45,634 | Kenkoooo API |
