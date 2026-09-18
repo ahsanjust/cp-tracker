@@ -143,16 +143,16 @@
       "id": "beecrowd",
       "name": "Beecrowd (URI)",
       "handle": "ahsanulhaque5588",
-      "profileUrl": "https://judge.beecrowd.com/en/",
-      "solved": 105,
-      "rank": "Rank 26,871 (Top 1%)",
+      "profileUrl": "https://judge.beecrowd.com/en/profile/899745",
+      "solved": 118,
+      "rank": "Rank 26,872 (Top 4%)",
       "badge": "316.60 Points",
       "color": "#8B5CF6",
       "accentColor": "#A78BFA",
       "category": "national",
       "fetchType": "beecrowd_cached",
       "icon": "bee",
-      "details": "Top 1% worldwide with 316.60 academic & contest points"
+      "details": "Top 4% worldwide with 316.60 points • 355 Submissions • Hardest: 1047"
     },
     {
       "id": "spoj",
