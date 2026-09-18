@@ -49,15 +49,15 @@
 .stack-block {
   display: flex;
   flex-direction: column;
-  gap: var(--s-6);
+  gap: var(--s-5);
 }
 
 .stack {
   position: relative;
   display: flex;
   gap: 4px;
-  height: 18px;
-  padding: 3px;
+  height: 16px;
+  padding: 2px;
   background: rgba(0, 0, 0, 0.5);
   border: 1px solid var(--line);
   border-radius: var(--r-pill);
@@ -68,7 +68,7 @@
   flex: var(--w, 1) 1 0;
   border-radius: var(--r-pill);
   background: var(--seg-color, var(--accent));
-  box-shadow: 0 0 12px var(--seg-color, transparent);
+  box-shadow: 0 0 10px var(--seg-color, transparent);
   transform-origin: left center;
   animation: stack-in 0.65s var(--ease-spring) both;
   animation-delay: calc(var(--i, 0) * 80ms);
@@ -76,7 +76,7 @@
 }
 
 .stack__seg:hover {
-  transform: scaleY(1.2);
+  transform: scaleY(1.25);
   filter: brightness(1.25);
   z-index: 2;
 }
@@ -87,35 +87,26 @@
   }
 }
 
-/* Difficulty 3-Card Summary Grid */
+/* Clean editorial stats row */
 .stack__legend {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
-  gap: var(--s-4);
-  max-width: 860px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-3) var(--s-8);
+  margin-top: var(--s-2);
 }
 
 .stack__item {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: var(--s-3);
-  padding: 12px 16px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--line);
-  border-radius: var(--r-2);
-  box-shadow: var(--shadow-sm), var(--glass-highlight-subtle);
+  font-size: var(--fs-sm);
   transition: all var(--transition-fast);
 }
 
-.stack__item:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: var(--line-strong);
-  transform: translateY(-2px);
-}
-
 .stack__dot {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   flex: none;
   border-radius: var(--r-pill);
   background: var(--seg-color, var(--accent));
@@ -128,18 +119,15 @@
 }
 
 .stack__val {
-  margin-inline-start: auto;
   font-family: var(--mono);
-  font-size: var(--fs-lg);
+  font-size: var(--fs-base);
   font-weight: 700;
   color: #ffffff;
 }
 
 .stack__pct {
-  min-width: 44px;
-  text-align: right;
   font-family: var(--mono);
   font-size: var(--fs-micro);
-  font-weight: 600;
+  font-weight: 500;
   color: var(--text-3);
 }

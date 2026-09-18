@@ -118,3 +118,7 @@ main[id] {
 .skip-link:focus {
   transform: translateY(0);
 }
+
+.is-hidden {
+  display: none !important;
+}
