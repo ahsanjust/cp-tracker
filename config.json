@@ -99,16 +99,15 @@
       "id": "cses",
       "name": "CSES Problem Set",
       "handle": "Ahsanul_Haque",
-      "profileUrl": "https://cses.fi/problemset/stats/friends/",
+      "profileUrl": "https://cses.fi/problemset/list/",
       "solved": 262,
-      "rank": "Rank #2 Friends",
-      "badge": "262 / 400 Tasks",
+      "badge": "262 Solved",
       "color": "#E11D48",
       "accentColor": "#FB7185",
       "category": "national",
       "fetchType": "cses_cached",
       "icon": "cses",
-      "details": "65.5% completion of the prestigious CSES algorithm suite"
+      "details": "262 problems solved across CSES benchmark algorithm suite"
     },
     {
       "id": "atcoder",
