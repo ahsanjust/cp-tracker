@@ -29,8 +29,8 @@
 .hero::before {
   inset: -10% -5% 10% -5%;
   background-image:
-    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
   background-size: 56px 56px;
   -webkit-mask-image: radial-gradient(ellipse 90% 70% at 20% 15%, #000 0%, transparent 75%);
   mask-image: radial-gradient(ellipse 90% 70% at 20% 15%, #000 0%, transparent 75%);
@@ -41,7 +41,7 @@
   left: -8%;
   width: min(780px, 92%);
   height: 560px;
-  background: radial-gradient(circle, rgba(56, 189, 248, 0.09) 0%, rgba(139, 92, 246, 0.04) 50%, transparent 75%);
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.08) 0%, rgba(139, 92, 246, 0.035) 50%, transparent 75%);
 }
 
 .hero__title {
@@ -49,16 +49,16 @@
   font-size: inherit;
 }
 
-/* High-end pill eyebrow */
+/* Live pill eyebrow */
 .hero__eyebrow {
   display: inline-flex;
   align-items: center;
   gap: var(--s-2);
-  padding: 6px 14px;
+  padding: 5px 14px;
   border-radius: var(--r-pill);
   background: rgba(56, 189, 248, 0.08);
-  border: 1px solid rgba(56, 189, 248, 0.24);
-  box-shadow: 0 0 20px -3px rgba(56, 189, 248, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.22);
+  box-shadow: 0 0 16px -3px rgba(56, 189, 248, 0.15);
   font-family: var(--mono);
   font-size: var(--fs-micro);
   font-weight: 600;
@@ -73,10 +73,10 @@
   margin-top: var(--s-2);
 }
 
-/* Monumental display numeral with metallic gradient sheen */
+/* Monumental display numeral */
 .hero__num {
   display: block;
-  font-size: clamp(3.5rem, 8vw, 8rem);
+  font-size: clamp(3.5rem, 8vw, 7.8rem);
   font-weight: 700;
   line-height: 0.92;
   letter-spacing: -0.04em;
@@ -84,7 +84,7 @@
   background: linear-gradient(180deg, #ffffff 15%, #cbd5e1 90%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 4px 24px rgba(255, 255, 255, 0.15));
+  filter: drop-shadow(0 4px 20px rgba(255, 255, 255, 0.12));
 }
 
 .hero__unit {
@@ -109,66 +109,54 @@
   line-height: 1.6;
 }
 
-/* Credential highlight capsules */
+/* Editorial results preview: clean hairline rows with hover accent */
 .hero__results {
-  display: flex;
-  flex-direction: column;
-  gap: var(--s-2);
-  max-width: 56ch;
+  max-width: 52ch;
   margin-top: var(--s-6);
+  border-top: 1px solid var(--line);
 }
 
 .hero__result {
   display: flex;
-  align-items: center;
-  gap: var(--s-3);
-  padding: 10px 16px;
-  background: rgba(255, 255, 255, 0.025);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid var(--line);
-  border-radius: var(--r-2);
-  box-shadow: var(--shadow-sm), var(--glass-highlight-subtle);
-  transition: all var(--transition-fast);
+  align-items: baseline;
+  gap: var(--s-4);
+  padding: 10px var(--s-2);
+  margin-inline: calc(-1 * var(--s-2));
+  border-bottom: 1px solid var(--line);
+  border-left: 2px solid transparent;
+  border-radius: var(--r-1);
+  transition: all 0.2s var(--ease-spring);
 }
 
 .hero__result:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: var(--line-strong);
-  transform: translateX(3px);
-  box-shadow: var(--shadow-md), var(--glass-highlight);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.035) 0%, transparent 100%);
+  border-left-color: var(--accent);
+  transform: translateX(4px);
+}
+
+.hero__result:first-child:hover {
+  border-left-color: var(--gold);
 }
 
 .hero__result-mark {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 48px;
-  padding: 3px 8px;
-  border-radius: var(--r-1);
+  min-width: 3.8ch;
   font-family: var(--mono);
-  font-size: var(--fs-micro);
+  font-size: var(--fs-sm);
   font-weight: 700;
-  background: rgba(245, 158, 11, 0.12);
-  border: 1px solid rgba(245, 158, 11, 0.3);
   color: var(--gold);
 }
 
 .hero__result:nth-child(2) .hero__result-mark {
-  background: rgba(203, 213, 225, 0.12);
-  border-color: rgba(203, 213, 225, 0.3);
   color: var(--silver);
 }
 
 .hero__result-text {
   font-size: var(--fs-sm);
-  font-weight: 500;
-  color: var(--text-1);
+  color: var(--text-2);
 }
 
 .hero__result-alt {
   color: var(--text-3);
-  font-weight: 400;
 }
 
 .cta-row {
@@ -216,29 +204,14 @@
   text-transform: none;
 }
 
-/* 5b. The Telemetry Scoreboard ============================================= */
+/* 5b. The Telemetry Scoreboard (Canvas-Integrated, No Bulky Card) =========== */
 
 .board {
   min-width: 0;
-  background: var(--glass-card);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--line);
-  border-radius: var(--r-3);
-  padding: var(--s-6);
-  box-shadow: var(--shadow-glass);
-  position: relative;
-  overflow: hidden;
-}
-
-.board::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.45), transparent);
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
 }
 
 .board__head {
@@ -247,8 +220,8 @@
   align-items: baseline;
   justify-content: space-between;
   gap: var(--s-2) var(--s-4);
-  padding-bottom: var(--s-4);
-  border-bottom: 1px solid var(--line);
+  padding-bottom: var(--s-3);
+  border-bottom: 1px solid var(--line-strong);
 }
 
 .board__title {
@@ -263,17 +236,41 @@
   color: var(--text-3);
 }
 
+/* Editorial standing rows with sleek interactive mouse hover */
 .standing {
+  position: relative;
   display: grid;
-  gap: var(--s-3);
-  padding: var(--s-5) 0;
+  gap: var(--s-2);
+  padding: var(--s-4) var(--s-3);
+  margin-inline: calc(-1 * var(--s-3));
   border-bottom: 1px solid var(--line);
-  transition: background var(--transition-fast);
+  border-left: 2px solid transparent;
+  border-radius: var(--r-1);
+  transition: all 0.22s var(--ease-spring);
+  cursor: default;
 }
 
 .standing:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.standing:hover {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.005) 100%);
+  border-left-color: var(--tier, var(--accent));
+  transform: translateX(4px);
+}
+
+.standing:hover .standing__num {
+  text-shadow: 0 0 16px rgba(255, 255, 255, 0.4);
+}
+
+.standing:hover .ladder__fill {
+  filter: brightness(1.2);
+}
+
+.standing:hover .ladder__marker {
+  box-shadow: 0 0 12px #ffffff;
+  transform: scaleY(1.2);
 }
 
 .standing__head {
@@ -304,9 +301,9 @@
   line-height: 1;
   letter-spacing: -0.025em;
   color: #ffffff;
+  transition: text-shadow 0.15s ease;
 }
 
-/* Tier badge with colored glow */
 .standing__tier {
   display: inline-flex;
   align-items: center;
@@ -317,7 +314,7 @@
   color: var(--tier, #ffffff);
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 0 16px -2px rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 14px -2px rgba(255, 255, 255, 0.08);
 }
 
 .standing__qual {
@@ -350,7 +347,7 @@
 .ladder {
   position: relative;
   flex: 1;
-  height: 12px;
+  height: 10px;
 }
 
 .ladder__track {
@@ -359,38 +356,34 @@
   border-radius: var(--r-pill);
   background: rgba(0, 0, 0, 0.45);
   border: 1px solid var(--line);
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .ladder__fill {
   position: absolute;
-  top: 2px;
-  bottom: 2px;
-  left: 2px;
-  width: calc((100% - 4px) * var(--pct, 0));
+  top: 1px;
+  bottom: 1px;
+  left: 1px;
+  width: calc((100% - 2px) * var(--pct, 0));
   border-radius: var(--r-pill);
-  background: linear-gradient(90deg, rgba(56, 189, 248, 0.2) 0%, rgba(56, 189, 248, 0.85) 100%);
-  box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+  background: linear-gradient(90deg, rgba(56, 189, 248, 0.15) 0%, rgba(56, 189, 248, 0.8) 100%);
   animation: ladder-fill 0.8s var(--ease-spring) both;
   transform-origin: left center;
+  transition: filter 0.2s ease;
 }
 
 /* LeetCode Amber Fill */
 .standing:first-child .ladder__fill {
-  background: linear-gradient(90deg, rgba(245, 158, 11, 0.2) 0%, rgba(245, 158, 11, 0.9) 100%);
-  box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
+  background: linear-gradient(90deg, rgba(245, 158, 11, 0.15) 0%, rgba(245, 158, 11, 0.85) 100%);
 }
 
 /* Codeforces Blue Fill */
 .standing:nth-child(2) .ladder__fill {
-  background: linear-gradient(90deg, rgba(56, 189, 248, 0.2) 0%, rgba(56, 189, 248, 0.9) 100%);
-  box-shadow: 0 0 12px rgba(56, 189, 248, 0.45);
+  background: linear-gradient(90deg, rgba(56, 189, 248, 0.15) 0%, rgba(56, 189, 248, 0.85) 100%);
 }
 
 /* CodeChef Copper/Orange Fill */
 .standing:nth-child(3) .ladder__fill {
-  background: linear-gradient(90deg, rgba(217, 119, 6, 0.2) 0%, rgba(217, 119, 6, 0.9) 100%);
-  box-shadow: 0 0 12px rgba(217, 119, 6, 0.4);
+  background: linear-gradient(90deg, rgba(217, 119, 6, 0.15) 0%, rgba(217, 119, 6, 0.85) 100%);
 }
 
 @keyframes ladder-fill {
@@ -401,8 +394,8 @@
 
 .ladder__tick {
   position: absolute;
-  top: 1px;
-  bottom: 1px;
+  top: 0;
+  bottom: 0;
   left: var(--at);
   width: 1px;
   background: rgba(255, 255, 255, 0.15);
@@ -414,11 +407,12 @@
   top: -3px;
   bottom: -3px;
   left: var(--at);
-  width: 4px;
+  width: 3px;
   background: #ffffff;
-  border-radius: 2px;
+  border-radius: 1px;
   box-shadow: 0 0 8px rgba(255, 255, 255, 0.8), 0 0 0 1px var(--ink);
   z-index: 3;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .ladder__scale {
