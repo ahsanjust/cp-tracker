@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ahsanul Haque — Competitive Programming Record (5,616+ Solved)</title>
-  <meta name="description" content="A verifiable record of 5,616+ competitive programming problems solved by Ahsanul Haque across 14 online judges — Codeforces, LeetCode, CodeChef, AtCoder, VJudge, Toph, CSES and more.">
+  <title>Ahsanul Haque — Competitive Programming Record (5,616 solves, 14 judges)</title>
+  <meta name="description" content="A verifiable record of 5,616 problems solved by Ahsanul Haque across 14 judge accounts — Codeforces, LeetCode, CodeChef, AtCoder, VJudge, Toph, CSES and more. Counts are quoted per judge, so an overlapping solve counts twice; at least 5,033 are distinct.">
   <meta name="author" content="Ahsanul Haque">
   <meta name="theme-color" content="#08090c">
   <link rel="canonical" href="https://ahsanjust.github.io/cp-tracker/">
@@ -31,14 +31,14 @@
   <!-- SEO & Social Sharing (LinkedIn, Twitter, Discord) -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://ahsanjust.github.io/cp-tracker/">
-  <meta property="og:title" content="Ahsanul Haque — Competitive Programming Record (5,616+ Solved)">
-  <meta property="og:description" content="Live problem-solving statistics across Codeforces (Expert 1774), LeetCode (Guardian 2142), CodeChef (4-star, 1900), AtCoder, VJudge, Toph, CSES and 14 online judges.">
+  <meta property="og:title" content="Ahsanul Haque — Competitive Programming Record (5,616 solves, 14 judges)">
+  <meta property="og:description" content="5,616 problems solved across 14 judge accounts, at least 5,033 of them distinct — Codeforces (Expert 1774), LeetCode (Guardian 2142), CodeChef (4-star 1900), AtCoder, Virtual Judge, Toph, CSES and more.">
   <meta property="og:image" content="https://ahsanjust.github.io/cp-tracker/assets/og_preview.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Ahsanul Haque — Competitive Programming Record">
-  <meta name="twitter:description" content="5,616+ problems solved across 14 online judges · LeetCode Guardian · Codeforces Expert">
+  <meta name="twitter:description" content="5,616 solved across 14 judge accounts (≥5,033 distinct) · LeetCode Guardian · Codeforces Expert">
   <meta name="twitter:image" content="https://ahsanjust.github.io/cp-tracker/assets/og_preview.png">
   <link rel="icon" type="image/png" href="assets/avatar-160.png">
 
@@ -93,10 +93,15 @@
           <span class="hero__eyebrow">Ahsanul Haque — competitive programming record</span>
           <span class="hero__figure">
             <span class="hero__num num" id="hero-total">5,616</span>
-            <span class="hero__unit">problems solved across <span class="num" id="hero-judges">14</span> online judges</span>
+            <!-- Two readings of the same figure: the sum of every judge account, and
+                 the deduplicated count. The dedup toggle swaps which one is shown. -->
+            <span class="hero__unit" id="hero-unit">
+              <span id="hero-unit-sum">problems solved across <span class="num" id="hero-judges">14</span> judge accounts, of which at least <span class="num" id="hero-unique">5,033</span> are distinct</span>
+              <span id="hero-unit-dedup" class="is-hidden">distinct problems, with Virtual Judge's overlapping solves excluded</span>
+            </span>
           </span>
         </h1>
-        <p class="hero__sub" id="hero-sub">Aggregated from live judge APIs, public profiles and tracked snapshots — Codeforces, LeetCode, CodeChef, AtCoder, Virtual Judge, Toph, CSES and seven more. Totals sum each judge's own record, so a problem solved on two judges counts twice.</p>
+        <p class="hero__sub" id="hero-sub">Each judge counts its own account, so the total is an upper bound: a problem solved on both Virtual Judge and its original judge is counted twice. Dropping Virtual Judge — which mirrors the others — leaves the 5,033 that are certainly distinct. Every figure links to the profile it came from, so any single one can be checked against its source.</p>
 
         <div class="cta-row">
           <a class="btn btn--primary" href="https://codeforces.com/profile/Ahsan_" target="_blank" rel="noopener noreferrer">View Codeforces</a>
@@ -296,7 +301,7 @@
               <div class="field">
                 <span class="field__label" id="embed-label">Embed badge (Markdown)</span>
                 <div class="field__row">
-                  <span class="field__value" id="embed-code">[![CP Tracker — 5,616+ problems solved](https://ahsanjust.github.io/cp-tracker/assets/og_preview.png)](https://ahsanjust.github.io/cp-tracker/)</span>
+                  <span class="field__value" id="embed-code">[![CP Tracker — 5,616 solves across 14 judges](https://ahsanjust.github.io/cp-tracker/assets/og_preview.png)](https://ahsanjust.github.io/cp-tracker/)</span>
                   <button type="button" class="copy-btn" data-copy-target="embed-code" aria-describedby="embed-label">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg>
                     Copy
