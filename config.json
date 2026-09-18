@@ -152,7 +152,7 @@
       "category": "national",
       "fetchType": "beecrowd_cached",
       "icon": "bee",
-      "details": "Top 4% worldwide with 316.60 points • 355 Submissions • Hardest: 1047"
+      "details": "Top 4% worldwide with 316.60 points \u2022 355 Submissions \u2022 Hardest: 1047"
     },
     {
       "id": "spoj",
@@ -228,5 +228,5 @@
       "details": "Rating: 650 Expert \u2022 272 Submissions \u2022 89 Accepted \u2022 Band 500-700"
     }
   ],
-  "lastUpdated": "2026-09-18T05:39:15.644870+00:00"
+  "lastUpdated": "2026-09-18T05:58:52.152297+00:00"
 }
