@@ -5,7 +5,7 @@
 
    Contents
    1. Tokens          5. Hero            9. Analytics
-   2. Reset & base    6. Achievements   10. Verify & footer
+   2. Reset & base    6. Ledger         10. Verify & footer
    3. Primitives      7. Toolbar        11. Feedback & states
    4. Header          8. Judge grid     12. Motion & responsive
    ========================================================================== */
@@ -38,6 +38,8 @@
   /* Semantic — only where it encodes meaning */
   --ok: #34d399;
   --warn: #fbbf24;
+  /* A championship is not a warning: same hue, distinct meaning. */
+  --gold: #fbbf24;
   --easy: #34d399;
   --medium: #fbbf24;
   --hard: #fb7185;
@@ -73,7 +75,7 @@
   --fs-lg: 1.0625rem;
   --fs-xl: 1.375rem;
   --fs-2xl: 1.75rem;
-  --fs-display: 2.25rem;
+  /* The hero numeral is a one-off clamp rather than a token (DESIGN.md §4). */
   --track-tight: -0.021em;
 
   color-scheme: dark;
@@ -392,38 +394,86 @@ main[id] {
 /* 5. Hero ================================================================== */
 
 .hero {
+  position: relative;
+  /* Contains the z-index:-1 wash so it cannot slip behind the page. */
+  isolation: isolate;
   padding: var(--s-14) 0 var(--s-10);
 }
 
-.hero__title {
-  font-size: var(--fs-display);
+/* Instrumentation rather than decoration: a hairline grid that fades out toward
+   the edges, and one soft accent wash behind the numeral. Both are inert. */
+.hero::before,
+.hero::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
 }
 
-.hero__name {
+.hero::before {
+  inset: 0 0 30% 0;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 64px 64px;
+  -webkit-mask-image: radial-gradient(115% 85% at 15% 0%, #000 0%, transparent 70%);
+  mask-image: radial-gradient(115% 85% at 15% 0%, #000 0%, transparent 70%);
+}
+
+.hero::after {
+  top: -12%;
+  left: -6%;
+  width: min(720px, 88%);
+  height: 520px;
+  background: radial-gradient(closest-side, rgba(56, 189, 248, 0.09), transparent 100%);
+}
+
+.hero__title {
+  display: block;
+  /* The h1 holds the eyebrow, the numeral and the lead line, all of which set
+     their own size. Inheriting stops the UA's 2em default leaking a phantom
+     30px step into the type scale. */
+  font-size: inherit;
+}
+
+.hero__eyebrow {
   display: block;
   font-size: var(--fs-micro);
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--text-3);
-  margin-bottom: var(--s-4);
 }
 
-.hero__claim {
+.hero__figure {
   display: block;
-  font-size: var(--fs-display);
-  line-height: 1.15;
-  max-width: 26ch;
+  margin-top: var(--s-6);
 }
 
-.hero__claim .num {
-  color: var(--accent);
+/* The numeral is the wordmark: the page's whole claim in one run of digits, set
+   at roughly ten times the body size so the hierarchy is unmistakable. */
+.hero__num {
+  display: block;
+  font-size: clamp(3.75rem, 12.5vw, 9.5rem);
+  font-weight: 600;
+  line-height: 0.9;
+  letter-spacing: -0.045em;
+  color: var(--text-1);
+}
+
+.hero__unit {
+  display: block;
+  max-width: 26ch;
+  margin-top: var(--s-5);
+  font-size: var(--fs-lg);
+  line-height: 1.4;
+  color: var(--text-2);
 }
 
 .hero__sub {
-  max-width: 60ch;
-  margin-top: var(--s-4);
-  color: var(--text-2);
+  max-width: 62ch;
+  margin-top: var(--s-5);
+  color: var(--text-3);
 }
 
 .cta-row {
@@ -433,43 +483,57 @@ main[id] {
   margin-top: var(--s-6);
 }
 
-.hero__meta {
+/* Provenance as a terminal readout: one mono line of facts, hairline-separated,
+   so it reads as a status bar instead of a row of promotional badges. */
+.readout {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--s-6) var(--s-8);
+  align-items: center;
+  gap: var(--s-3) var(--s-5);
   margin-top: var(--s-10);
-  padding-top: var(--s-6);
+  padding-top: var(--s-5);
   border-top: 1px solid var(--line);
-}
-
-.meta-item {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.meta-item__value {
   font-family: var(--mono);
-  font-size: var(--fs-lg);
-  font-weight: 600;
-  letter-spacing: -0.01em;
-}
-
-.meta-item__label {
   font-size: var(--fs-micro);
-  letter-spacing: 0.08em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--text-3);
 }
 
-.meta-item--live .meta-item__value {
+.readout__item {
   display: inline-flex;
   align-items: center;
   gap: var(--s-2);
-  font-size: var(--fs-base);
+}
+
+.readout__item:not(:last-child)::after {
+  content: "";
+  width: 1px;
+  height: 9px;
+  background: var(--line-strong);
+}
+
+.readout__val {
   color: var(--text-2);
-  font-family: var(--font);
-  font-weight: 500;
+  font-weight: 600;
+}
+
+/* The timestamp is the one value worth reading as text, so it keeps its case. */
+.readout__item--live .readout__val {
+  color: var(--text-1);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* The only looping cue besides the sync spinner, and it encodes live state. */
+@keyframes live-pulse {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.readout__item--live .dot--live {
+  animation: live-pulse 2.8s ease-in-out infinite;
 }
 
 /* 6. Sections & achievements =============================================== */
@@ -499,48 +563,82 @@ main[id] {
   max-width: 52ch;
 }
 
-.achievements {
+/* 6. Ledger ================================================================ */
+
+/* Achievements as an editorial ledger: hairline rules instead of cards, and the
+   placement set in mono as the scannable element. */
+.ledger {
+  border-top: 1px solid var(--line);
+}
+
+.ledger__row {
+  position: relative;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
-  gap: var(--s-4);
+  grid-template-columns: minmax(80px, auto) minmax(0, 1fr);
+  align-items: start;
+  gap: var(--s-2) var(--s-6);
+  padding: var(--s-5) 0;
+  border-bottom: 1px solid var(--line);
 }
 
-.achievement {
-  display: flex;
-  gap: var(--s-4);
-  padding: var(--s-5);
-  background: var(--surface-2);
-  border: 1px solid var(--line);
-  border-radius: var(--r-2);
+/* One hairline grows into the row on hover, so motion marks the row being read
+   rather than decorating every row at rest. */
+.ledger__row::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 2px;
+  background: var(--accent);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.22s cubic-bezier(0.2, 0.8, 0.3, 1);
 }
 
-.achievement__icon {
+.ledger__row:hover::before {
+  transform: scaleY(1);
+}
+
+.ledger__mark {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 34px;
-  height: 34px;
-  flex: none;
-  border-radius: var(--r-1);
-  background: var(--accent-weak);
+  flex-direction: column;
+  gap: 3px;
+  font-family: var(--mono);
+  font-size: var(--fs-xl);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--text-2);
+  transition: color 0.15s ease;
+}
+
+.ledger__row:hover .ledger__mark {
   color: var(--accent);
 }
 
-.achievement__title {
-  font-size: var(--fs-base);
-  font-weight: 600;
-  line-height: 1.35;
+.ledger__row--gold .ledger__mark,
+.ledger__row--gold:hover .ledger__mark {
+  color: var(--gold);
 }
 
-.achievement__meta {
-  margin-top: 2px;
-  font-size: var(--fs-sm);
+.ledger__unit {
+  font-size: var(--fs-micro);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--text-3);
 }
 
-.achievement--gold .achievement__icon {
-  background: rgba(251, 191, 36, 0.12);
-  color: var(--warn);
+.ledger__title {
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: var(--track-tight);
+}
+
+.ledger__meta {
+  margin-top: 4px;
+  font-size: var(--fs-sm);
+  color: var(--text-3);
 }
 
 /* 7. Toolbar =============================================================== */
@@ -554,50 +652,59 @@ main[id] {
   margin-bottom: var(--s-6);
 }
 
-.seg {
+/* Underline tabs on a single hairline, with one underline element that slides
+   between them (positioned by JS). The 2px transparent border keeps every tab
+   the same height so the rule never steps. */
+.tabs {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
-  gap: var(--s-1);
-  padding: var(--s-1);
-  background: var(--surface-2);
-  border: 1px solid var(--line);
-  border-radius: var(--r-2);
+  gap: 0 var(--s-2);
+  border-bottom: 1px solid var(--line);
 }
 
-.seg__btn {
+.tabs__indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--accent);
+  transition: transform 0.26s cubic-bezier(0.2, 0.8, 0.3, 1),
+    width 0.26s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+
+.tabs__btn {
   display: inline-flex;
   align-items: center;
   gap: var(--s-2);
-  min-height: 32px;
+  min-height: 40px;
   padding: 0 var(--s-3);
   border: 0;
-  border-radius: var(--r-1);
+  border-bottom: 2px solid transparent;
   background: transparent;
-  color: var(--text-2);
+  color: var(--text-3);
   font-size: var(--fs-sm);
   font-weight: 500;
   cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease;
+  transition: color 0.15s ease;
 }
 
-.seg__btn:hover {
+.tabs__btn:hover {
   color: var(--text-1);
-  background: var(--surface-3);
 }
 
-.seg__btn[aria-pressed="true"] {
-  background: var(--surface-3);
+.tabs__btn[aria-pressed="true"] {
   color: var(--text-1);
-  box-shadow: inset 0 0 0 1px var(--line-strong);
 }
 
-.seg__n {
+.tabs__n {
   font-family: var(--mono);
   font-size: var(--fs-micro);
   color: var(--text-3);
 }
 
-.seg__btn[aria-pressed="true"] .seg__n {
+.tabs__btn[aria-pressed="true"] .tabs__n {
   color: var(--accent);
 }
 
@@ -932,6 +1039,74 @@ main[id] {
   color: var(--text-1);
 }
 
+/* Stacked share bar — one bar, three bands. Widths come from flex-grow, so the
+   rendered proportion can never disagree with the printed numbers. */
+.stack-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-5);
+}
+
+.stack {
+  display: flex;
+  gap: 2px;
+  height: 10px;
+}
+
+.stack__seg {
+  flex: var(--w, 1) 1 0;
+  /* Pill ends, matching the judge bars: one bar language for the whole page. */
+  border-radius: var(--r-pill);
+  background: var(--seg-color, var(--accent));
+  transform-origin: left center;
+  animation: stack-in 0.55s cubic-bezier(0.2, 0.8, 0.3, 1) both;
+  animation-delay: calc(var(--i, 0) * 70ms);
+}
+
+@keyframes stack-in {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+.stack__legend {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
+  gap: var(--s-2) var(--s-4);
+}
+
+.stack__item {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-size: var(--fs-sm);
+}
+
+.stack__dot {
+  width: 8px;
+  height: 8px;
+  flex: none;
+  border-radius: var(--r-pill);
+  background: var(--seg-color, var(--accent));
+}
+
+.stack__label {
+  color: var(--text-2);
+}
+
+.stack__val {
+  margin-inline-start: auto;
+  font-weight: 500;
+  color: var(--text-1);
+}
+
+.stack__pct {
+  min-width: 46px;
+  text-align: right;
+  font-size: var(--fs-micro);
+  color: var(--text-3);
+}
+
 /* 10. Verify & footer ====================================================== */
 
 .verify {
@@ -1253,40 +1428,64 @@ main[id] {
 
   .btn,
   .copy-btn,
-  .seg__btn {
+  .tabs__btn {
     min-height: 44px;
   }
 
   /* --- Hero ------------------------------------------------------------- */
 
+  /* The wash is sized for a wide viewport; on a phone it would flood the whole
+     fold, so it is pulled in and dimmed. */
+  .hero::after {
+    left: -22%;
+    height: 300px;
+    opacity: 0.7;
+  }
+
   .hero {
     padding: var(--s-8) 0 var(--s-6);
   }
 
-  .hero__claim {
-    font-size: var(--fs-2xl);
+  .hero__figure {
+    margin-top: var(--s-5);
+  }
+
+  .hero__num {
+    /* Scaled up for the narrow range: 12.5vw reads as timid on a phone. */
+    font-size: clamp(3.5rem, 18vw, 5.5rem);
+  }
+
+  .hero__unit {
     max-width: none;
+    font-size: var(--fs-base);
   }
 
-  /* Four meta items as a 2x2 block: one tidy panel instead of a ragged wrap. */
-  .hero__meta {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--s-5) var(--s-4);
-    margin-top: var(--s-6);
-    padding-top: var(--s-5);
-  }
-
-  /* --- Achievements ----------------------------------------------------- */
-
-  .achievement {
+  /* The readout stacks: 12px mono cannot hold five facts on one phone line. */
+  .readout {
+    flex-direction: column;
+    align-items: flex-start;
     gap: var(--s-3);
-    padding: var(--s-4);
+    margin-top: var(--s-8);
   }
 
-  .achievement__icon {
-    width: 30px;
-    height: 30px;
+  .readout__item:not(:last-child)::after {
+    display: none;
+  }
+
+  /* --- Ledger ----------------------------------------------------------- */
+
+  .ledger__row {
+    grid-template-columns: minmax(64px, auto) minmax(0, 1fr);
+    gap: var(--s-2) var(--s-4);
+    padding: var(--s-4) 0;
+  }
+
+  .ledger__mark {
+    font-size: var(--fs-lg);
+  }
+
+  .ledger__title {
+    font-size: var(--fs-base);
   }
 
   /* --- Toolbar: a 2x2 keypad beats four ragged wrapped buttons ---------- */
@@ -1296,14 +1495,19 @@ main[id] {
     gap: var(--s-3);
   }
 
-  .seg {
+  /* A 2x2 keypad rather than a scrolling strip: every filter stays visible and
+     each one is a full-width target. Each tab carries its own rule so both rows
+     read as a tab bar; the sliding underline covers the active one. */
+  .tabs {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-bottom: 0;
   }
 
-  .seg__btn {
+  .tabs__btn {
     justify-content: center;
     line-height: 1.25;
+    border-bottom: 1px solid var(--line);
   }
 
   .switch-field {

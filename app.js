@@ -370,6 +370,29 @@
     // Bars animate themselves from CSS, so a re-render needs no reveal step.
   }
 
+  /* Difficulty mix as one stacked bar instead of three separate rows: the bands
+     read as parts of a single whole, which is what a share actually is. Segment
+     widths come from flex-grow, so the numbers stay the source of truth. */
+  function paintStack(barEl, legendEl, items) {
+    if (!barEl || !legendEl) return;
+    const total = items.reduce((sum, item) => sum + item.value, 0);
+    if (!total) {
+      barEl.innerHTML = '';
+      legendEl.innerHTML = '';
+      return;
+    }
+    barEl.innerHTML = items.map((item, index) =>
+      `<span class="stack__seg" style="--w:${(item.value / total).toFixed(4)};--seg-color:${item.color};--i:${index}"></span>`
+    ).join('');
+    legendEl.innerHTML = items.map((item) => `
+      <li class="stack__item">
+        <span class="stack__dot" style="--seg-color:${item.color}" aria-hidden="true"></span>
+        <span class="stack__label">${esc(item.label)}</span>
+        <span class="stack__val num">${formatInt(item.value)}</span>
+        <span class="stack__pct num">${((item.value / total) * 100).toFixed(1)}%</span>
+      </li>`).join('');
+  }
+
   function renderAnalytics() {
     // Distribution — ranked, and consistent with the headline total.
     const ranked = visiblePlatforms().slice().sort((a, b) => b.solved - a.solved);
@@ -396,16 +419,16 @@
     const diffNote = $('difficulty-bars-note');
 
     if (!mix || (!mix.easy && !mix.medium && !mix.hard)) {
-      paintBars($('bars-difficulty'), []);
+      paintStack($('difficulty-bar'), $('difficulty-legend'), []);
       if (diffNote) diffNote.textContent = 'Breakdown unavailable';
       return;
     }
 
     const sum = mix.easy + mix.medium + mix.hard;
-    paintBars($('bars-difficulty'), [
-      { label: 'Easy', value: mix.easy, share: mix.easy / sum, color: 'var(--easy)' },
-      { label: 'Medium', value: mix.medium, share: mix.medium / sum, color: 'var(--medium)' },
-      { label: 'Hard', value: mix.hard, share: mix.hard / sum, color: 'var(--hard)' }
+    paintStack($('difficulty-bar'), $('difficulty-legend'), [
+      { label: 'Easy', value: mix.easy, color: 'var(--easy)' },
+      { label: 'Medium', value: mix.medium, color: 'var(--medium)' },
+      { label: 'Hard', value: mix.hard, color: 'var(--hard)' }
     ]);
 
     if (diffNote) {
@@ -427,6 +450,7 @@
     renderJudges();
     renderAnalytics();
     renderNotice();
+    positionTabIndicator(false);
     state.rendered = true;
   }
 
@@ -642,14 +666,42 @@
     revealObserver.observe(el);
   }
 
+  /* The active tab owns one sliding underline, so its geometry is re-measured
+     whenever the active tab, the counts or the wrapped line breaks change.
+     `animate` is false for layout-driven moves (first paint, resize, re-filter)
+     so the bar jumps into place instead of sliding for no reason. */
+  function positionTabIndicator(animate) {
+    const group = $('judge-filter');
+    const indicator = group && group.querySelector('.tabs__indicator');
+    if (!indicator) return;
+    const active = group.querySelector('.tabs__btn[aria-pressed="true"]');
+    if (!active) {
+      indicator.style.width = '0px';
+      return;
+    }
+    if (!animate) indicator.style.transition = 'none';
+    // Offset by the active tab's own row, because the tabs wrap to two rows on
+    // a phone; the underline lands on that tab's rule either way.
+    const top = active.offsetTop + active.offsetHeight - 2;
+    indicator.style.transform = `translate(${active.offsetLeft}px, ${top}px)`;
+    indicator.style.width = `${active.offsetWidth}px`;
+    if (!animate) {
+      // Force the un-animated position to commit before restoring the
+      // transition, otherwise the first move animates in from the top-left.
+      void indicator.offsetWidth;
+      indicator.style.transition = '';
+    }
+  }
+
   function setFilter(value) {
     state.filter = value;
     const group = $('judge-filter');
     if (group) {
-      group.querySelectorAll('.seg__btn').forEach((button) => {
+      group.querySelectorAll('.tabs__btn').forEach((button) => {
         button.setAttribute('aria-pressed', String(button.dataset.filter === value));
       });
     }
+    positionTabIndicator(true);
     renderJudges();
   }
 
@@ -657,13 +709,13 @@
     const group = $('judge-filter');
     if (group) {
       group.addEventListener('click', (event) => {
-        const button = event.target.closest('.seg__btn');
+        const button = event.target.closest('.tabs__btn');
         if (button && group.contains(button)) setFilter(button.dataset.filter);
       });
 
       group.addEventListener('keydown', (event) => {
         if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
-        const buttons = Array.from(group.querySelectorAll('.seg__btn'));
+        const buttons = Array.from(group.querySelectorAll('.tabs__btn'));
         const index = buttons.indexOf(document.activeElement);
         if (index === -1) return;
         event.preventDefault();
@@ -777,6 +829,15 @@
     initDedup();
     initCopy();
     initSyncButton();
+
+    // Wrapping changes which row a tab sits on, so the underline is re-measured.
+    window.addEventListener('resize', () => positionTabIndicator(false), { passive: true });
+
+    // A web font arriving after first paint changes the tab widths, which would
+    // leave the underline too short, so it is re-measured once fonts settle.
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => positionTabIndicator(false));
+    }
 
     // Paint the verified snapshot immediately; refresh in the background.
     renderAll();

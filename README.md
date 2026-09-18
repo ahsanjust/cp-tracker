@@ -49,7 +49,7 @@
 ## 🛠️ Features
 - **Live aggregate counter**: the hero total animates to the exact solved count across all judges, and updates when you filter.
 - **Deduplication mode**: toggle off Virtual Judge overlaps for a deduplicated total; the distribution chart and total follow the same figure.
-- **Accessible analytics**: per-judge ranking and LeetCode difficulty mix rendered as real HTML lists — readable by screen readers, no canvas, no chart library to load.
+- **Accessible analytics**: per-judge ranking as a real HTML list and the LeetCode difficulty mix as one stacked bar with a mono legend — readable by screen readers, no canvas, no chart library to load.
 - **Honest provenance**: the hero reports how many judges are read from live APIs, scheduled profile syncs, and tracked snapshots, plus the last verification time.
 - **Category filters**: contests & speed / interview & prep / national & archives, with counts computed from the data.
 - **Automated daily sync**: GitHub Actions runs daily at midnight UTC to query live APIs, update numbers, and redeploy.
