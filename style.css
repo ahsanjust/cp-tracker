@@ -4,10 +4,11 @@
    See DESIGN.md for tokens, rationale and the accessibility contract.
 
    Contents
-   1. Tokens          5. Hero            9. Analytics
-   2. Reset & base    6. Ledger         10. Verify & footer
-   3. Primitives      7. Toolbar        11. Feedback & states
-   4. Header          8. Judge grid     12. Motion & responsive
+   1. Tokens          5. Hero           10. Judge grid
+   2. Reset & base    6. Sections       11. Difficulty
+   3. Primitives      7. Record bar     12. Verify & footer
+   4. Header          8. Ledger         13. Feedback & states
+                      9. Toolbar        14. Motion & responsive
    ========================================================================== */
 
 /* 1. Tokens ================================================================ */
@@ -425,7 +426,9 @@ main[id] {
   left: -6%;
   width: min(720px, 88%);
   height: 520px;
-  background: radial-gradient(closest-side, rgba(56, 189, 248, 0.09), transparent 100%);
+  /* Trimmed: the record band below it is the loudest object on the page, and
+     two competing accent fields would flatten both. */
+  background: radial-gradient(closest-side, rgba(56, 189, 248, 0.065), transparent 100%);
 }
 
 .hero__title {
@@ -536,7 +539,7 @@ main[id] {
   animation: live-pulse 2.8s ease-in-out infinite;
 }
 
-/* 6. Sections & achievements =============================================== */
+/* 6. Sections ============================================================== */
 
 .section {
   margin-top: var(--section-gap);
@@ -563,7 +566,146 @@ main[id] {
   max-width: 52ch;
 }
 
-/* 6. Ledger ================================================================ */
+/* 7. Record bar ============================================================ */
+
+/* The one full-bleed object on the page. Left inside the content column it
+   would read as a chart; broken to both viewport edges it reads as the record
+   itself, and a single judge can visibly own more than half of it. */
+.band {
+  padding: var(--s-8) 0 var(--s-10);
+  background: var(--surface-1);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.band__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-2) var(--s-6);
+}
+
+.band__title {
+  font-size: var(--fs-xl);
+}
+
+.band__note {
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+  max-width: 56ch;
+}
+
+/* A measuring rule, read left to right: width is the figure, height is just
+   the room the object needs to be seen. */
+.record {
+  display: flex;
+  gap: 2px;
+  height: clamp(84px, 12vw, 152px);
+  margin: var(--s-6) 0 var(--s-8);
+  animation: record-draw 1.15s cubic-bezier(0.22, 0.9, 0.24, 1) both;
+}
+
+.record__seg {
+  flex: var(--w, 1) 1 0;
+  /* Legibility floor: 12 solves is a third of a pixel at this scale, so the
+     smallest bands are widened to a hairline. The legend states the exact
+     figures, which is where they are read. */
+  min-width: 3px;
+  /* Mirrors --accent as a literal: a colour-mix fallback would drop the whole
+     declaration and leave the page's hero object invisible. */
+  background: rgba(56, 189, 248, var(--ramp, 0.5));
+}
+
+.record__seg.is-active {
+  background: var(--accent);
+}
+
+.record__seg.is-dimmed {
+  opacity: 0.4;
+}
+
+/* The record draws itself once, left to right. Nothing depends on the
+   animation: the resting state is the finished bar. */
+@keyframes record-draw {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+
+  to {
+    clip-path: inset(0);
+  }
+}
+
+/* Ranked ledger: position, name, leader rule, count, share. */
+.record-legend {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: 0 var(--s-10);
+}
+
+.record__row {
+  display: grid;
+  grid-template-columns: auto minmax(0, auto) 1fr auto auto;
+  align-items: baseline;
+  gap: 0 var(--s-3);
+  padding: 7px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: var(--fs-sm);
+}
+
+.record__rank {
+  font-size: var(--fs-micro);
+  color: var(--text-3);
+}
+
+.record__name {
+  color: var(--text-2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Leader rule — the editorial device that ties a name to its figure. */
+.record__lead {
+  align-self: end;
+  height: 1px;
+  margin-bottom: 4px;
+  border-bottom: 1px dotted var(--line-strong);
+}
+
+.record__val {
+  font-family: var(--mono);
+  font-weight: 500;
+  color: var(--text-1);
+}
+
+.record__pct {
+  min-width: 44px;
+  text-align: right;
+  font-size: var(--fs-micro);
+  color: var(--text-3);
+}
+
+.record__row.is-active .record__name,
+.record__row.is-active .record__val {
+  color: var(--text-1);
+}
+
+/* The shape of the record, stated as numbers rather than left to the eye. */
+.record-callout {
+  max-width: 78ch;
+  margin-top: var(--s-6);
+  font-size: var(--fs-sm);
+  color: var(--text-2);
+}
+
+.record-callout .num {
+  color: var(--text-1);
+  font-weight: 500;
+}
+
+/* 8. Ledger ================================================================ */
 
 /* Achievements as an editorial ledger: hairline rules instead of cards, and the
    placement set in mono as the scannable element. */
@@ -641,7 +783,7 @@ main[id] {
   color: var(--text-3);
 }
 
-/* 7. Toolbar =============================================================== */
+/* 9. Toolbar =============================================================== */
 
 .toolbar {
   display: flex;
@@ -784,7 +926,7 @@ main[id] {
   max-width: 34ch;
 }
 
-/* 8. Judge grid ============================================================ */
+/* 10. Judge grid =========================================================== */
 
 .judge-grid {
   display: grid;
@@ -939,14 +1081,7 @@ main[id] {
   opacity: 0.55;
 }
 
-/* 9. Analytics ============================================================= */
-
-.analytics {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--s-4);
-  align-items: start;
-}
+/* 11. Difficulty =========================================================== */
 
 .panel {
   padding: var(--s-5);
@@ -973,70 +1108,9 @@ main[id] {
   color: var(--text-3);
 }
 
-.bars {
-  display: flex;
-  flex-direction: column;
-  gap: var(--s-3);
-}
-
-.bar__row {
-  display: grid;
-  grid-template-columns: 1fr auto auto;
-  align-items: baseline;
-  gap: var(--s-3);
-  margin-bottom: 5px;
-}
-
-.bar__label {
-  font-size: var(--fs-sm);
-  color: var(--text-2);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.bar__val {
-  font-family: var(--mono);
-  font-size: var(--fs-sm);
-  font-weight: 500;
-}
-
-.bar__pct {
-  font-family: var(--mono);
-  font-size: var(--fs-micro);
-  color: var(--text-3);
-  min-width: 46px;
-  text-align: right;
-}
-
-.bar__track {
-  height: 4px;
-  border-radius: var(--r-pill);
-  background: var(--surface-3);
-  overflow: hidden;
-}
-
-/* The bar's resting state is its true value, so a bar can never be stuck
-   invisible; the growth animation is a keyframe that replays each re-render. */
-.bar__fill {
-  display: block;
-  height: 100%;
-  border-radius: var(--r-pill);
-  background: var(--bar-color, var(--accent));
-  transform: scaleX(var(--w, 1));
-  transform-origin: left center;
-  animation: bar-grow 0.7s cubic-bezier(0.2, 0.8, 0.3, 1) both;
-  animation-delay: calc(var(--i, 0) * 24ms);
-}
-
-@keyframes bar-grow {
-  from {
-    transform: scaleX(0);
-  }
-}
-
-.bar--emph .bar__val {
-  color: var(--text-1);
+/* A full-width panel for the one chart the page still carries. */
+.panel--wide {
+  padding: var(--s-6);
 }
 
 /* Stacked share bar — one bar, three bands. Widths come from flex-grow, so the
@@ -1050,7 +1124,7 @@ main[id] {
 .stack {
   display: flex;
   gap: 2px;
-  height: 10px;
+  height: 14px;
 }
 
 .stack__seg {
@@ -1107,7 +1181,7 @@ main[id] {
   color: var(--text-3);
 }
 
-/* 10. Verify & footer ====================================================== */
+/* 12. Verify & footer ====================================================== */
 
 .verify {
   display: grid;
@@ -1253,7 +1327,7 @@ main[id] {
   color: var(--text-3);
 }
 
-/* 11. Feedback & states ==================================================== */
+/* 13. Feedback & states ==================================================== */
 
 .notice {
   display: flex;
@@ -1337,7 +1411,7 @@ main[id] {
   color: var(--warn);
 }
 
-/* 12. Motion & responsive ================================================== */
+/* 14. Motion & responsive ================================================== */
 
 .reveal {
   opacity: 0;
@@ -1368,10 +1442,6 @@ main[id] {
 
   .hero {
     padding: var(--s-14) 0 var(--s-14);
-  }
-
-  .analytics {
-    grid-template-columns: 1.15fr 1fr;
   }
 
   .verify {
@@ -1470,6 +1540,28 @@ main[id] {
 
   .readout__item:not(:last-child)::after {
     display: none;
+  }
+
+  /* --- Record bar: the bands keep their true proportions, but the bar is
+     shorter and the legend drops to one column so long names fit ---------- */
+
+  .band {
+    padding: var(--s-6) 0 var(--s-8);
+  }
+
+  .record {
+    gap: 1px;
+    height: 76px;
+    margin: var(--s-5) 0 var(--s-6);
+  }
+
+  .record__seg {
+    min-width: 2px;
+  }
+
+  .record-legend {
+    grid-template-columns: 1fr;
+    gap: 0;
   }
 
   /* --- Ledger ----------------------------------------------------------- */

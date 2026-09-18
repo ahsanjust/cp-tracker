@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ahsanul Haque — Competitive Programming Record (5,616 solves, 14 judges)</title>
-  <meta name="description" content="A verifiable record of 5,616 problems solved by Ahsanul Haque across 14 judge accounts — Codeforces, LeetCode, CodeChef, AtCoder, VJudge, Toph, CSES and more. Counts are quoted per judge, so an overlapping solve counts twice; at least 5,033 are distinct.">
+  <title>Ahsanul Haque — Competitive Programming Record (5,629 solves, 14 judges)</title>
+  <meta name="description" content="A verifiable record of 5,629 problems solved by Ahsanul Haque across 14 judge accounts — Codeforces, LeetCode, CodeChef, AtCoder, VJudge, Toph, CSES and more. Counts are quoted per judge, so an overlapping solve counts twice; at least 5,046 are distinct.">
   <meta name="author" content="Ahsanul Haque">
   <meta name="theme-color" content="#08090c">
   <link rel="canonical" href="https://ahsanjust.github.io/cp-tracker/">
@@ -31,14 +31,14 @@
   <!-- SEO & Social Sharing (LinkedIn, Twitter, Discord) -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://ahsanjust.github.io/cp-tracker/">
-  <meta property="og:title" content="Ahsanul Haque — Competitive Programming Record (5,616 solves, 14 judges)">
-  <meta property="og:description" content="5,616 problems solved across 14 judge accounts, at least 5,033 of them distinct — Codeforces (Expert 1774), LeetCode (Guardian 2142), CodeChef (4-star 1900), AtCoder, Virtual Judge, Toph, CSES and more.">
+  <meta property="og:title" content="Ahsanul Haque — Competitive Programming Record (5,629 solves, 14 judges)">
+  <meta property="og:description" content="5,629 problems solved across 14 judge accounts, at least 5,046 of them distinct — Codeforces (Expert 1774), LeetCode (Guardian 2142), CodeChef (4-star 1900), AtCoder, Virtual Judge, Toph, CSES and more.">
   <meta property="og:image" content="https://ahsanjust.github.io/cp-tracker/assets/og_preview.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Ahsanul Haque — Competitive Programming Record">
-  <meta name="twitter:description" content="5,616 solved across 14 judge accounts (≥5,033 distinct) · LeetCode Guardian · Codeforces Expert">
+  <meta name="twitter:description" content="5,629 solved across 14 judge accounts (≥5,046 distinct) · LeetCode Guardian · Codeforces Expert">
   <meta name="twitter:image" content="https://ahsanjust.github.io/cp-tracker/assets/og_preview.png">
   <link rel="icon" type="image/png" href="assets/avatar-160.png">
 
@@ -63,9 +63,10 @@
       </a>
 
       <nav class="site-nav" aria-label="Page sections">
+        <a href="#record">Record</a>
         <a href="#achievements">Achievements</a>
         <a href="#judges">Judges</a>
-        <a href="#analytics">Analytics</a>
+        <a href="#difficulty">Difficulty</a>
         <a href="#verify">Verify</a>
       </nav>
 
@@ -92,16 +93,16 @@
         <h1 class="hero__title" id="hero-title">
           <span class="hero__eyebrow">Ahsanul Haque — competitive programming record</span>
           <span class="hero__figure">
-            <span class="hero__num num" id="hero-total">5,616</span>
+            <span class="hero__num num" id="hero-total">5,629</span>
             <!-- Two readings of the same figure: the sum of every judge account, and
                  the deduplicated count. The dedup toggle swaps which one is shown. -->
             <span class="hero__unit" id="hero-unit">
-              <span id="hero-unit-sum">problems solved across <span class="num" id="hero-judges">14</span> judge accounts, of which at least <span class="num" id="hero-unique">5,033</span> are distinct</span>
+              <span id="hero-unit-sum">problems solved across <span class="num" id="hero-judges">14</span> judge accounts, of which at least <span class="num" id="hero-unique">5,046</span> are distinct</span>
               <span id="hero-unit-dedup" class="is-hidden">distinct problems, with Virtual Judge's overlapping solves excluded</span>
             </span>
           </span>
         </h1>
-        <p class="hero__sub" id="hero-sub">Each judge counts its own account, so the total is an upper bound: a problem solved on both Virtual Judge and its original judge is counted twice. Dropping Virtual Judge — which mirrors the others — leaves the 5,033 that are certainly distinct. Every figure links to the profile it came from, so any single one can be checked against its source.</p>
+        <p class="hero__sub" id="hero-sub">Each judge counts its own account, so the total is an upper bound: a problem solved on both Virtual Judge and its original judge is counted twice. Dropping Virtual Judge — which mirrors the others — leaves the 5,046 that are certainly distinct. Every figure links to the profile it came from, so any single one can be checked against its source.</p>
 
         <div class="cta-row">
           <a class="btn btn--primary" href="https://codeforces.com/profile/Ahsan_" target="_blank" rel="noopener noreferrer">View Codeforces</a>
@@ -130,7 +131,29 @@
           </span>
         </div>
       </section>
+    </div>
 
+    <!-- The record bar: the whole record as one object. This is the only element
+         on the page that escapes the content column — it runs the full width of
+         the viewport, so a single judge can visibly own more than half of it.
+         The bar is decorative; the legend below carries every figure as text. -->
+    <section class="band" id="record" aria-labelledby="record-title">
+      <div class="wrap">
+        <div class="band__head">
+          <h2 class="band__title" id="record-title">Where the record comes from</h2>
+          <p class="band__note">Each band is one judge, and its width is that judge's true share of the total. Ranked left to right.</p>
+        </div>
+      </div>
+
+      <div class="record" aria-hidden="true" id="record-bar"></div>
+
+      <div class="wrap">
+        <ul class="record-legend" id="record-legend"></ul>
+        <p class="record-callout" id="record-callout"></p>
+      </div>
+    </section>
+
+    <div class="wrap">
       <!-- Achievements: the credentials a recruiter scans for -->
       <section class="section" id="achievements" aria-labelledby="achievements-title">
         <div class="section-head">
@@ -246,33 +269,23 @@
         </div>
       </section>
 
-      <!-- Analytics: comparison across judges and difficulty -->
-      <section class="section" id="analytics" aria-labelledby="analytics-title">
+      <!-- Difficulty: the one place a judge publishes a per-difficulty split -->
+      <section class="section" id="difficulty" aria-labelledby="difficulty-title">
         <div class="section-head">
-          <h2 class="section-head__title" id="analytics-title">Distribution &amp; difficulty</h2>
-          <p class="section-head__note">How the record is spread across judges, and the difficulty mix inside LeetCode.</p>
+          <h2 class="section-head__title" id="difficulty-title">Difficulty mix</h2>
+          <p class="section-head__note">LeetCode is the only judge in this record that publishes a per-difficulty breakdown — so these figures describe its solves, not all of them.</p>
         </div>
 
-        <div class="analytics">
-          <div class="panel">
-            <div class="panel__head">
-              <h3 class="panel__title" id="judge-bars-title">Problems by judge</h3>
-              <p class="panel__note" id="judge-bars-note">Ranked by solved count</p>
-            </div>
-            <ul class="bars" id="bars-judges" aria-labelledby="judge-bars-title"></ul>
+        <div class="panel panel--wide">
+          <div class="panel__head">
+            <h3 class="panel__title" id="difficulty-bars-title">LeetCode</h3>
+            <p class="panel__note" id="difficulty-bars-note"></p>
           </div>
-
-          <div class="panel">
-            <div class="panel__head">
-              <h3 class="panel__title" id="difficulty-bars-title">LeetCode difficulty mix</h3>
-              <p class="panel__note" id="difficulty-bars-note"></p>
-            </div>
-            <!-- One bar, three bands. The bar is decorative; the legend carries
-                 the numbers as text for screen readers and copy/paste. -->
-            <div class="stack-block" aria-labelledby="difficulty-bars-title">
-              <div class="stack" id="difficulty-bar" aria-hidden="true"></div>
-              <ul class="stack__legend" id="difficulty-legend"></ul>
-            </div>
+          <!-- One bar, three bands. The bar is decorative; the legend carries
+               the numbers as text for screen readers and copy/paste. -->
+          <div class="stack-block" aria-labelledby="difficulty-bars-title">
+            <div class="stack" id="difficulty-bar" aria-hidden="true"></div>
+            <ul class="stack__legend" id="difficulty-legend"></ul>
           </div>
         </div>
       </section>
@@ -301,7 +314,7 @@
               <div class="field">
                 <span class="field__label" id="embed-label">Embed badge (Markdown)</span>
                 <div class="field__row">
-                  <span class="field__value" id="embed-code">[![CP Tracker — 5,616 solves across 14 judges](https://ahsanjust.github.io/cp-tracker/assets/og_preview.png)](https://ahsanjust.github.io/cp-tracker/)</span>
+                  <span class="field__value" id="embed-code">[![CP Tracker — 5,629 solves across 14 judges](https://ahsanjust.github.io/cp-tracker/assets/og_preview.png)](https://ahsanjust.github.io/cp-tracker/)</span>
                   <button type="button" class="copy-btn" data-copy-target="embed-code" aria-describedby="embed-label">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg>
                     Copy

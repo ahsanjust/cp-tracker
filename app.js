@@ -38,8 +38,8 @@
         details: 'Solved on ABC, ARC & AGC contests via Kenkoooo API' },
       { id: 'lightoj', name: 'LightOJ', handle: 'ahsanul_haque99', profileUrl: 'https://lightoj.com/user/ahsanul_haque99', solved: 133, badge: '181 AC Submissions', color: '#6366F1', accentColor: '#818CF8', category: 'national', fetchType: 'lightoj_api',
         details: 'Classic Bangladeshi judge • 391 Submissions • 133 Distinct Problems' },
-      { id: 'beecrowd', name: 'Beecrowd (URI)', handle: 'ahsanulhaque5588', profileUrl: 'https://judge.beecrowd.com/en/', solved: 105, rank: 'Rank 26,871 (Top 1%)', badge: '316.60 Points', color: '#8B5CF6', accentColor: '#A78BFA', category: 'national', fetchType: 'beecrowd_cached',
-        details: 'Top 1% worldwide with 316.60 academic & contest points' },
+      { id: 'beecrowd', name: 'Beecrowd (URI)', handle: 'ahsanulhaque5588', profileUrl: 'https://judge.beecrowd.com/en/profile/899745', solved: 118, rank: 'Rank 26,872 (Top 4%)', badge: '316.60 Points', color: '#8B5CF6', accentColor: '#A78BFA', category: 'national', fetchType: 'beecrowd_cached',
+        details: 'Top 4% worldwide with 316.60 points • 355 Submissions • Hardest: 1047' },
       { id: 'spoj', name: 'SPOJ', handle: 'ahsanul_haque', profileUrl: 'https://www.spoj.com/users/ahsanul_haque/', solved: 68, rank: 'World Rank #5140', badge: '68 Classical Solves', color: '#2563EB', accentColor: '#60A5FA', category: 'national', fetchType: 'spoj_cached',
         details: '68 Classical problems • 316 Submissions • 6.9 Score Points' },
       { id: 'hackerrank', name: 'HackerRank', handle: '_AhSaN_', profileUrl: 'https://www.hackerrank.com/profile/_AhSaN_', solved: 30, badge: 'Problem Solving ★★★', color: '#059669', accentColor: '#10B981', category: 'practice', fetchType: 'hackerrank_api',
@@ -133,7 +133,9 @@
       rating: platform.rating == null || platform.rating === '' ? null : Number(platform.rating),
       rank: platform.rank || '',
       badge: tidyBadge(platform.badge),
-      tint: platform.accentColor || platform.color || '#38BDF8',
+      // The chip glyph is held at a fixed strength while the fill and border
+      // carry the ramp: a glyph that dimmed with rank fell to 3.4:1 at the
+      // bottom, and the fallback monogram is real text, not an icon.
       category: platform.category || 'competitive',
       source: classifySource(platform),
       details: platform.details || '',
@@ -312,7 +314,7 @@
 
   const EXTERNAL_ICON = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14 4h6v6"/><path d="M20 4 11 13"/><path d="M18 14.5V19a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 4 19V8a1.5 1.5 0 0 1 1.5-1.5H10"/></svg>';
 
-  function judgeCard(platform, excluded) {
+  function judgeCard(platform, excluded, rank, count) {
     const badge = platform.badge.toLowerCase();
     const showRating = platform.rating != null && !badge.includes(String(platform.rating));
     const showRank = platform.rank !== '' && !badge.includes(platform.rank.toLowerCase());
@@ -329,7 +331,7 @@
 
     return `
       <div class="judge-card__head">
-        <span class="judge-chip" aria-hidden="true" style="--chip-bg:${hexToRgba(platform.tint, 0.13)};--chip-line:${hexToRgba(platform.tint, 0.3)};--chip-fg:${esc(platform.tint)}">${glyph}</span>
+        <span class="judge-chip" aria-hidden="true" style="--chip-bg:${hexToRgba(ACCENT_HEX, rampAlpha(rank, count) * 0.18)};--chip-line:${hexToRgba(ACCENT_HEX, rampAlpha(rank, count) * 0.44)};--chip-fg:${hexToRgba(ACCENT_HEX, 0.85)}">${glyph}</span>
         <div class="judge-card__id">
           <h3 class="judge-card__name">${esc(platform.name)}</h3>
           <span class="judge-card__handle">@${esc(platform.handle)}</span>
@@ -365,32 +367,123 @@
     grid.classList.remove('is-hidden');
     if (empty) empty.classList.add('is-hidden');
 
+    const order = rankOrder();
+    const count = state.platforms.length;
     const fragment = document.createDocumentFragment();
     list.forEach((platform) => {
       const excluded = state.dedup && platform.id === 'vjudge';
       const card = document.createElement('li');
       card.className = `judge-card reveal${excluded ? ' is-excluded' : ''}`;
-      card.innerHTML = judgeCard(platform, excluded);
+      card.innerHTML = judgeCard(platform, excluded, order.get(platform.id) || 0, count);
       fragment.appendChild(card);
       reveal(card, state.rendered);
     });
     grid.replaceChildren(fragment);
   }
 
-  function paintBars(listEl, items) {
-    if (!listEl) return;
-    listEl.innerHTML = items.map((item, index) => `
-      <li class="bar${item.emph ? ' bar--emph' : ''}" style="--i:${index}">
-        <div class="bar__row">
-          <span class="bar__label">${esc(item.label)}</span>
-          <span class="bar__val">${formatInt(item.value)}</span>
-          <span class="bar__pct">${(item.share * 100).toFixed(1)}%</span>
-        </div>
-        <div class="bar__track" aria-hidden="true">
-          <span class="bar__fill" style="--w:${item.value > 0 ? Math.max(item.share, 0.006).toFixed(4) : '0'};--bar-color:${item.color}"></span>
-        </div>
+  /* One hue, stepped by rank. The alternative — 14 brand colours — encodes
+     nothing and reads as a category palette from a dashboard template; a ramp
+     at least states an order. Alpha is linear in rank rather than in value,
+     because a value-linear ramp would erase all but the top judge; the band's
+     width carries the magnitude, and the legend carries the figures. */
+  const ACCENT_HEX = '#38bdf8';
+
+  function rampAlpha(index, count) {
+    if (count < 2) return 0.62;
+    return 0.16 + (0.68 * (count - 1 - index)) / (count - 1);
+  }
+
+  /* Rank among every tracked judge, so a card keeps its band when a filter
+     hides the cards around it. */
+  function rankOrder() {
+    const order = new Map();
+    state.platforms.slice().sort((a, b) => b.solved - a.solved)
+      .forEach((p, index) => order.set(p.id, index));
+    return order;
+  }
+
+  /* The record as a single object: one band per judge, across the full width of
+     the viewport, each sized by its true share of the total. The bands are
+     decorative, so the legend below repeats every figure as text. */
+  function renderRecord() {
+    const bar = $('record-bar');
+    const legend = $('record-legend');
+    const callout = $('record-callout');
+    if (!bar || !legend) return;
+
+    const list = visiblePlatforms().slice().sort((a, b) => b.solved - a.solved);
+    const total = list.reduce((sum, p) => sum + p.solved, 0) || 1;
+    const count = list.length;
+
+    bar.innerHTML = list.map((p, index) =>
+      `<span class="record__seg" data-judge="${esc(p.id)}" style="--w:${p.solved};--ramp:${rampAlpha(index, count).toFixed(3)}"></span>`
+    ).join('');
+
+    legend.innerHTML = list.map((p, index) => `
+      <li class="record__row" data-judge="${esc(p.id)}">
+        <span class="record__rank num">${String(index + 1).padStart(2, '0')}</span>
+        <span class="record__name">${esc(p.name)}</span>
+        <span class="record__lead" aria-hidden="true"></span>
+        <span class="record__val num">${formatInt(p.solved)}</span>
+        <span class="record__pct num">${((p.solved / total) * 100).toFixed(1)}%</span>
       </li>`).join('');
-    // Bars animate themselves from CSS, so a re-render needs no reveal step.
+
+    // The concentration is the shape of this record, and it is a fact about the
+    // data rather than a flourish — so it is stated, and computed from the same
+    // list that was just drawn, so the sentence cannot drift from the bands.
+    if (callout) {
+      const top = list[0];
+      const topThree = list.slice(0, Math.min(3, count)).reduce((sum, p) => sum + p.solved, 0);
+      const tailCount = Math.min(7, count - 3);
+      const tail = list.slice(count - tailCount).reduce((sum, p) => sum + p.solved, 0);
+      const pct = (value) => ((value / total) * 100).toFixed(1);
+      const parts = [
+        `<span class="num">${esc(top.name)}</span> alone is <span class="num">${pct(top.solved)}%</span>`,
+        `the three largest judges are <span class="num">${pct(topThree)}%</span>`
+      ];
+      if (tailCount >= 3) {
+        parts.push(`the ${tailCount} smallest together are <span class="num">${pct(tail)}%</span>`);
+      }
+      callout.innerHTML = `Of these <span class="num">${formatInt(total)}</span> solves — `
+        + `${parts.join(', ')}. `
+        + (state.dedup ? 'Virtual Judge is excluded from this view.' : '');
+    }
+
+    linkRecord();
+  }
+
+  /* The band and its legend are one object, so pointing at either lights both.
+     The band is not focusable and the legend is plain text, so this is a
+     supplementary affordance rather than the accessible path to the figures. */
+  function linkRecord() {
+    const band = $('record-bar');
+    const legend = $('record-legend');
+    if (!band || !legend) return;
+
+    if (!legend.dataset.bound) {
+      legend.dataset.bound = '1';
+      legend.addEventListener('mouseover', (event) => {
+        const row = event.target.closest('.record__row');
+        if (row) setRecordActive(row.dataset.judge);
+      });
+      legend.addEventListener('mouseleave', () => setRecordActive(null));
+      band.addEventListener('mouseover', (event) => {
+        const seg = event.target.closest('.record__seg');
+        if (seg) setRecordActive(seg.dataset.judge);
+      });
+      band.addEventListener('mouseleave', () => setRecordActive(null));
+    }
+
+    function setRecordActive(id) {
+      band.querySelectorAll('.record__seg').forEach((seg) => {
+        const on = Boolean(id) && seg.dataset.judge === id;
+        seg.classList.toggle('is-active', on);
+        seg.classList.toggle('is-dimmed', Boolean(id) && !on);
+      });
+      legend.querySelectorAll('.record__row').forEach((row) => {
+        row.classList.toggle('is-active', Boolean(id) && row.dataset.judge === id);
+      });
+    }
   }
 
   /* Difficulty mix as one stacked bar instead of three separate rows: the bands
@@ -416,27 +509,9 @@
       </li>`).join('');
   }
 
-  function renderAnalytics() {
-    // Distribution — ranked, and consistent with the headline total.
-    const ranked = visiblePlatforms().slice().sort((a, b) => b.solved - a.solved);
-    const total = ranked.reduce((sum, p) => sum + p.solved, 0) || 1;
-
-    paintBars($('bars-judges'), ranked.map((p, index) => ({
-      label: p.name,
-      value: p.solved,
-      share: p.solved / total,
-      color: 'var(--accent)',
-      emph: index === 0
-    })));
-
-    const judgeNote = $('judge-bars-note');
-    if (judgeNote) {
-      judgeNote.textContent = state.dedup
-        ? `${formatInt(total)} problems · Virtual Judge excluded`
-        : `${formatInt(total)} problems across ${ranked.length} judges`;
-    }
-
-    // Difficulty mix — only LeetCode reports a per-difficulty breakdown.
+  /* Only LeetCode reports a per-difficulty breakdown, and the section head says
+     so — an unqualified "difficulty mix" would imply it describes the total. */
+  function renderDifficulty() {
     const leetcode = state.platforms.find((p) => p.id === 'leetcode');
     const mix = leetcode && leetcode.breakdown;
     const diffNote = $('difficulty-bars-note');
@@ -470,8 +545,9 @@
     renderProvenance();
     renderEmbed();
     renderFilterCounts();
+    renderRecord();
     renderJudges();
-    renderAnalytics();
+    renderDifficulty();
     renderNotice();
     renderDistinctFloor();
     positionTabIndicator(false);
@@ -758,8 +834,9 @@
     toggle.addEventListener('change', () => {
       state.dedup = toggle.checked;
       renderHero();
+      renderRecord();
       renderJudges();
-      renderAnalytics();
+      renderDifficulty();
     });
   }
 
