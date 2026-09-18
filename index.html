@@ -62,13 +62,12 @@
         </span>
       </a>
 
-      <nav class="site-nav" aria-label="Page sections">
-        <a href="#record">Record</a>
-        <a href="#standings">Standings</a>
-        <a href="#achievements">Achievements</a>
-        <a href="#judges">Judges</a>
-        <a href="#difficulty">Difficulty</a>
-        <a href="#verify">Verify</a>
+      <nav class="site-nav" aria-label="Page sections" id="site-nav">
+        <a href="#record" data-nav="record">Record</a>
+        <a href="#achievements" data-nav="achievements">Results</a>
+        <a href="#judges" data-nav="judges">Judges</a>
+        <a href="#difficulty" data-nav="difficulty">Difficulty</a>
+        <a href="#verify" data-nav="verify">Verify</a>
       </nav>
 
       <div class="header-actions">
@@ -78,37 +77,64 @@
         <a class="icon-link" href="https://www.linkedin.com/in/ahsanul-haque-8b2485379/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile (opens in a new tab)">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9h4v12H3V9Zm6.5 0h3.8v1.71h.05a4.2 4.2 0 0 1 3.77-2.07c4.03 0 4.78 2.65 4.78 6.1V21h-4v-5.32c0-1.27-.02-2.9-1.77-2.9-1.77 0-2.04 1.38-2.04 2.81V21h-4V9Z"/></svg>
         </a>
-        <button type="button" class="btn btn--primary" id="btn-sync" aria-busy="false">
+        <button type="button" class="btn btn--quiet" id="btn-sync" aria-busy="false">
           <svg class="btn__icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
           <span id="sync-label">Sync live</span>
         </button>
       </div>
     </div>
   </header>
-
   <main id="top">
     <div class="wrap">
 
-      <!-- Hero: the claim, backed by provenance -->
+      <!-- HERO — the claim on the left, and beside it the instrument that places that
+           claim on each judge's published tier ladder. The scoreboard is rendered from
+           config.json, so it can never drift from the numbers further down. -->
       <section class="hero" aria-labelledby="hero-title">
-        <h1 class="hero__title" id="hero-title">
-          <span class="hero__eyebrow">Ahsanul Haque — competitive programming record</span>
-          <span class="hero__figure">
-            <span class="hero__num num" id="hero-total">5,629</span>
-            <!-- Two readings of the same figure: the sum of every judge account, and
-                 the deduplicated count. The dedup toggle swaps which one is shown. -->
-            <span class="hero__unit" id="hero-unit">
-              <span id="hero-unit-sum">problems solved across <span class="num" id="hero-judges">14</span> judge accounts, of which at least <span class="num" id="hero-unique">5,046</span> are distinct</span>
-              <span id="hero-unit-dedup" class="is-hidden">distinct problems, with Virtual Judge's overlapping solves excluded</span>
-            </span>
-          </span>
-        </h1>
-        <p class="hero__sub" id="hero-sub">Each judge counts its own account, so the total is an upper bound: a problem solved on both Virtual Judge and its original judge is counted twice. Dropping Virtual Judge — which mirrors the others — leaves the 5,046 that are certainly distinct. Every figure links to the profile it came from, so any single one can be checked against its source.</p>
+        <div class="hero__grid">
+          <div class="hero__claim">
+            <h1 class="hero__title" id="hero-title">
+              <span class="hero__eyebrow">Ahsanul Haque — competitive programming record</span>
+              <span class="hero__figure">
+                <span class="hero__num num" id="hero-total">5,629</span>
+                <!-- Two readings of the same figure: the sum of every judge account, and
+                     the deduplicated count. The dedup toggle swaps which one is shown. -->
+                <span class="hero__unit" id="hero-unit">
+                  <span id="hero-unit-sum">accepted problems across <span class="num" id="hero-judges">14</span> judge accounts, of which at least <span class="num" id="hero-unique">5,046</span> are distinct</span>
+                  <span id="hero-unit-dedup" class="is-hidden">distinct problems, with Virtual Judge's overlapping solves excluded</span>
+                </span>
+              </span>
+            </h1>
 
-        <div class="cta-row">
-          <a class="btn btn--primary" href="https://codeforces.com/profile/Ahsan_" target="_blank" rel="noopener noreferrer">View Codeforces</a>
-          <a class="btn" href="https://leetcode.com/u/Ahsanul_haque_/" target="_blank" rel="noopener noreferrer">View LeetCode</a>
-          <a class="btn" href="https://github.com/ahsanjust" target="_blank" rel="noopener noreferrer">GitHub</a>
+            <p class="hero__sub" id="hero-sub">Recorded judge by judge, and every figure on this page links to the profile it came from.</p>
+
+            <!-- Two results, one line each: the strongest credentials after the
+                 tiers, and the reason to keep reading. The full record is below. -->
+            <ul class="hero__results">
+              <li class="hero__result">
+                <span class="hero__result-mark num">34th</span>
+                <span class="hero__result-text">ICPC Asia Dhaka Regional <span class="hero__result-alt">· 2025, of 300+ teams</span></span>
+              </li>
+              <li class="hero__result">
+                <span class="hero__result-mark num">2nd</span>
+                <span class="hero__result-text">NWU IUPC 2025 <span class="hero__result-alt">· national 1st runner-up</span></span>
+              </li>
+            </ul>
+
+            <div class="cta-row">
+              <a class="btn btn--primary" href="https://codeforces.com/profile/Ahsan_" target="_blank" rel="noopener noreferrer">Codeforces profile</a>
+              <a class="btn" href="https://leetcode.com/u/Ahsanul_haque_/" target="_blank" rel="noopener noreferrer">LeetCode profile</a>
+              <a class="btn" href="https://github.com/ahsanjust" target="_blank" rel="noopener noreferrer">GitHub</a>
+            </div>
+          </div>
+
+          <aside class="board" aria-labelledby="board-title">
+            <div class="board__head">
+              <h2 class="board__title" id="board-title">Platform standing</h2>
+              <p class="board__note">Peak rating, placed on each judge's published tier ladder.</p>
+            </div>
+            <ul class="board__list" id="standing-list"></ul>
+          </aside>
         </div>
 
         <!-- Provenance, read as instrumentation: one mono line, not four badges. -->
@@ -133,20 +159,36 @@
         </div>
       </section>
     </div>
-
-    <!-- The record bar: the whole record as one object. This is the only element
-         on the page that escapes the content column — it runs the full width of
-         the viewport, so a single judge can visibly own more than half of it.
-         The bar is decorative; the legend below carries every figure as text. -->
+    <!-- THE RECORD — the whole thing as one object. This is the only element that
+         escapes the content column: it runs to both viewport edges, so a single judge
+         can visibly own more than half of it. The bands are decorative; the annotations,
+         the axis and the legend below carry every figure as text. -->
     <section class="band" id="record" aria-labelledby="record-title">
       <div class="wrap">
         <div class="band__head">
-          <h2 class="band__title" id="record-title">Where the record comes from</h2>
-          <p class="band__note">Each band is one judge, and its width is that judge's true share of the total. Ranked left to right.</p>
+          <h2 class="band__title" id="record-title">The shape of the record</h2>
+          <p class="band__note">Each band is one judge, ranked largest first — its width is that judge's share of the total, read against the axis below.</p>
         </div>
       </div>
 
-      <div class="record" aria-hidden="true" id="record-bar"></div>
+      <figure class="record-figure">
+        <div class="record__annot" id="record-annot" aria-hidden="true"></div>
+        <div class="record" id="record-bar" aria-hidden="true"></div>
+        <div class="record__axis" aria-hidden="true">
+          <span class="record__axis-label">share of the record</span>
+          <span class="record__tick" style="--at: 25%"><i></i>25%</span>
+          <span class="record__tick" style="--at: 50%"><i></i>50%</span>
+          <span class="record__tick" style="--at: 75%"><i></i>75%</span>
+          <span class="record__tick record__tick--end" style="--at: 100%"><i></i>100%</span>
+        </div>
+        <!-- The honest caveat lives with the object it qualifies, not in the hero. -->
+        <figcaption class="record__method">
+          <div class="wrap">
+            <span class="record__method-label">Method</span>
+            <span id="record-method">Each judge counts its own account, so the total is an upper bound: a problem solved on both Virtual Judge and its original judge is counted twice. Dropping Virtual Judge — which mirrors the others — leaves the 5,046 that are certainly distinct.</span>
+          </div>
+        </figcaption>
+      </figure>
 
       <div class="wrap">
         <ul class="record-legend" id="record-legend"></ul>
@@ -155,78 +197,22 @@
     </section>
 
     <div class="wrap">
-      <!-- Platform Standing: Verified peak ratings strip -->
-      <section class="section" id="standings" aria-labelledby="standings-title">
-        <div class="section-head">
-          <h2 class="section-head__title" id="standings-title">Platform standing</h2>
-          <p class="section-head__note">Verified peak ratings and percentile tiers across competitive judges.</p>
-        </div>
-
-        <div class="ratings-grid">
-          <a class="rating-card" href="https://codeforces.com/profile/Ahsan_" target="_blank" rel="noopener noreferrer" style="--card-accent: #3b82f6;">
-            <div class="rating-card__head">
-              <span class="rating-card__platform">Codeforces</span>
-              <span class="rating-card__badge">Live API</span>
-            </div>
-            <div class="rating-card__value">
-              <span class="num">1774</span>
-              <span class="rating-card__title">Expert</span>
-            </div>
-            <p class="rating-card__meta">Peak rating • 3,183 problems solved across official rounds & practice</p>
-          </a>
-
-          <a class="rating-card" href="https://leetcode.com/u/Ahsanul_haque_/" target="_blank" rel="noopener noreferrer" style="--card-accent: #f59e0b;">
-            <div class="rating-card__head">
-              <span class="rating-card__platform">LeetCode</span>
-              <span class="rating-card__badge">Top 1.24%</span>
-            </div>
-            <div class="rating-card__value">
-              <span class="num">2142</span>
-              <span class="rating-card__title">Guardian</span>
-            </div>
-            <p class="rating-card__meta">Rating 2142 • 364 solved (72 Hard) • Worldwide top 1.24%</p>
-          </a>
-
-          <a class="rating-card" href="https://www.codechef.com/users/ahsanul_haque" target="_blank" rel="noopener noreferrer" style="--card-accent: #d97706;">
-            <div class="rating-card__head">
-              <span class="rating-card__platform">CodeChef</span>
-              <span class="rating-card__badge">Div 2</span>
-            </div>
-            <div class="rating-card__value">
-              <span class="num">1900</span>
-              <span class="rating-card__title">4 Stars ★★★★</span>
-            </div>
-            <p class="rating-card__meta">Max Rating 1900 • Division 2 Contestant • 265 solved</p>
-          </a>
-        </div>
-      </section>
-
       <!-- Achievements: the credentials a recruiter scans for -->
       <section class="section" id="achievements" aria-labelledby="achievements-title">
         <div class="section-head">
           <h2 class="section-head__title" id="achievements-title">Competitive results</h2>
-          <p class="section-head__note">Tournament placements, regional appearances, and championships.</p>
+          <p class="section-head__note">Ordered by weight — the ICPC regional first, then the national inter-university circuit, then campus championships.</p>
         </div>
 
         <ul class="ledger">
           <li class="ledger__row ledger__row--gold">
             <span class="ledger__mark">
-              <span class="num">1st</span>
-              <span class="ledger__unit">place</span>
-            </span>
-            <div>
-              <p class="ledger__title">JUST IDPC — Champion</p>
-              <p class="ledger__meta">Inter-departmental programming contest (1st place)</p>
-            </div>
-          </li>
-          <li class="ledger__row">
-            <span class="ledger__mark">
               <span class="num">34th</span>
               <span class="ledger__unit">regional</span>
             </span>
             <div>
-              <p class="ledger__title">ICPC Asia Dhaka Regional</p>
-              <p class="ledger__meta">34th in 2025 · 63rd in 2024 (2x Regionalist among 300+ university teams)</p>
+              <p class="ledger__title">ICPC Asia Dhaka Regional — 34th</p>
+              <p class="ledger__meta">2025, team JUST_ORIONS · 63rd in 2024, team JUST_TRIPLE_HELIX · 2× regionalist among 300+ university teams</p>
             </div>
           </li>
           <li class="ledger__row">
@@ -236,17 +222,27 @@
             </span>
             <div>
               <p class="ledger__title">NWU IUPC 2025 — 1st Runner-Up</p>
-              <p class="ledger__meta">National inter-university programming contest</p>
+              <p class="ledger__meta">National inter-university programming contest · team JUST_ORIONS</p>
             </div>
           </li>
           <li class="ledger__row">
             <span class="ledger__mark">
-              <span class="num">#39</span>
-              <span class="ledger__unit">national</span>
+              <span class="num">1st</span>
+              <span class="ledger__unit">place</span>
             </span>
             <div>
-              <p class="ledger__title">Toph National Contest Standing</p>
-              <p class="ledger__meta">Rank #39 national on Bangladesh's competitive contest judge · 364 solved</p>
+              <p class="ledger__title">JUST IDPC — Champion</p>
+              <p class="ledger__meta">Inter-departmental programming contest</p>
+            </div>
+          </li>
+          <li class="ledger__row">
+            <span class="ledger__mark">
+              <span class="num">14+</span>
+              <span class="ledger__unit">on-site IUPCs</span>
+            </span>
+            <div>
+              <p class="ledger__title">National IUPC circuit</p>
+              <p class="ledger__meta">2026: 11th NDUB, 13th SUST, 15th DUET, 16th BUET · 2024: 7th KU KRIUPC · sustained top-20 finishes at national level</p>
             </div>
           </li>
           <li class="ledger__row">
@@ -256,11 +252,24 @@
             </span>
             <div>
               <p class="ledger__title">JUST ACM Laboratory Farewell Contest</p>
-              <p class="ledger__meta">Senior Category Champion (2026), 1st Runner-Up (2025), Junior Champion (2024)</p>
+              <p class="ledger__meta">Senior Category Champion (2026) · 1st Runner-Up (2025) · Junior Champion (2024)</p>
+            </div>
+          </li>
+          <li class="ledger__row">
+            <span class="ledger__mark">
+              <span class="num">#39</span>
+              <span class="ledger__unit">national</span>
+            </span>
+            <div>
+              <p class="ledger__title">Toph national standing</p>
+              <p class="ledger__meta">Rank #39 nationally on Bangladesh's contest judge · 364 problems solved ·
+                <a class="ledger__link" href="https://toph.co/u/AhSaN.x" target="_blank" rel="noopener noreferrer">verify on Toph</a>
+              </p>
             </div>
           </li>
         </ul>
       </section>
+
 
       <!-- Judges: the core data -->
       <section class="section" id="judges" aria-labelledby="judges-title">
@@ -273,8 +282,8 @@
           <div class="tabs" role="group" aria-label="Filter judges by category" id="judge-filter">
             <span class="tabs__indicator" aria-hidden="true"></span>
             <button type="button" class="tabs__btn" data-filter="all" aria-pressed="true">All Judges <span class="tabs__n" data-count="all">14</span></button>
-            <button type="button" class="tabs__btn" data-filter="competitive" aria-pressed="false" title="Contests and speed-solving judges">Contests &amp; Speed <span class="tabs__n" data-count="competitive">6</span></button>
-            <button type="button" class="tabs__btn" data-filter="practice" aria-pressed="false" title="Interview preparation and practice platforms">Interview &amp; Prep <span class="tabs__n" data-count="practice">3</span></button>
+            <button type="button" class="tabs__btn" data-filter="competitive" aria-pressed="false" title="Contests and speed judges">Contests &amp; Speed <span class="tabs__n" data-count="competitive">6</span></button>
+            <button type="button" class="tabs__btn" data-filter="practice" aria-pressed="false" title="Interview preparation and practice judges">Interview &amp; Prep <span class="tabs__n" data-count="practice">3</span></button>
             <button type="button" class="tabs__btn" data-filter="national" aria-pressed="false" title="National judges and classic archives">National &amp; Archives <span class="tabs__n" data-count="national">5</span></button>
           </div>
 
@@ -285,7 +294,7 @@
             </label>
             <span class="switch-field__text">
               <label class="switch-field__label" for="toggle-dedup">Exclude Virtual Judge overlaps</label>
-              <span class="switch-field__hint" id="dedup-hint">Virtual Judge mirrors problems from the other judges, so its solves can double-count. Turn this on to exclude them.</span>
+              <span class="switch-field__hint" id="dedup-hint">Virtual Judge mirrors problems from the other judges, so its solves can double-count.</span>
             </span>
           </div>
         </div>
@@ -327,15 +336,33 @@
         </div>
       </section>
 
-      <!-- Verify & share -->
+<!-- Verify & share — the vocabulary of the page, then the ways to reuse it -->
       <section class="section" id="verify" aria-labelledby="verify-title">
         <div class="section-head">
           <h2 class="section-head__title" id="verify-title">Verify &amp; share</h2>
-          <p class="section-head__note">Every number can be checked against the live profile it came from.</p>
+          <p class="section-head__note">Every figure can be checked against the live profile it came from, and every card states which way it was read.</p>
         </div>
 
         <div class="panel">
           <div class="verify">
+            <div class="verify__main">
+              <h3 class="panel__title" id="provenance-title">Where a number comes from</h3>
+              <ul class="provenance" aria-labelledby="provenance-title">
+                <li class="provenance__row">
+                  <span class="source source--api"><span class="source__dot" aria-hidden="true"></span>Live API</span>
+                  <p class="provenance__text">Read from the judge's own public API at sync time — the freshest source, no manual step.</p>
+                </li>
+                <li class="provenance__row">
+                  <span class="source source--sync"><span class="source__dot" aria-hidden="true"></span>Profile sync</span>
+                  <p class="provenance__text">Read from the judge's public profile page every day, because that judge publishes no API for this figure.</p>
+                </li>
+                <li class="provenance__row">
+                  <span class="source source--snapshot"><span class="source__dot" aria-hidden="true"></span>Snapshot</span>
+                  <p class="provenance__text">Hand-checked against the profile and kept in the repository between syncs — the number is dated, not stale.</p>
+                </li>
+              </ul>
+            </div>
+
             <div class="verify__fields">
               <div class="field">
                 <span class="field__label" id="portfolio-link-label">Portfolio link</span>
@@ -359,11 +386,6 @@
                 </div>
               </div>
             </div>
-
-            <p class="verify__aside">
-              Recruiters and teammates can follow any card to its source.
-              <a href="https://www.linkedin.com/in/ahsanul-haque-8b2485379/" target="_blank" rel="noopener noreferrer">Connect on LinkedIn</a>
-            </p>
           </div>
         </div>
       </section>
@@ -383,10 +405,11 @@
           <a href="https://github.com/ahsanjust" target="_blank" rel="noopener noreferrer">GitHub</a>
           <a href="https://www.linkedin.com/in/ahsanul-haque-8b2485379/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
         </nav>
-      </div>            <p class="footer-note">
+      </div>
+      <p class="footer-note">
         Counts are aggregated from official judge APIs, scheduled public-profile syncs and tracked snapshots, then
-        refreshed by GitHub Actions — daily at 00:00 UTC and on every deploy. Figures reflect accepted submissions
-        as reported by each judge, and the timestamp above records the last successful verification.
+        refreshed by GitHub Actions — daily at 00:00 UTC and on every deploy. Figures are accepted submissions as
+        reported by each judge, and the timestamp in the header records the last successful verification.
       </p>
     </div>
   </footer>

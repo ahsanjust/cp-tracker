@@ -4,11 +4,11 @@
    See DESIGN.md for tokens, rationale and the accessibility contract.
 
    Contents
-   1. Tokens          5. Hero           10. Judge grid
-   2. Reset & base    6. Sections       11. Difficulty
-   3. Primitives      7. Record bar     12. Verify & footer
-   4. Header          8. Ledger         13. Feedback & states
-                      9. Toolbar        14. Motion & responsive
+   1. Tokens               6. Sections         11. Difficulty
+   2. Reset & base         7. Record bar       12. Verify & footer
+   3. Primitives           8. Ledger           13. Feedback & states
+   4. Header               9. Toolbar          14. Motion & responsive
+   5. Hero & scoreboard   10. Judge grid
    ========================================================================== */
 
 /* 1. Tokens ================================================================ */
@@ -81,7 +81,6 @@
 
   color-scheme: dark;
 }
-
 /* 2. Reset & base ========================================================== */
 
 *,
@@ -255,6 +254,23 @@ main[id] {
   border-color: #5cc9fa;
 }
 
+/* A utility action in the header. It carries the live-data affordance without
+   competing with the hero's primary call to action for the accent. */
+.btn--quiet {
+  background: transparent;
+  color: var(--text-2);
+}
+
+.btn--quiet .btn__icon {
+  color: var(--accent);
+}
+
+.btn--quiet:hover {
+  background: var(--surface-2);
+  border-color: var(--line-strong);
+  color: var(--text-1);
+}
+
 .btn[disabled],
 .btn[aria-busy="true"] {
   cursor: progress;
@@ -305,6 +321,9 @@ main[id] {
   display: flex;
   align-items: center;
   gap: var(--s-3);
+  /* Takes the slack, then gives it back: a long credential line truncates rather
+     than pushing the nav and the actions off the bar. */
+  flex: 1 1 auto;
   min-width: 0;
   border-radius: var(--r-2);
 }
@@ -360,10 +379,17 @@ main[id] {
   display: flex;
   align-items: center;
   gap: var(--s-1);
+  flex: none;
   margin-inline-start: auto;
 }
 
+/* The credential line is the only thing in the bar that may give ground. */
+.identity__role {
+  max-width: 100%;
+}
+
 .site-nav a {
+  position: relative;
   padding: var(--s-2) var(--s-3);
   border-radius: var(--r-1);
   font-size: var(--fs-sm);
@@ -374,6 +400,23 @@ main[id] {
 .site-nav a:hover {
   color: var(--text-1);
   background: var(--surface-2);
+}
+
+/* Where you are on a nine-screen page. Set from scroll position, so the answer
+   is always true rather than whatever was last clicked. */
+.site-nav a[aria-current="true"] {
+  color: var(--text-1);
+}
+
+.site-nav a[aria-current="true"]::after {
+  content: "";
+  position: absolute;
+  left: var(--s-3);
+  right: var(--s-3);
+  bottom: 3px;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--accent);
 }
 
 .header-actions {
@@ -413,6 +456,19 @@ main[id] {
   /* Contains the z-index:-1 wash so it cannot slip behind the page. */
   isolation: isolate;
   padding: var(--s-14) 0 var(--s-10);
+}
+
+/* The claim and the instrument that measures it, side by side in the first
+   viewport. Everything above the fold is information, nothing is filler. */
+.hero__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--s-10);
+  align-items: start;
+}
+
+.hero__claim {
+  min-width: 0;
 }
 
 /* Instrumentation rather than decoration: a hairline grid that fades out toward
@@ -471,24 +527,26 @@ main[id] {
    at roughly ten times the body size so the hierarchy is unmistakable. */
 .hero__num {
   display: block;
-  font-size: clamp(3.75rem, 12.5vw, 9.5rem);
+  /* Sized for its own column rather than the viewport: the numeral is the page's
+     whole claim in one run of digits, and it shares the fold with the scoreboard. */
+  font-size: clamp(3.25rem, 7.6vw, 7.5rem);
   font-weight: 600;
   line-height: 0.9;
-  letter-spacing: -0.045em;
+  letter-spacing: -0.035em;
   color: var(--text-1);
 }
 
 .hero__unit {
   display: block;
-  max-width: 26ch;
+  max-width: 40ch;
   margin-top: var(--s-5);
   font-size: var(--fs-lg);
-  line-height: 1.4;
+  line-height: 1.45;
   color: var(--text-2);
 }
 
 .hero__sub {
-  max-width: 62ch;
+  max-width: 54ch;
   margin-top: var(--s-5);
   color: var(--text-3);
 }
@@ -498,6 +556,40 @@ main[id] {
   flex-wrap: wrap;
   gap: var(--s-3);
   margin-top: var(--s-6);
+}
+
+/* Two results, one line each, subordinate to the numeral above them: hairline
+   rules and a mono placement, the same ledger grammar as the Results section. */
+.hero__results {
+  max-width: 52ch;
+  margin-top: var(--s-6);
+}
+
+.hero__result {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-4);
+  padding: var(--s-2) 0;
+  border-top: 1px solid var(--line);
+}
+
+.hero__result:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+.hero__result-mark {
+  min-width: 3.6ch;
+  font-size: var(--fs-sm);
+  color: var(--text-1);
+}
+
+.hero__result-text {
+  font-size: var(--fs-sm);
+  color: var(--text-2);
+}
+
+.hero__result-alt {
+  color: var(--text-3);
 }
 
 /* Provenance as a terminal readout: one mono line of facts, hairline-separated,
@@ -551,6 +643,200 @@ main[id] {
 
 .readout__item--live .dot--live {
   animation: live-pulse 2.8s ease-in-out infinite;
+}
+
+/* 5b. The scoreboard ======================================================= */
+
+/* Three tier rows, rendered from config.json so they can never drift from the
+   cards below. Borderless: hairline rules carry the structure, as everywhere
+   else on the page. */
+.board {
+  min-width: 0;
+}
+
+.board__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-2) var(--s-4);
+  padding-bottom: var(--s-3);
+  border-bottom: 1px solid var(--line-strong);
+}
+
+.board__title {
+  font-size: var(--fs-base);
+}
+
+.board__note {
+  font-size: var(--fs-micro);
+  color: var(--text-3);
+}
+
+.standing {
+  display: grid;
+  gap: var(--s-2);
+  padding: var(--s-4) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.standing__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+}
+
+.standing__platform {
+  font-family: var(--mono);
+  font-size: var(--fs-micro);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+
+.standing__value {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-3);
+}
+
+.standing__num {
+  font-size: var(--fs-2xl);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+/* The judge's own tier vocabulary, in that judge's own colour. */
+.standing__tier {
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  color: var(--tier, var(--text-1));
+}
+
+.standing__qual {
+  font-size: var(--fs-micro);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.standing__note {
+  font-size: var(--fs-micro);
+  line-height: 1.5;
+  color: var(--text-3);
+}
+
+.standing__note .num {
+  color: var(--text-2);
+}
+
+/* The rating ladder. Ticks are published tier boundaries, the marker is the peak;
+   it answers "how good is 1774?" in one glance. Decorative — the note above
+   states the band and the distance as text. */
+.ladder-row {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  margin-top: var(--s-1);
+}
+
+.ladder {
+  position: relative;
+  flex: 1;
+  height: 10px;
+}
+
+.ladder__track {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--r-pill);
+  background: var(--well);
+  border: 1px solid var(--line);
+}
+
+.ladder__fill {
+  position: absolute;
+  top: 1px;
+  bottom: 1px;
+  left: 1px;
+  width: calc((100% - 2px) * var(--pct, 0));
+  border-radius: var(--r-pill);
+  /* Directional: the wash darkens toward the marker, so the fill reads as
+     distance covered rather than as a filled bar chart. */
+  background: linear-gradient(90deg, rgba(56, 189, 248, 0.05), rgba(56, 189, 248, 0.24));
+  /* Grows once, left to right: the marker is what is being read. */
+  animation: ladder-fill 0.7s cubic-bezier(0.2, 0.8, 0.3, 1) both;
+  transform-origin: left center;
+}
+
+@keyframes ladder-fill {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+.ladder__tick {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--at);
+  width: 1px;
+  background: var(--line-strong);
+}
+
+.ladder__marker {
+  position: absolute;
+  top: -4px;
+  bottom: -4px;
+  left: var(--at);
+  width: 3px;
+  background: var(--accent);
+  border-radius: 1px;
+  /* A hairline of canvas either side so the marker reads over its own fill. */
+  box-shadow: 0 0 0 2px var(--ink);
+}
+
+.ladder__scale {
+  font-family: var(--mono);
+  font-size: var(--fs-micro);
+  color: var(--text-3);
+}
+
+/* Provenance chip: the same vocabulary in the scoreboard, the cards and the
+   Verify section. The dot carries the class, the label spells it out. */
+.source {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-family: var(--mono);
+  font-size: var(--fs-micro);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  white-space: nowrap;
+}
+
+.source__dot {
+  width: 5px;
+  height: 5px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--src, var(--text-3));
+}
+
+.source--api {
+  --src: var(--ok);
+}
+
+.source--sync {
+  --src: var(--accent);
+}
+
+.source--snapshot {
+  --src: var(--text-3);
 }
 
 /* 6. Sections ============================================================== */
@@ -611,13 +897,111 @@ main[id] {
 }
 
 /* A measuring rule, read left to right: width is the figure, height is just
-   the room the object needs to be seen. */
+   the room the object needs to be seen. It sits between an annotation layer and
+   a share axis, so the shape can actually be read rather than only admired. */
+.record-figure {
+  margin: 0;
+}
+
+/* Annotations for the bands wide enough to carry one (placed by JS). A tick
+   drops from the label to its band so the pairing is unambiguous. */
+.record__annot {
+  position: relative;
+  height: 20px;
+  /* Keeps the labels clear of the section head above the bar. */
+  margin-top: var(--s-6);
+}
+
+.record__annot-label {
+  position: absolute;
+  left: var(--at);
+  transform: translateX(-50%);
+  font-family: var(--mono);
+  font-size: var(--fs-micro);
+  letter-spacing: 0.04em;
+  color: var(--text-2);
+  white-space: nowrap;
+}
+
+.record__annot-label i {
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  width: 1px;
+  height: 8px;
+  background: var(--line-strong);
+}
+
 .record {
+  position: relative;
   display: flex;
   gap: 2px;
-  height: clamp(84px, 12vw, 152px);
-  margin: var(--s-6) 0 var(--s-8);
+  height: clamp(64px, 8.5vw, 112px);
+  margin: 0;
   animation: record-draw 1.15s cubic-bezier(0.22, 0.9, 0.24, 1) both;
+}
+
+/* The share axis: the keyline under the bar, with quarter ticks. The axis is the
+   value, so the bar's width can be read off instead of estimated. */
+.record__axis {
+  position: relative;
+  display: block;
+  height: 22px;
+  border-top: 1px solid var(--line-strong);
+  font-family: var(--mono);
+  font-size: var(--fs-micro);
+  color: var(--text-3);
+}
+
+.record__axis-label {
+  position: absolute;
+  top: 5px;
+  left: 0;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.record__tick {
+  position: absolute;
+  top: 0;
+  left: var(--at);
+  padding-top: 5px;
+  transform: translateX(-50%);
+}
+
+.record__tick--end {
+  transform: translateX(-100%);
+}
+
+.record__tick i {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 1px;
+  height: 4px;
+  background: var(--line-strong);
+}
+
+.record__tick--end i {
+  left: auto;
+  right: 0;
+}
+
+/* The counting caveat, beside the object it qualifies. */
+.record__method {
+  padding-block: var(--s-4) var(--s-6);
+  border-bottom: 1px solid var(--line);
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+}
+
+.record__method-label {
+  margin-right: var(--s-3);
+  font-family: var(--mono);
+  font-size: var(--fs-micro);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-2);
 }
 
 .record__seg {
@@ -718,101 +1102,6 @@ main[id] {
   color: var(--text-1);
   font-weight: 500;
 }
-
-/* 7b. Platform Standing =================================================== */
-
-.ratings-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  background: var(--line);
-  border: 1px solid var(--line);
-  border-radius: var(--r-2);
-  overflow: hidden;
-  margin-top: var(--s-6);
-  margin-bottom: var(--s-8);
-}
-
-.rating-card {
-  background: var(--surface-1);
-  padding: var(--s-5) var(--s-6);
-  display: flex;
-  flex-direction: column;
-  gap: var(--s-2);
-  transition: background 0.2s ease, transform 0.2s ease;
-  position: relative;
-  text-decoration: none;
-}
-
-.rating-card:hover {
-  background: var(--surface-2);
-}
-
-.rating-card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--card-accent, var(--line));
-}
-
-.rating-card__head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.rating-card__platform {
-  font-family: var(--mono);
-  font-size: var(--fs-micro);
-  color: var(--text-3);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-weight: 600;
-}
-
-.rating-card__badge {
-  font-family: var(--mono);
-  font-size: var(--fs-micro);
-  padding: 1px 7px;
-  border-radius: var(--r-pill);
-  background: var(--surface-3);
-  color: var(--text-2);
-  border: 1px solid var(--line);
-}
-
-.rating-card__value {
-  font-family: var(--mono);
-  font-size: var(--fs-2xl);
-  font-weight: 700;
-  color: var(--text-1);
-  display: flex;
-  align-items: baseline;
-  gap: var(--s-2);
-  margin-top: 2px;
-}
-
-.rating-card__title {
-  font-family: var(--font);
-  font-size: var(--fs-base);
-  font-weight: 600;
-  color: var(--card-accent, var(--text-1));
-}
-
-.rating-card__meta {
-  font-size: var(--fs-sm);
-  color: var(--text-2);
-  line-height: 1.45;
-}
-
-@media (max-width: 800px) {
-  .ratings-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
 /* 8. Ledger ================================================================ */
 
 /* Achievements as an editorial ledger: hairline rules instead of cards, and the
@@ -889,6 +1178,20 @@ main[id] {
   margin-top: 4px;
   font-size: var(--fs-sm);
   color: var(--text-3);
+}
+
+/* An achievement that can be checked against a public source says so. */
+.ledger__link {
+  color: var(--text-2);
+  border-bottom: 1px solid var(--line-strong);
+  /* Inline links keep their line box; block padding lifts the target to 24px. */
+  padding-block: 5px;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.ledger__link:hover {
+  color: var(--accent);
+  border-bottom-color: var(--accent-line);
 }
 
 /* 9. Toolbar =============================================================== */
@@ -1175,13 +1478,37 @@ main[id] {
 
 .judge-card__details {
   margin-top: var(--s-4);
-  padding-top: var(--s-4);
-  border-top: 1px solid var(--line);
   font-size: var(--fs-sm);
   line-height: 1.5;
   color: var(--text-3);
-  /* Pins the hairline to the card foot so rows stay aligned. */
+  /* Two lines of room, so a one-line and a three-line details block still produce
+     the same card height and the grid keeps clean rows. */
+  min-height: calc(1.5em * 2);
+}
+
+/* The card's foot: where this judge sits in the record, and how its number was
+   read. Pinned to the bottom so every row in the grid aligns. */
+.judge-card__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
   margin-block-start: auto;
+  padding-top: var(--s-4);
+  border-top: 1px solid var(--line);
+  font-size: var(--fs-micro);
+  color: var(--text-3);
+}
+
+.judge-card__rank {
+  font-family: var(--mono);
+  font-size: var(--fs-micro);
+  color: var(--text-2);
+}
+
+.judge-card__rank-unit {
+  font-family: var(--font);
+  color: var(--text-3);
 }
 
 /* Deduplicate mode: excluded judges stay visible but read as inactive. */
@@ -1253,8 +1580,11 @@ main[id] {
 
 .stack__legend {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
-  gap: var(--s-2) var(--s-4);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+  gap: var(--s-3) var(--s-5);
+  /* Capped so the three bands resolve to three equal columns instead of being
+     scattered one-per-column across a very wide panel. */
+  max-width: 780px;
 }
 
 .stack__item {
@@ -1293,8 +1623,36 @@ main[id] {
 
 .verify {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--s-5);
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--s-8);
+  align-items: start;
+}
+
+.verify__main {
+  min-width: 0;
+}
+
+/* The three ways a figure can be read, explained once, then used as a chip
+   everywhere else on the page. */
+.provenance {
+  display: grid;
+  gap: var(--s-4);
+  margin-top: var(--s-5);
+}
+
+.provenance__row {
+  display: grid;
+  grid-template-columns: minmax(140px, auto) minmax(0, 1fr);
+  gap: var(--s-2) var(--s-5);
+  align-items: baseline;
+  padding-top: var(--s-4);
+  border-top: 1px solid var(--line);
+}
+
+.provenance__text {
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+  color: var(--text-3);
 }
 
 .field__label {
@@ -1322,13 +1680,12 @@ main[id] {
   font-family: var(--mono);
   font-size: var(--fs-sm);
   color: var(--text-2);
-  overflow-x: auto;
+  /* Clipped with an ellipsis rather than scrolled: the value is a label you can
+     copy, not a text field, and a cut-off URL reads as broken. The full string is
+     still what the Copy button writes to the clipboard. */
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
-  scrollbar-width: none;
-}
-
-.field__value::-webkit-scrollbar {
-  display: none;
 }
 
 .field__value--accent {
@@ -1356,21 +1713,6 @@ main[id] {
   color: var(--text-1);
   background: var(--surface-3);
   border-color: var(--line-strong);
-}
-
-.verify__aside {
-  font-size: var(--fs-sm);
-  color: var(--text-3);
-}
-
-.verify__aside a {
-  color: var(--accent);
-  /* Inline links keep the line box; block padding lifts the target to 24px. */
-  padding-block: 4px;
-}
-
-.verify__aside a:hover {
-  text-decoration: underline;
 }
 
 .verify__fields {
@@ -1543,6 +1885,18 @@ main[id] {
   }
 }
 
+@media (min-width: 1080px) {
+  /* Side by side: the claim and the instrument that measures it, in one fold. */
+  .hero__grid {
+    grid-template-columns: minmax(0, 1.06fr) minmax(0, 1fr);
+    gap: var(--s-14);
+  }
+
+  .verify {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  }
+}
+
 @media (min-width: 900px) {
   :root {
     --header-h: 68px;
@@ -1551,10 +1905,27 @@ main[id] {
   .hero {
     padding: var(--s-14) 0 var(--s-14);
   }
+}
 
-  .verify {
-    grid-template-columns: 1fr auto;
-    align-items: center;
+/* The scoreboard needs room for its own head row; below this it simply stacks
+   under the claim, in the same reading order. */
+@media (max-width: 700px) {
+  .provenance__row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* The section note already says the bar is read against the axis, and at this
+     width the label collides with the 25% tick. The ticks are the axis. */
+  .record__axis-label {
+    display: none;
+  }
+
+  .record__axis {
+    height: 20px;
+  }
+
+  .record__tick {
+    padding-top: 4px;
   }
 }
 
@@ -1657,14 +2028,21 @@ main[id] {
     padding: var(--s-6) 0 var(--s-8);
   }
 
+  .record__annot {
+    height: 18px;
+  }
+
   .record {
     gap: 1px;
-    height: 76px;
-    margin: var(--s-5) 0 var(--s-6);
+    height: 64px;
   }
 
   .record__seg {
     min-width: 2px;
+  }
+
+  .record__method {
+    padding-block: var(--s-3) var(--s-5);
   }
 
   .record-legend {
@@ -1755,7 +2133,8 @@ main[id] {
     grid-template-areas:
       "head count"
       "tags tags"
-      "details details";
+      "details details"
+      "foot foot";
     align-items: start;
     gap: var(--s-2) var(--s-3);
     padding: var(--s-4);
@@ -1784,8 +2163,14 @@ main[id] {
 
   .judge-card__details {
     grid-area: details;
+    margin-top: var(--s-3);
+    /* Cards are one to a row here, so nothing needs to line up. */
+    min-height: 0;
+  }
+
+  .judge-card__foot {
+    grid-area: foot;
     margin-block-start: 0;
-    padding-top: var(--s-3);
   }
 
   .judge-card__link {
@@ -1800,21 +2185,18 @@ main[id] {
     padding: var(--s-4);
   }
 
-  /* --- Verify: keep the value and its Copy button on one line, but wrap the
-     value rather than scrolling it sideways — on a phone a URL hidden behind
-     an invisible horizontal scroll reads as a broken field ----------------- */
+  /* --- Verify: the value stays on one line with an ellipsis — the same
+     treatment as desktop, so the truncation reads as deliberate rather than as a
+     value broken across three lines at arbitrary character boundaries. The Copy
+     button still writes the full string, because an ellipsis is paint, not text.
+     -------------------------------------------------------------------- */
 
   .field__row {
-    align-items: flex-start;
+    align-items: center;
     padding: var(--s-2) var(--s-2) var(--s-2) var(--s-3);
   }
 
   .field__value {
-    overflow-x: visible;
-    white-space: normal;
-    overflow-wrap: anywhere;
-    /* Mono code at the label size: keeps the wrapped value compact and reads
-       as a value rather than as body copy. */
     font-size: var(--fs-micro);
   }
 }

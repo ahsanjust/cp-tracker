@@ -122,6 +122,11 @@
     return platform.source === 'api' || platform.source === 'sync' ? platform.source : 'snapshot';
   }
 
+  /* The three classes are named once, here, and used verbatim in the scoreboard,
+     on every card and in the Verify section. */
+  const SOURCE_LABELS = { api: 'Live API', sync: 'Profile sync', snapshot: 'Snapshot' };
+  const sourceLabel = (source) => SOURCE_LABELS[source] || SOURCE_LABELS.snapshot;
+
   function normalize(platform) {
     const breakdown = platform.breakdown;
     return {
@@ -133,9 +138,10 @@
       rating: platform.rating == null || platform.rating === '' ? null : Number(platform.rating),
       rank: platform.rank || '',
       badge: tidyBadge(platform.badge),
-      // The chip glyph is held at a fixed strength while the fill and border
-      // carry the ramp: a glyph that dimmed with rank fell to 3.4:1 at the
-      // bottom, and the fallback monogram is real text, not an icon.
+      // The judge's own brand colour, spent on exactly two things: the chip that
+      // identifies the platform on its card, and the tier label in the scoreboard.
+      // Everything else stays on the one system accent.
+      accentColor: platform.accentColor || platform.color || '#38BDF8',
       category: platform.category || 'competitive',
       source: classifySource(platform),
       details: platform.details || '',
@@ -149,6 +155,130 @@
     };
   }
 
+  /* 2b. The tier ladders ---------------------------------------------------
+     Every threshold below is published by the judge it belongs to, which is what
+     makes the scoreboard an instrument rather than a badge: it answers "how good
+     is 1774?" with the band that rating sits in and the distance to the next one.
+     Adding a judged ladder here is the only change needed to put it in the hero.
+     ------------------------------------------------------------------------ */
+
+  const TIERS = {
+    codeforces: {
+      max: 3000,
+      scaleMax: '3000+',
+      /* Rating bands, lowest first: 1200, 1400, 1600 (Expert), 1900 (Candidate
+         Master), 2100 Master, 2300 International Master, 2400 GM, 2600 IGM. */
+      bands: [1200, 1400, 1600, 1900, 2100, 2300, 2400, 2600, 3000],
+      names: ['Newbie', 'Pupil', 'Specialist', 'Expert', 'Candidate Master', 'Master',
+        'International Master', 'Grandmaster', 'International Grandmaster', 'Legendary Grandmaster'],
+      qualifier: 'peak rating'
+    },
+    codechef: {
+      max: 2500,
+      scaleMax: '2500+',
+      /* CodeChef star bands: 1400 through 2500. */
+      bands: [1400, 1600, 1800, 2000, 2200, 2500],
+      names: ['1 star', '2 stars', '3 stars', '4 stars', '5 stars', '6 stars', '7 stars'],
+      qualifier: 'max rating'
+    },
+    leetcode: {
+      max: 2400,
+      scaleMax: '2400+',
+      /* LeetCode contest badges: Knight from 1600, Guardian from 2000. */
+      bands: [1600, 2000],
+      names: ['Contestant', 'Knight', 'Guardian'],
+      qualifier: 'contest rating'
+    }
+  };
+
+  /* Which ladder each row of the scoreboard uses, in reading order. The order is
+     the order of the tiers as credentials, not of the raw numbers — a CodeChef
+     1900 is not a Codeforces 1900. */
+  const BOARD_ORDER = ['leetcode', 'codeforces', 'codechef'];
+
+  /* Resolves a rating against its ladder: the band it sits in, where the marker
+     goes, and how much is left to the next band. */
+  function tierInfo(spec, rating) {
+    const bands = spec.bands;
+    // Index of the first boundary above the rating; -1 means the rating clears
+    // every boundary (LeetCode has no ceiling above Guardian).
+    const index = bands.findIndex((boundary) => rating < boundary);
+    const upper = index === -1 ? null : bands[index];
+    const lower = index === -1
+      ? bands[bands.length - 1]
+      : (index === 0 ? 0 : bands[index - 1]);
+    // The tier name is the count of boundaries at or below the rating.
+    const nameIndex = bands.filter((boundary) => rating >= boundary).length;
+    return {
+      name: spec.names[Math.min(nameIndex, spec.names.length - 1)] || '',
+      bandLabel: upper === null
+        ? `${formatInt(lower)}+`
+        : `${formatInt(lower)}–${formatInt(upper - 1)}`,
+      next: upper === null ? '' : spec.names[Math.min(nameIndex + 1, spec.names.length - 1)],
+      toNext: upper === null ? null : upper - rating,
+      pct: Math.max(0, Math.min(1, rating / spec.max)),
+      ticks: bands.map((boundary) => Math.max(0, Math.min(1, boundary / spec.max)))
+    };
+  }
+
+  /* The scoreboard: one row per judged ladder, rendered from the same data as the
+     cards below, so the hero can never quote a figure the record does not hold. */
+  function renderStandings() {
+    const list = $('standing-list');
+    if (!list) return;
+
+    const rows = BOARD_ORDER
+      .map((id) => state.platforms.find((p) => p.id === id))
+      .filter((platform) => platform && platform.rating != null && TIERS[platform.id]);
+
+    if (!rows.length) {
+      list.innerHTML = '';
+      return;
+    }
+
+    list.innerHTML = rows.map((platform) => {
+      const spec = TIERS[platform.id];
+      const tier = tierInfo(spec, platform.rating);
+      const ticks = tier.ticks
+        .map((at) => `<span class="ladder__tick" style="--at: ${(at * 100).toFixed(2)}%"></span>`)
+        .join('');
+
+      /* The note states the band and the distance in text: the ladder is the
+         glance, the sentence is the reading. */
+      let note = `${esc(tier.name)} band ${esc(tier.bandLabel)}`;
+      if (tier.toNext != null) {
+        note += ` · <span class="num">${formatInt(tier.toNext)}</span> to ${esc(tier.next)}`;
+      } else {
+        const pct = /Top ([\d.]+%)/i.exec(platform.badge);
+        note += pct ? ` · top ${esc(pct[1])} worldwide` : ` · highest contest badge`;
+      }
+
+      return `
+      <li class="standing">
+        <div class="standing__head">
+          <span class="standing__platform">${esc(platform.name)}</span>
+          <span class="source source--${esc(platform.source)}"><span class="source__dot" aria-hidden="true"></span>${sourceLabel(platform.source)}</span>
+        </div>
+        <div class="standing__value">
+          <span class="standing__num num">${formatInt(platform.rating)}</span>
+          <span class="standing__tier" style="--tier:${esc(platform.accentColor)}">${esc(tier.name)}</span>
+          <span class="standing__qual">${esc(spec.qualifier)}</span>
+        </div>
+        <div class="ladder-row" aria-hidden="true">
+          <span class="ladder__scale">0</span>
+          <div class="ladder">
+            <span class="ladder__track"></span>
+            <span class="ladder__fill" style="--pct: ${tier.pct.toFixed(4)}"></span>
+            ${ticks}
+            <span class="ladder__marker" style="--at: ${(tier.pct * 100).toFixed(2)}%"></span>
+          </div>
+          <span class="ladder__scale">${esc(spec.scaleMax)}</span>
+        </div>
+        <p class="standing__note">${note}</p>
+      </li>`;
+    }).join('');
+  }
+
   /* 3. State -------------------------------------------------------------- */
 
   const state = {
@@ -159,8 +289,6 @@
     offline: false,
     rendered: false
   };
-
-  let baseHeroSub = '';
 
   const visiblePlatforms = () => (state.dedup ? state.platforms.filter((p) => p.id !== 'vjudge') : state.platforms);
   const totalSolved = () => visiblePlatforms().reduce((sum, p) => sum + p.solved, 0);
@@ -206,20 +334,13 @@
 
     // The headline figure changes meaning with the toggle, so the line that
     // reads it changes with it: "5,033 ... of which at least 5,033 are distinct"
-    // would be nonsense.
+    // would be nonsense. The method note beside the record bar explains the
+    // duplication itself, which is where the question is actually asked.
     const sumUnit = $('hero-unit-sum');
     const dedupUnit = $('hero-unit-dedup');
     if (sumUnit && dedupUnit) {
       sumUnit.classList.toggle('is-hidden', state.dedup);
       dedupUnit.classList.toggle('is-hidden', !state.dedup);
-    }
-
-    const sub = $('hero-sub');
-    if (sub) {
-      const excluded = state.platforms.find((p) => p.id === 'vjudge');
-      sub.textContent = state.dedup && excluded
-        ? `Deduplicated total: Virtual Judge mirrors problems that already exist on the native judges, so all ${formatInt(excluded.solved)} of its solves are removed from this figure. Problems unique to Virtual Judge are dropped too, so the true unique count sits between it and the full total.`
-        : baseHeroSub;
     }
   }
 
@@ -314,7 +435,7 @@
 
   const EXTERNAL_ICON = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14 4h6v6"/><path d="M20 4 11 13"/><path d="M18 14.5V19a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 4 19V8a1.5 1.5 0 0 1 1.5-1.5H10"/></svg>';
 
-  function judgeCard(platform, excluded, rank, count) {
+  function judgeCard(platform, excluded, rank) {
     const badge = platform.badge.toLowerCase();
     const showRating = platform.rating != null && !badge.includes(String(platform.rating));
     const showRank = platform.rank !== '' && !badge.includes(platform.rank.toLowerCase());
@@ -329,9 +450,14 @@
     const glyph = JUDGE_ICONS[platform.id] ||
       `<span class="judge-chip__text">${esc(initials(platform.name))}</span>`;
 
+    /* The chip is the one place a judge's own colour is spent: it names the
+       source at a glance, which is what colour is good for. Rank and provenance
+       live in the foot, where they are read rather than scanned. */
+    const brand = platform.accentColor;
+
     return `
       <div class="judge-card__head">
-        <span class="judge-chip" aria-hidden="true" style="--chip-bg:${hexToRgba(ACCENT_HEX, rampAlpha(rank, count) * 0.18)};--chip-line:${hexToRgba(ACCENT_HEX, rampAlpha(rank, count) * 0.44)};--chip-fg:${hexToRgba(ACCENT_HEX, 0.85)}">${glyph}</span>
+        <span class="judge-chip" aria-hidden="true" style="--chip-bg:${hexToRgba(brand, 0.14)};--chip-line:${hexToRgba(brand, 0.38)};--chip-fg:${esc(brand)}">${glyph}</span>
         <div class="judge-card__id">
           <h3 class="judge-card__name">${esc(platform.name)}</h3>
           <span class="judge-card__handle">@${esc(platform.handle)}</span>
@@ -345,6 +471,10 @@
       </p>
       ${tags ? `<div class="judge-card__tags">${tags}</div>` : ''}
       ${platform.details ? `<p class="judge-card__details">${esc(platform.details)}</p>` : ''}
+      <p class="judge-card__foot">
+        <span class="judge-card__rank">#${String(rank + 1).padStart(2, '0')} <span class="judge-card__rank-unit">in the record</span></span>
+        <span class="source source--${esc(platform.source)}"><span class="source__dot" aria-hidden="true"></span>${sourceLabel(platform.source)}</span>
+      </p>
     `;
   }
 
@@ -353,9 +483,13 @@
     const empty = $('judges-empty');
     if (!grid) return;
 
-    const list = state.filter === 'all'
+    /* Ranked, exactly as the record legend is ranked: two views of one dataset
+       should never disagree about the order. */
+    const list = (state.filter === 'all'
       ? state.platforms
-      : state.platforms.filter((p) => p.category === state.filter);
+      : state.platforms.filter((p) => p.category === state.filter))
+      .slice()
+      .sort((a, b) => b.solved - a.solved);
 
     if (!list.length) {
       grid.innerHTML = '';
@@ -368,13 +502,12 @@
     if (empty) empty.classList.add('is-hidden');
 
     const order = rankOrder();
-    const count = state.platforms.length;
     const fragment = document.createDocumentFragment();
     list.forEach((platform) => {
       const excluded = state.dedup && platform.id === 'vjudge';
       const card = document.createElement('li');
       card.className = `judge-card reveal${excluded ? ' is-excluded' : ''}`;
-      card.innerHTML = judgeCard(platform, excluded, order.get(platform.id) || 0, count);
+      card.innerHTML = judgeCard(platform, excluded, order.get(platform.id) || 0);
       fragment.appendChild(card);
       reveal(card, state.rendered);
     });
@@ -386,8 +519,6 @@
      at least states an order. Alpha is linear in rank rather than in value,
      because a value-linear ramp would erase all but the top judge; the band's
      width carries the magnitude, and the legend carries the figures. */
-  const ACCENT_HEX = '#38bdf8';
-
   function rampAlpha(index, count) {
     if (count < 2) return 0.62;
     return 0.16 + (0.68 * (count - 1 - index)) / (count - 1);
@@ -418,6 +549,11 @@
     bar.innerHTML = list.map((p, index) =>
       `<span class="record__seg" data-judge="${esc(p.id)}" style="--w:${p.solved};--ramp:${rampAlpha(index, count).toFixed(3)}"></span>`
     ).join('');
+
+    /* Direct labels on the bands that can carry one, measured against the width
+       the bar actually rendered at — so a label can never collide with its
+       neighbour, at any viewport. The legend below still lists every judge. */
+    positionRecordAnnotations();
 
     legend.innerHTML = list.map((p, index) => `
       <li class="record__row" data-judge="${esc(p.id)}">
@@ -450,6 +586,50 @@
     }
 
     linkRecord();
+  }
+
+  /* A band earns a direct label when the label fits inside it with room to spare
+     and does not crowd the label before it. Mono at the micro size advances
+     ~7.3px per character, and the bar's true rendered width is passed in. */
+  const ANNOT_MAX_LABELS = 3;
+  const ANNOT_MIN_WIDTH = 116;
+
+  /* Kept separate from renderRecord because a resize changes which labels fit
+     without changing any of the figures: the bar must not be rebuilt (and so
+     must not re-animate) just because the window moved. */
+  function positionRecordAnnotations() {
+    const annot = $('record-annot');
+    const bar = $('record-bar');
+    if (!annot || !bar) return;
+    const list = visiblePlatforms().slice().sort((a, b) => b.solved - a.solved);
+    const total = list.reduce((sum, p) => sum + p.solved, 0) || 1;
+    annot.innerHTML = recordAnnotations(list, total, bar.clientWidth || window.innerWidth);
+  }
+
+  function recordAnnotations(list, total, width) {
+    const out = [];
+    let cursor = 0;
+    let edge = 0;
+
+    list.forEach((platform) => {
+      const share = platform.solved / total;
+      const center = cursor + share / 2;
+      cursor += share;
+      if (out.length >= ANNOT_MAX_LABELS) return;
+
+      const text = `${platform.name} ${formatInt(platform.solved)}`;
+      const textWidth = text.length * 7.3;
+      const left = center * width - textWidth / 2;
+
+      if (share * width < Math.max(ANNOT_MIN_WIDTH, textWidth + 24)) return;
+      // Keep clear of the bar's left edge and of the label before it.
+      if (left < 8 || left < edge + 16) return;
+
+      edge = left + textWidth;
+      out.push(`<span class="record__annot-label" style="--at: ${(center * 100).toFixed(2)}%">${esc(text)}<i></i></span>`);
+    });
+
+    return out.join('');
   }
 
   /* The band and its legend are one object, so pointing at either lights both.
@@ -540,11 +720,13 @@
   }
 
   function renderAll() {
+    renderIdentity();
     renderHero();
     renderUpdated();
     renderProvenance();
     renderEmbed();
     renderFilterCounts();
+    renderStandings();
     renderRecord();
     renderJudges();
     renderDifficulty();
@@ -840,6 +1022,57 @@
     });
   }
 
+  /* Name and credential line come from config.json, so the bar and the data
+     cannot disagree about who this is. The credential line is hidden below 900px,
+     where the header belongs to the name and the actions. */
+  function renderIdentity() {
+    const user = SNAPSHOT.user || {};
+    const name = $('user-display-name');
+    const role = $('user-headline');
+    if (name && user.name) name.textContent = user.name;
+    if (role && user.headline) role.textContent = user.headline;
+  }
+
+  /* Which section is being read. This is a nine-screen page; the nav answers
+     "where am I" from the scroll position itself rather than from whatever was
+     last clicked, so the answer is always true. */
+  function initScrollspy() {
+    const nav = $('site-nav');
+    if (!nav) return;
+    const links = Array.from(nav.querySelectorAll('a[data-nav]'));
+    const sections = links
+      .map((link) => document.getElementById(link.dataset.nav))
+      .filter(Boolean);
+    if (!sections.length) return;
+
+    let queued = false;
+    const update = () => {
+      queued = false;
+      const header = $('site-header');
+      const line = (header ? header.offsetHeight : 68) + 24;
+      let current = null;
+      sections.forEach((section) => {
+        // The last section whose top has passed under the header is the one
+        // being read.
+        if (section.getBoundingClientRect().top <= line) current = section.id;
+      });
+      links.forEach((link) => {
+        if (link.dataset.nav === current) link.setAttribute('aria-current', 'true');
+        else link.removeAttribute('aria-current');
+      });
+    };
+
+    const schedule = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(update);
+    };
+
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule, { passive: true });
+    update();
+  }
+
   function initHeader() {
     const header = $('site-header');
     if (!header) return;
@@ -917,22 +1150,30 @@
   }
 
   async function init() {
-    const sub = $('hero-sub');
-    baseHeroSub = sub ? sub.textContent : '';
-
     state.platforms = SNAPSHOT.platforms.map(normalize);
     state.updatedAt = SNAPSHOT.lastUpdated;
 
     initReveal();
     initHeader();
+    initScrollspy();
     initAvatar();
     initFilter();
     initDedup();
     initCopy();
     initSyncButton();
 
-    // Wrapping changes which row a tab sits on, so the underline is re-measured.
-    window.addEventListener('resize', () => positionTabIndicator(false), { passive: true });
+    // Wrapping changes which row a tab sits on and which bands can carry a label,
+    // so both are re-measured rather than recomputed from the data.
+    let resizeQueued = false;
+    window.addEventListener('resize', () => {
+      if (resizeQueued) return;
+      resizeQueued = true;
+      requestAnimationFrame(() => {
+        resizeQueued = false;
+        positionTabIndicator(false);
+        positionRecordAnnotations();
+      });
+    }, { passive: true });
 
     // A web font arriving after first paint changes the tab widths, which would
     // leave the underline too short, so it is re-measured once fonts settle.
