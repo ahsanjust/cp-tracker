@@ -547,7 +547,7 @@
     const count = list.length;
 
     bar.innerHTML = list.map((p, index) =>
-      `<span class="record__seg" data-judge="${esc(p.id)}" style="--w:${p.solved};--ramp:${rampAlpha(index, count).toFixed(3)}"></span>`
+      `<span class="record__seg" data-judge="${esc(p.id)}" style="--w:${p.solved};--ramp:${rampAlpha(index, count).toFixed(3)}" tabindex="0" role="button" aria-label="${esc(p.name)}: ${formatInt(p.solved)} solves (${((p.solved / total) * 100).toFixed(1)}%)"></span>`
     ).join('');
 
     /* Direct labels on the bands that can carry one, measured against the width
@@ -556,7 +556,7 @@
     positionRecordAnnotations();
 
     legend.innerHTML = list.map((p, index) => `
-      <li class="record__row" data-judge="${esc(p.id)}">
+      <li class="record__row" data-judge="${esc(p.id)}" tabindex="0" role="button" aria-label="${esc(p.name)}: ${formatInt(p.solved)} solves (${((p.solved / total) * 100).toFixed(1)}%)">
         <span class="record__rank num">${String(index + 1).padStart(2, '0')}</span>
         <span class="record__name">${esc(p.name)}</span>
         <span class="record__lead" aria-hidden="true"></span>
@@ -632,38 +632,174 @@
     return out.join('');
   }
 
-  /* The band and its legend are one object, so pointing at either lights both.
-     The band is not focusable and the legend is plain text, so this is a
-     supplementary affordance rather than the accessible path to the figures. */
+  /* Persistent click-to-pin and spotlight illumination for the record bar */
+  let pinnedRecordJudge = null;
+
   function linkRecord() {
     const band = $('record-bar');
     const legend = $('record-legend');
+    const inspector = $('record-inspector');
+    const idleEl = $('record-inspector-idle');
+    const activeEl = $('record-inspector-active');
+    const rankEl = $('inspector-rank');
+    const nameEl = $('inspector-name');
+    const tierEl = $('inspector-tier');
+    const valEl = $('inspector-val');
+    const pctEl = $('inspector-pct');
+    const pinTag = $('inspector-pin-tag');
+    const jumpBtn = $('inspector-jump-btn');
+
     if (!band || !legend) return;
+
+    function updateInspector(id, isPinned) {
+      if (!inspector || !idleEl || !activeEl) return;
+      if (!id) {
+        inspector.classList.remove('is-active');
+        idleEl.style.display = 'flex';
+        activeEl.style.display = 'none';
+        return;
+      }
+
+      const list = visiblePlatforms().slice().sort((a, b) => b.solved - a.solved);
+      const total = list.reduce((sum, p) => sum + p.solved, 0) || 1;
+      const index = list.findIndex(p => p.id === id);
+      const p = list[index];
+      if (!p) return;
+
+      inspector.classList.add('is-active');
+      idleEl.style.display = 'none';
+      activeEl.style.display = 'flex';
+
+      if (rankEl) rankEl.textContent = `#${String(index + 1).padStart(2, '0')}`;
+      if (nameEl) nameEl.textContent = p.name;
+      if (tierEl) tierEl.textContent = p.badge || p.rank || (p.rating ? `Rating ${p.rating}` : 'Active Account');
+      if (valEl) valEl.textContent = formatInt(p.solved);
+      if (pctEl) pctEl.textContent = `${((p.solved / total) * 100).toFixed(1)}%`;
+      if (pinTag) pinTag.style.display = isPinned ? 'inline-block' : 'none';
+
+      if (jumpBtn) {
+        jumpBtn.onclick = (e) => {
+          e.stopPropagation();
+          jumpToJudgeCard(p.id);
+        };
+      }
+    }
+
+    function jumpToJudgeCard(id) {
+      const card = $(`p-${id}`);
+      if (card) {
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        card.classList.add('is-target-highlight');
+        setTimeout(() => card.classList.remove('is-target-highlight'), 2200);
+      }
+    }
+
+    function setRecordActive(id, isPinned) {
+      const targetId = id || pinnedRecordJudge;
+      const isTargetPinned = Boolean(pinnedRecordJudge) && targetId === pinnedRecordJudge;
+
+      band.classList.toggle('has-active', Boolean(targetId));
+      legend.classList.toggle('has-active', Boolean(targetId));
+
+      band.querySelectorAll('.record__seg').forEach((seg) => {
+        const on = Boolean(targetId) && seg.dataset.judge === targetId;
+        seg.classList.toggle('is-active', on);
+        seg.classList.toggle('is-dimmed', Boolean(targetId) && !on);
+      });
+
+      legend.querySelectorAll('.record__row').forEach((row) => {
+        const on = Boolean(targetId) && row.dataset.judge === targetId;
+        row.classList.toggle('is-active', on);
+        row.classList.toggle('is-pinned', Boolean(targetId) && on && isTargetPinned);
+      });
+
+      updateInspector(targetId, isTargetPinned);
+    }
+
+    function handleTogglePin(id) {
+      if (!id) return;
+      if (pinnedRecordJudge === id) {
+        pinnedRecordJudge = null;
+        setRecordActive(null, false);
+      } else {
+        pinnedRecordJudge = id;
+        setRecordActive(id, true);
+      }
+    }
 
     if (!legend.dataset.bound) {
       legend.dataset.bound = '1';
+
       legend.addEventListener('mouseover', (event) => {
         const row = event.target.closest('.record__row');
-        if (row) setRecordActive(row.dataset.judge);
+        if (row) setRecordActive(row.dataset.judge, false);
       });
-      legend.addEventListener('mouseleave', () => setRecordActive(null));
+
+      legend.addEventListener('mouseleave', () => {
+        setRecordActive(pinnedRecordJudge, Boolean(pinnedRecordJudge));
+      });
+
+      legend.addEventListener('click', (event) => {
+        const row = event.target.closest('.record__row');
+        if (row) handleTogglePin(row.dataset.judge);
+      });
+
+      legend.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          const row = event.target.closest('.record__row');
+          if (row) {
+            event.preventDefault();
+            handleTogglePin(row.dataset.judge);
+          }
+        }
+      });
+
       band.addEventListener('mouseover', (event) => {
         const seg = event.target.closest('.record__seg');
-        if (seg) setRecordActive(seg.dataset.judge);
+        if (seg) setRecordActive(seg.dataset.judge, false);
       });
-      band.addEventListener('mouseleave', () => setRecordActive(null));
+
+      band.addEventListener('mouseleave', () => {
+        setRecordActive(pinnedRecordJudge, Boolean(pinnedRecordJudge));
+      });
+
+      band.addEventListener('click', (event) => {
+        const seg = event.target.closest('.record__seg');
+        if (seg) handleTogglePin(seg.dataset.judge);
+      });
+
+      band.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          const seg = event.target.closest('.record__seg');
+          if (seg) {
+            event.preventDefault();
+            handleTogglePin(seg.dataset.judge);
+          }
+        }
+      });
+
+      document.addEventListener('click', (event) => {
+        if (!event.target.closest('#record')) {
+          if (pinnedRecordJudge) {
+            pinnedRecordJudge = null;
+            setRecordActive(null, false);
+          }
+        }
+      });
     }
 
-    function setRecordActive(id) {
-      band.querySelectorAll('.record__seg').forEach((seg) => {
-        const on = Boolean(id) && seg.dataset.judge === id;
-        seg.classList.toggle('is-active', on);
-        seg.classList.toggle('is-dimmed', Boolean(id) && !on);
-      });
-      legend.querySelectorAll('.record__row').forEach((row) => {
-        row.classList.toggle('is-active', Boolean(id) && row.dataset.judge === id);
-      });
+    // Deep linking support: #judge-leetcode or #judge-codeforces
+    if (!pinnedRecordJudge && window.location.hash) {
+      const hash = window.location.hash.slice(1);
+      if (hash.startsWith('judge-')) {
+        const target = hash.replace('judge-', '');
+        if (state.platforms.some(p => p.id === target)) {
+          pinnedRecordJudge = target;
+        }
+      }
     }
+
+    setRecordActive(pinnedRecordJudge, Boolean(pinnedRecordJudge));
   }
 
   /* Difficulty mix as one stacked bar instead of three separate rows: the bands

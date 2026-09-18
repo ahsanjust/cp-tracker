@@ -169,6 +169,40 @@
           <h2 class="band__title" id="record-title">The shape of the record</h2>
           <p class="band__note">Each band is one judge, ranked largest first — its width is that judge's share of the total, read against the axis below.</p>
         </div>
+
+        <div class="record-inspector" id="record-inspector" aria-live="polite">
+          <div class="record-inspector__idle" id="record-inspector-idle">
+            <span class="record-inspector__pulse" aria-hidden="true"></span>
+            <span class="record-inspector__text">Hover or click any band to inspect volume share, rank, and jump to verified credentials</span>
+          </div>
+          <div class="record-inspector__active" id="record-inspector-active" style="display: none;">
+            <div class="record-inspector__left">
+              <span class="record-inspector__badge num" id="inspector-rank">#01</span>
+              <div class="record-inspector__identity">
+                <span class="record-inspector__name" id="inspector-name">Codeforces</span>
+                <span class="record-inspector__tier" id="inspector-tier">Expert 1,774</span>
+              </div>
+            </div>
+            <div class="record-inspector__center">
+              <div class="record-inspector__metric">
+                <span class="record-inspector__val num" id="inspector-val">3,183</span>
+                <span class="record-inspector__label">solves</span>
+              </div>
+              <span class="record-inspector__sep" aria-hidden="true">/</span>
+              <div class="record-inspector__metric">
+                <span class="record-inspector__pct num" id="inspector-pct">56.5%</span>
+                <span class="record-inspector__label">of record</span>
+              </div>
+            </div>
+            <div class="record-inspector__right">
+              <span class="record-inspector__pin-tag" id="inspector-pin-tag" style="display: none;">PINNED</span>
+              <button type="button" class="record-inspector__btn" id="inspector-jump-btn" title="Jump to judge card in Directory">
+                <span>View Card</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M7 17l9.2-9.2M17 17V8H8"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
 
       <figure class="record-figure">

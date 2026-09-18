@@ -1,0 +1,103 @@
+/* 11. Difficulty =========================================================== */
+
+.panel {
+  padding: var(--s-5);
+  background: var(--surface-1);
+  border: 1px solid var(--line);
+  border-radius: var(--r-3);
+}
+
+.panel__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-2) var(--s-4);
+  margin-bottom: var(--s-5);
+}
+
+.panel__title {
+  font-size: var(--fs-lg);
+}
+
+.panel__note {
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+}
+
+/* A full-width panel for the one chart the page still carries. */
+.panel--wide {
+  padding: var(--s-6);
+}
+
+/* Stacked share bar — one bar, three bands. Widths come from flex-grow, so the
+   rendered proportion can never disagree with the printed numbers. */
+.stack-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-5);
+}
+
+.stack {
+  display: flex;
+  gap: 2px;
+  height: 14px;
+}
+
+.stack__seg {
+  flex: var(--w, 1) 1 0;
+  /* Pill ends, matching the judge bars: one bar language for the whole page. */
+  border-radius: var(--r-pill);
+  background: var(--seg-color, var(--accent));
+  transform-origin: left center;
+  animation: stack-in 0.55s cubic-bezier(0.2, 0.8, 0.3, 1) both;
+  animation-delay: calc(var(--i, 0) * 70ms);
+}
+
+@keyframes stack-in {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+.stack__legend {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+  gap: var(--s-3) var(--s-5);
+  /* Capped so the three bands resolve to three equal columns instead of being
+     scattered one-per-column across a very wide panel. */
+  max-width: 780px;
+}
+
+.stack__item {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-size: var(--fs-sm);
+}
+
+.stack__dot {
+  width: 8px;
+  height: 8px;
+  flex: none;
+  border-radius: var(--r-pill);
+  background: var(--seg-color, var(--accent));
+}
+
+.stack__label {
+  color: var(--text-2);
+}
+
+.stack__val {
+  margin-inline-start: auto;
+  font-weight: 500;
+  color: var(--text-1);
+}
+
+.stack__pct {
+  min-width: 46px;
+  text-align: right;
+  font-size: var(--fs-micro);
+  color: var(--text-3);
+}
+

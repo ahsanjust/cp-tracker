@@ -1,0 +1,96 @@
+/* 3. Primitives ============================================================ */
+
+.num {
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--text-3);
+}
+
+.dot--live {
+  background: var(--ok);
+  box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.14);
+}
+
+/* Buttons ----------------------------------------------------------------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-2);
+  min-height: 40px;
+  padding: 0 var(--s-4);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  background: var(--surface-2);
+  color: var(--text-1);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.btn:hover {
+  background: var(--surface-3);
+  border-color: var(--line-strong);
+}
+
+.btn--primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 600;
+}
+
+.btn--primary:hover {
+  background: #5cc9fa;
+  border-color: #5cc9fa;
+}
+
+/* A utility action in the header. It carries the live-data affordance without
+   competing with the hero's primary call to action for the accent. */
+.btn--quiet {
+  background: transparent;
+  color: var(--text-2);
+}
+
+.btn--quiet .btn__icon {
+  color: var(--accent);
+}
+
+.btn--quiet:hover {
+  background: var(--surface-2);
+  border-color: var(--line-strong);
+  color: var(--text-1);
+}
+
+.btn[disabled],
+.btn[aria-busy="true"] {
+  cursor: progress;
+  opacity: 0.75;
+}
+
+.btn__icon {
+  flex: none;
+}
+
+/* The only looping animation in the system: sync activity. */
+.btn[aria-busy="true"] .btn__icon {
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
