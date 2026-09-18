@@ -3,20 +3,42 @@
 .num {
   font-family: var(--mono);
   font-variant-numeric: tabular-nums;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.015em;
 }
 
 .dot {
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
   flex: none;
   border-radius: 50%;
   background: var(--text-3);
+  position: relative;
 }
 
 .dot--live {
   background: var(--ok);
-  box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.14);
+  box-shadow: 0 0 10px rgba(52, 211, 153, 0.6);
+}
+
+.dot--live::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(52, 211, 153, 0.5);
+  animation: pulse-ring 2.4s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+  pointer-events: none;
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.9;
+  }
+  50%, 100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
 }
 
 /* Buttons ----------------------------------------------------------------- */
@@ -26,51 +48,69 @@
   align-items: center;
   justify-content: center;
   gap: var(--s-2);
-  min-height: 40px;
-  padding: 0 var(--s-4);
+  min-height: 42px;
+  padding: 0 var(--s-5);
   border: 1px solid var(--line);
   border-radius: var(--r-2);
-  background: var(--surface-2);
+  background: var(--glass-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   color: var(--text-1);
   font-size: var(--fs-sm);
   font-weight: 500;
   cursor: pointer;
   white-space: nowrap;
-  transition: background 0.15s ease, border-color 0.15s ease;
+  box-shadow: var(--shadow-sm), var(--glass-highlight-subtle);
+  transition: all var(--transition-fast);
 }
 
 .btn:hover {
-  background: var(--surface-3);
+  background: var(--glass-surface-hover);
   border-color: var(--line-strong);
+  color: #ffffff;
+  transform: translateY(-1.5px);
+  box-shadow: var(--shadow-md), var(--glass-highlight);
+}
+
+.btn:active {
+  transform: translateY(0) scale(0.98);
 }
 
 .btn--primary {
-  background: var(--accent);
-  border-color: var(--accent);
+  background: var(--accent-gradient);
+  border-color: rgba(255, 255, 255, 0.2);
   color: var(--accent-ink);
   font-weight: 600;
+  box-shadow: var(--glow-accent), inset 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 
 .btn--primary:hover {
-  background: #5cc9fa;
-  border-color: #5cc9fa;
+  background: linear-gradient(135deg, #60a5fa 0%, #38bdf8 100%);
+  border-color: rgba(255, 255, 255, 0.35);
+  color: #02121b;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(56, 189, 248, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
-/* A utility action in the header. It carries the live-data affordance without
-   competing with the hero's primary call to action for the accent. */
 .btn--quiet {
-  background: transparent;
+  background: rgba(255, 255, 255, 0.03);
+  border-color: var(--line);
   color: var(--text-2);
 }
 
 .btn--quiet .btn__icon {
   color: var(--accent);
+  transition: transform 0.3s var(--ease-spring);
 }
 
 .btn--quiet:hover {
-  background: var(--surface-2);
+  background: rgba(255, 255, 255, 0.06);
   border-color: var(--line-strong);
   color: var(--text-1);
+}
+
+.btn--quiet:hover .btn__icon {
+  transform: rotate(30deg);
 }
 
 .btn[disabled],
@@ -83,9 +123,8 @@
   flex: none;
 }
 
-/* The only looping animation in the system: sync activity. */
 .btn[aria-busy="true"] .btn__icon {
-  animation: spin 0.9s linear infinite;
+  animation: spin 0.9s linear infinite !important;
 }
 
 @keyframes spin {
@@ -93,4 +132,3 @@
     transform: rotate(360deg);
   }
 }
-

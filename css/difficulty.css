@@ -1,10 +1,24 @@
-/* 11. Difficulty =========================================================== */
+/* 11. Difficulty Breakdown ================================================ */
 
 .panel {
-  padding: var(--s-5);
-  background: var(--surface-1);
+  padding: var(--s-6);
+  background: var(--glass-card);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--line);
   border-radius: var(--r-3);
+  box-shadow: var(--shadow-glass);
+  position: relative;
+}
+
+.panel::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent);
 }
 
 .panel__head {
@@ -13,45 +27,58 @@
   align-items: baseline;
   justify-content: space-between;
   gap: var(--s-2) var(--s-4);
-  margin-bottom: var(--s-5);
+  margin-bottom: var(--s-6);
 }
 
 .panel__title {
   font-size: var(--fs-lg);
+  font-weight: 600;
+  color: #ffffff;
 }
 
 .panel__note {
   font-size: var(--fs-sm);
-  color: var(--text-3);
+  color: var(--text-2);
 }
 
-/* A full-width panel for the one chart the page still carries. */
 .panel--wide {
-  padding: var(--s-6);
+  padding: var(--s-8);
 }
 
-/* Stacked share bar — one bar, three bands. Widths come from flex-grow, so the
-   rendered proportion can never disagree with the printed numbers. */
+/* Stacked Share Bar */
 .stack-block {
   display: flex;
   flex-direction: column;
-  gap: var(--s-5);
+  gap: var(--s-6);
 }
 
 .stack {
+  position: relative;
   display: flex;
-  gap: 2px;
-  height: 14px;
+  gap: 4px;
+  height: 18px;
+  padding: 3px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.6);
 }
 
 .stack__seg {
   flex: var(--w, 1) 1 0;
-  /* Pill ends, matching the judge bars: one bar language for the whole page. */
   border-radius: var(--r-pill);
   background: var(--seg-color, var(--accent));
+  box-shadow: 0 0 12px var(--seg-color, transparent);
   transform-origin: left center;
-  animation: stack-in 0.55s cubic-bezier(0.2, 0.8, 0.3, 1) both;
-  animation-delay: calc(var(--i, 0) * 70ms);
+  animation: stack-in 0.65s var(--ease-spring) both;
+  animation-delay: calc(var(--i, 0) * 80ms);
+  transition: transform 0.2s var(--ease-spring), filter 0.2s ease;
+}
+
+.stack__seg:hover {
+  transform: scaleY(1.2);
+  filter: brightness(1.25);
+  z-index: 2;
 }
 
 @keyframes stack-in {
@@ -60,44 +87,59 @@
   }
 }
 
+/* Difficulty 3-Card Summary Grid */
 .stack__legend {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
-  gap: var(--s-3) var(--s-5);
-  /* Capped so the three bands resolve to three equal columns instead of being
-     scattered one-per-column across a very wide panel. */
-  max-width: 780px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: var(--s-4);
+  max-width: 860px;
 }
 
 .stack__item {
   display: flex;
   align-items: center;
-  gap: var(--s-2);
-  font-size: var(--fs-sm);
+  gap: var(--s-3);
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  box-shadow: var(--shadow-sm), var(--glass-highlight-subtle);
+  transition: all var(--transition-fast);
+}
+
+.stack__item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--line-strong);
+  transform: translateY(-2px);
 }
 
 .stack__dot {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   flex: none;
   border-radius: var(--r-pill);
   background: var(--seg-color, var(--accent));
+  box-shadow: 0 0 8px var(--seg-color, transparent);
 }
 
 .stack__label {
+  font-weight: 500;
   color: var(--text-2);
 }
 
 .stack__val {
   margin-inline-start: auto;
-  font-weight: 500;
-  color: var(--text-1);
+  font-family: var(--mono);
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  color: #ffffff;
 }
 
 .stack__pct {
-  min-width: 46px;
+  min-width: 44px;
   text-align: right;
+  font-family: var(--mono);
   font-size: var(--fs-micro);
+  font-weight: 600;
   color: var(--text-3);
 }
-
