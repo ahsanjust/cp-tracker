@@ -64,6 +64,7 @@
 
       <nav class="site-nav" aria-label="Page sections">
         <a href="#record">Record</a>
+        <a href="#standings">Standings</a>
         <a href="#achievements">Achievements</a>
         <a href="#judges">Judges</a>
         <a href="#difficulty">Difficulty</a>
@@ -154,11 +155,57 @@
     </section>
 
     <div class="wrap">
+      <!-- Platform Standing: Verified peak ratings strip -->
+      <section class="section" id="standings" aria-labelledby="standings-title">
+        <div class="section-head">
+          <h2 class="section-head__title" id="standings-title">Platform standing</h2>
+          <p class="section-head__note">Verified peak ratings and percentile tiers across competitive judges.</p>
+        </div>
+
+        <div class="ratings-grid">
+          <a class="rating-card" href="https://codeforces.com/profile/Ahsan_" target="_blank" rel="noopener noreferrer" style="--card-accent: #3b82f6;">
+            <div class="rating-card__head">
+              <span class="rating-card__platform">Codeforces</span>
+              <span class="rating-card__badge">Live API</span>
+            </div>
+            <div class="rating-card__value">
+              <span class="num">1774</span>
+              <span class="rating-card__title">Expert</span>
+            </div>
+            <p class="rating-card__meta">Peak rating • 3,183 problems solved across official rounds & practice</p>
+          </a>
+
+          <a class="rating-card" href="https://leetcode.com/u/Ahsanul_haque_/" target="_blank" rel="noopener noreferrer" style="--card-accent: #f59e0b;">
+            <div class="rating-card__head">
+              <span class="rating-card__platform">LeetCode</span>
+              <span class="rating-card__badge">Top 1.24%</span>
+            </div>
+            <div class="rating-card__value">
+              <span class="num">2142</span>
+              <span class="rating-card__title">Guardian</span>
+            </div>
+            <p class="rating-card__meta">Rating 2142 • 364 solved (72 Hard) • Worldwide top 1.24%</p>
+          </a>
+
+          <a class="rating-card" href="https://www.codechef.com/users/ahsanul_haque" target="_blank" rel="noopener noreferrer" style="--card-accent: #d97706;">
+            <div class="rating-card__head">
+              <span class="rating-card__platform">CodeChef</span>
+              <span class="rating-card__badge">Div 2</span>
+            </div>
+            <div class="rating-card__value">
+              <span class="num">1900</span>
+              <span class="rating-card__title">4 Stars ★★★★</span>
+            </div>
+            <p class="rating-card__meta">Max Rating 1900 • Division 2 Contestant • 265 solved</p>
+          </a>
+        </div>
+      </section>
+
       <!-- Achievements: the credentials a recruiter scans for -->
       <section class="section" id="achievements" aria-labelledby="achievements-title">
         <div class="section-head">
           <h2 class="section-head__title" id="achievements-title">Competitive results</h2>
-          <p class="section-head__note">Contest placements and ratings, verified on the judges cited.</p>
+          <p class="section-head__note">Tournament placements, regional appearances, and championships.</p>
         </div>
 
         <ul class="ledger">
@@ -169,7 +216,7 @@
             </span>
             <div>
               <p class="ledger__title">JUST IDPC — Champion</p>
-              <p class="ledger__meta">Inter-departmental programming contest</p>
+              <p class="ledger__meta">Inter-departmental programming contest (1st place)</p>
             </div>
           </li>
           <li class="ledger__row">
@@ -179,7 +226,7 @@
             </span>
             <div>
               <p class="ledger__title">ICPC Asia Dhaka Regional</p>
-              <p class="ledger__meta">Two regional appearances · 63rd in 2024</p>
+              <p class="ledger__meta">34th in 2025 · 63rd in 2024 (2x Regionalist among 300+ university teams)</p>
             </div>
           </li>
           <li class="ledger__row">
@@ -189,27 +236,7 @@
             </span>
             <div>
               <p class="ledger__title">NWU IUPC 2025 — 1st Runner-Up</p>
-              <p class="ledger__meta">National inter-university contest</p>
-            </div>
-          </li>
-          <li class="ledger__row">
-            <span class="ledger__mark">
-              <span class="num">1.24%</span>
-              <span class="ledger__unit">worldwide</span>
-            </span>
-            <div>
-              <p class="ledger__title">LeetCode Guardian</p>
-              <p class="ledger__meta">Contest rating 2142 · inside the top 1.24% worldwide</p>
-            </div>
-          </li>
-          <li class="ledger__row">
-            <span class="ledger__mark">
-              <span class="num">1774</span>
-              <span class="ledger__unit">peak rating</span>
-            </span>
-            <div>
-              <p class="ledger__title">Codeforces Expert</p>
-              <p class="ledger__meta">CodeChef 4-star at 1900</p>
+              <p class="ledger__meta">National inter-university programming contest</p>
             </div>
           </li>
           <li class="ledger__row">
@@ -218,8 +245,18 @@
               <span class="ledger__unit">national</span>
             </span>
             <div>
-              <p class="ledger__title">Toph</p>
-              <p class="ledger__meta">Top 40 on Bangladesh's national contest platform</p>
+              <p class="ledger__title">Toph National Contest Standing</p>
+              <p class="ledger__meta">Rank #39 national on Bangladesh's competitive contest judge · 364 solved</p>
+            </div>
+          </li>
+          <li class="ledger__row">
+            <span class="ledger__mark">
+              <span class="num">1st</span>
+              <span class="ledger__unit">champion</span>
+            </span>
+            <div>
+              <p class="ledger__title">JUST ACM Laboratory Farewell Contest</p>
+              <p class="ledger__meta">Senior Category Champion (2026), 1st Runner-Up (2025), Junior Champion (2024)</p>
             </div>
           </li>
         </ul>
