@@ -1,6 +1,6 @@
 # Competitive Programming Solved Hub ⚡
 
-> **Dynamic real-time problem-solving portfolio tracking 5,616+ solved problems across 14 online judges.**
+> **Dynamic real-time problem-solving portfolio tracking 5,616 problems solved across 14 judge accounts — at least 5,033 of them distinct.**
 
 [![Live Demo](https://img.shields.io/badge/Live_Demo-ahsanjust.github.io/cp--tracker-blue?style=for-the-badge&logo=githubpages&logoColor=white)](https://ahsanjust.github.io/cp-tracker/)
 [![Total Solved](https://img.shields.io/badge/Problems_Solved-5616%2B-emerald?style=for-the-badge&logo=codeforces&logoColor=white)](https://ahsanjust.github.io/cp-tracker/)

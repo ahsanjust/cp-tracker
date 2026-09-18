@@ -202,6 +202,16 @@
     const judges = $('hero-judges');
     if (judges) judges.textContent = String(state.platforms.length);
 
+    // The headline figure changes meaning with the toggle, so the line that
+    // reads it changes with it: "5,033 ... of which at least 5,033 are distinct"
+    // would be nonsense.
+    const sumUnit = $('hero-unit-sum');
+    const dedupUnit = $('hero-unit-dedup');
+    if (sumUnit && dedupUnit) {
+      sumUnit.classList.toggle('is-hidden', state.dedup);
+      dedupUnit.classList.toggle('is-hidden', !state.dedup);
+    }
+
     const sub = $('hero-sub');
     if (sub) {
       const excluded = state.platforms.find((p) => p.id === 'vjudge');
@@ -273,7 +283,20 @@
     const el = $('embed-code');
     if (!el) return;
     const total = state.platforms.reduce((sum, p) => sum + p.solved, 0);
-    el.textContent = `[![CP Tracker — ${formatInt(total)}+ problems solved](${TRACKER_URL}assets/og_preview.png)](${TRACKER_URL})`;
+    el.textContent = `[![CP Tracker — ${formatInt(total)} solves across ${state.platforms.length} judges](${TRACKER_URL}assets/og_preview.png)](${TRACKER_URL})`;
+  }
+
+  /* The headline sums 14 separate judge accounts, so an overlapping solve is
+     counted twice. Dropping Virtual Judge — which mirrors the others — leaves
+     the figure that is certainly distinct, and it is stated beside the total
+     rather than buried in a footnote. */
+  function renderDistinctFloor() {
+    const el = $('hero-unique');
+    if (!el) return;
+    const floor = state.platforms
+      .filter((p) => p.id !== 'vjudge')
+      .reduce((sum, p) => sum + p.solved, 0);
+    el.textContent = formatInt(floor);
   }
 
   function renderFilterCounts() {
@@ -450,6 +473,7 @@
     renderJudges();
     renderAnalytics();
     renderNotice();
+    renderDistinctFloor();
     positionTabIndicator(false);
     state.rendered = true;
   }
