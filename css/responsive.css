@@ -2,13 +2,13 @@
 
 .reveal {
   opacity: 0;
-  transform: translateY(6px);
+  transform: translateY(12px);
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .reveal.is-in {
   opacity: 1;
   transform: none;
-  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.2, 0.8, 0.3, 1);
 }
 
 @media (min-width: 600px) {
@@ -16,16 +16,11 @@
     --gutter: 24px;
     --section-gap: var(--s-14);
   }
-
-  .field__row {
-    padding-inline-start: var(--s-5);
-  }
 }
 
 @media (min-width: 1080px) {
-  /* Side by side: the claim and the instrument that measures it, in one fold. */
   .hero__grid {
-    grid-template-columns: minmax(0, 1.06fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr);
     gap: var(--s-14);
   }
 }
@@ -40,15 +35,11 @@
   }
 }
 
-/* The scoreboard needs room for its own head row; below this it simply stacks
-   under the claim, in the same reading order. */
-@media (max-width: 700px) {
-  .provenance__row {
-    grid-template-columns: minmax(0, 1fr);
+@media (max-width: 768px) {
+  .hero__results {
+    max-width: 100%;
   }
 
-  /* The section note already says the bar is read against the axis, and at this
-     width the label collides with the 25% tick. The ticks are the axis. */
   .record__axis-label {
     display: none;
   }
@@ -62,7 +53,7 @@
   }
 }
 
-/* Section nav is a desktop convenience: it is not load-bearing. */
+/* Nav collapse for mobile */
 @media (max-width: 899px) {
   .site-nav {
     display: none;
@@ -73,26 +64,18 @@
   }
 }
 
-/* Below 600px the page is rebuilt rather than shrunk. Type lifts to a legible
-   floor, controls reach the 44px touch minimum, the header is decluttered so
-   the name stops colliding with the action cluster, and the long stacks (14
-   judge cards, 17 bars) are compacted so the record does not run to nine
-   screens while still showing every figure. */
+/* Small screen / Mobile refinement */
 @media (max-width: 599px) {
   :root {
-    --fs-micro: 0.75rem; /* 12px — eyebrows and labels stay readable */
-    --fs-sm: 0.875rem; /* 14px — secondary copy */
-    --section-gap: var(--s-8);
+    --fs-micro: 0.75rem;
+    --fs-sm: 0.875rem;
+    --section-gap: var(--s-10);
   }
-
-  /* --- Header ----------------------------------------------------------- */
 
   .header-inner {
     gap: var(--s-3);
   }
 
-  /* The social buttons also appear in the hero and footer, so the bar spends
-     their width on the name and leaves one control at full touch size. */
   .header-actions .icon-link {
     display: none;
   }
@@ -101,7 +84,6 @@
     min-height: 44px;
   }
 
-  /* Hidden until focused, but it is a real button once it appears. */
   .skip-link {
     display: inline-flex;
     align-items: center;
@@ -109,32 +91,26 @@
   }
 
   .btn,
-  .copy-btn,
   .tabs__btn {
     min-height: 44px;
-  }
-
-  /* --- Hero ------------------------------------------------------------- */
-
-  /* The wash is sized for a wide viewport; on a phone it would flood the whole
-     fold, so it is pulled in and dimmed. */
-  .hero::after {
-    left: -22%;
-    height: 300px;
-    opacity: 0.7;
   }
 
   .hero {
     padding: var(--s-8) 0 var(--s-6);
   }
 
+  .hero::after {
+    left: -20%;
+    height: 320px;
+    opacity: 0.8;
+  }
+
   .hero__figure {
-    margin-top: var(--s-5);
+    margin-top: var(--s-3);
   }
 
   .hero__num {
-    /* Scaled up for the narrow range: 12.5vw reads as timid on a phone. */
-    font-size: clamp(3.5rem, 18vw, 5.5rem);
+    font-size: clamp(3.2rem, 16vw, 5rem);
   }
 
   .hero__unit {
@@ -142,20 +118,19 @@
     font-size: var(--fs-base);
   }
 
-  /* The readout stacks: 12px mono cannot hold five facts on one phone line. */
+  .hero__result {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--s-2);
+  }
+
   .readout {
     flex-direction: column;
     align-items: flex-start;
     gap: var(--s-3);
     margin-top: var(--s-8);
+    border-radius: var(--r-2);
   }
-
-  .readout__item:not(:last-child)::after {
-    display: none;
-  }
-
-  /* --- Record bar: the bands keep their true proportions, but the bar is
-     shorter and the legend drops to one column so long names fit ---------- */
 
   .band {
     padding: var(--s-6) 0 var(--s-8);
@@ -166,12 +141,12 @@
   }
 
   .record {
-    gap: 1px;
+    gap: 2px;
     height: 64px;
   }
 
   .record__seg {
-    min-width: 2px;
+    min-width: 3px;
   }
 
   .record__method {
@@ -180,157 +155,59 @@
 
   .record-legend {
     grid-template-columns: 1fr;
-    gap: 0;
+    gap: 4px;
   }
 
-  /* --- Ledger ----------------------------------------------------------- */
-
   .ledger__row {
-    grid-template-columns: minmax(64px, auto) minmax(0, 1fr);
-    gap: var(--s-2) var(--s-4);
-    padding: var(--s-4) 0;
+    grid-template-columns: 1fr;
+    gap: var(--s-3);
+    padding: var(--s-4);
   }
 
   .ledger__mark {
-    font-size: var(--fs-lg);
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: var(--s-2);
+    width: fit-content;
+    padding: 6px 12px;
   }
-
-  .ledger__title {
-    font-size: var(--fs-base);
-  }
-
-  /* --- Toolbar: a 2x2 keypad beats four ragged wrapped buttons ---------- */
 
   .toolbar {
     align-items: stretch;
     gap: var(--s-3);
   }
 
-  /* A 2x2 keypad rather than a scrolling strip: every filter stays visible and
-     each one is a full-width target. Each tab carries its own rule so both rows
-     read as a tab bar; the sliding underline covers the active one. */
   .tabs {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    border-bottom: 0;
+    border-radius: var(--r-2);
+    padding: 6px;
   }
 
   .tabs__btn {
     justify-content: center;
     line-height: 1.25;
-    border-bottom: 1px solid var(--line);
+    border-radius: var(--r-1);
   }
 
   .switch-field {
-    justify-content: flex-start;
+    border-radius: var(--r-2);
   }
-
-  /* Track keeps its proportions; the label grows to a 44px hit area. */
-  .switch {
-    width: 44px;
-    height: 44px;
-    align-items: center;
-    margin-top: 0;
-  }
-
-  .switch__track {
-    position: relative;
-    height: 26px;
-  }
-
-  .switch__track::after {
-    width: 18px;
-    height: 18px;
-    top: 4px;
-    left: 4px;
-  }
-
-  .switch__input:checked + .switch__track::after {
-    transform: translateX(18px);
-  }
-
-  .switch-field__hint {
-    max-width: none;
-  }
-
-  /* --- Judge cards: name and count share the first line, so 14 cards stop
-     consuming four screens of scrolling ---------------------------------- */
 
   .judge-grid {
-    gap: var(--s-3);
+    gap: var(--s-4);
   }
 
   .judge-card {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-areas:
-      "head count"
-      "tags tags"
-      "details details"
-      "foot foot";
-    align-items: start;
-    gap: var(--s-2) var(--s-3);
     padding: var(--s-4);
   }
-
-  .judge-card__head {
-    grid-area: head;
-  }
-
-  .judge-card__count {
-    grid-area: count;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 0;
-    margin-top: 0;
-  }
-
-  .judge-card__num {
-    font-size: var(--fs-lg);
-  }
-
-  .judge-card__tags {
-    grid-area: tags;
-    margin-top: 0;
-  }
-
-  .judge-card__details {
-    grid-area: details;
-    margin-top: var(--s-3);
-    /* Cards are one to a row here, so nothing needs to line up. */
-    min-height: 0;
-  }
-
-  .judge-card__foot {
-    grid-area: foot;
-    margin-block-start: 0;
-  }
-
-  .judge-card__link {
-    min-width: 44px;
-    min-height: 44px;
-    margin-top: 0;
-  }
-
-  /* --- Analytics: give the bars the panel's padding width --------------- */
 
   .panel {
     padding: var(--s-4);
   }
 
-  /* --- Verify: the value stays on one line with an ellipsis — the same
-     treatment as desktop, so the truncation reads as deliberate rather than as a
-     value broken across three lines at arbitrary character boundaries. The Copy
-     button still writes the full string, because an ellipsis is paint, not text.
-     -------------------------------------------------------------------- */
-
-  .field__row {
-    align-items: center;
-    padding: var(--s-2) var(--s-2) var(--s-2) var(--s-3);
-  }
-
-  .field__value {
-    font-size: var(--fs-micro);
+  .panel--wide {
+    padding: var(--s-4);
   }
 }
 

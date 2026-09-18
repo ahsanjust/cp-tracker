@@ -2,13 +2,10 @@
 
 .hero {
   position: relative;
-  /* Contains the z-index:-1 wash so it cannot slip behind the page. */
   isolation: isolate;
   padding: var(--s-14) 0 var(--s-10);
 }
 
-/* The claim and the instrument that measures it, side by side in the first
-   viewport. Everything above the fold is information, nothing is filler. */
 .hero__grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -20,8 +17,7 @@
   min-width: 0;
 }
 
-/* Instrumentation rather than decoration: a hairline grid that fades out toward
-   the edges, and one soft accent wash behind the numeral. Both are inert. */
+/* Atmospheric subtle lighting behind hero */
 .hero::before,
 .hero::after {
   content: "";
@@ -31,126 +27,171 @@
 }
 
 .hero::before {
-  inset: 0 0 30% 0;
+  inset: -10% -5% 10% -5%;
   background-image:
     linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-  background-size: 64px 64px;
-  -webkit-mask-image: radial-gradient(115% 85% at 15% 0%, #000 0%, transparent 70%);
-  mask-image: radial-gradient(115% 85% at 15% 0%, #000 0%, transparent 70%);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(ellipse 90% 70% at 20% 15%, #000 0%, transparent 75%);
+  mask-image: radial-gradient(ellipse 90% 70% at 20% 15%, #000 0%, transparent 75%);
 }
 
 .hero::after {
-  top: -12%;
-  left: -6%;
-  width: min(720px, 88%);
-  height: 520px;
-  /* Trimmed: the record band below it is the loudest object on the page, and
-     two competing accent fields would flatten both. */
-  background: radial-gradient(closest-side, rgba(56, 189, 248, 0.065), transparent 100%);
+  top: -15%;
+  left: -8%;
+  width: min(780px, 92%);
+  height: 560px;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.09) 0%, rgba(139, 92, 246, 0.04) 50%, transparent 75%);
 }
 
 .hero__title {
   display: block;
-  /* The h1 holds the eyebrow, the numeral and the lead line, all of which set
-     their own size. Inheriting stops the UA's 2em default leaking a phantom
-     30px step into the type scale. */
   font-size: inherit;
 }
 
+/* High-end pill eyebrow */
 .hero__eyebrow {
-  display: block;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: 6px 14px;
+  border-radius: var(--r-pill);
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.24);
+  box-shadow: 0 0 20px -3px rgba(56, 189, 248, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  font-family: var(--mono);
   font-size: var(--fs-micro);
   font-weight: 600;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--text-3);
+  color: var(--accent);
+  margin-bottom: var(--s-4);
 }
 
 .hero__figure {
   display: block;
-  margin-top: var(--s-6);
+  margin-top: var(--s-2);
 }
 
-/* The numeral is the wordmark: the page's whole claim in one run of digits, set
-   at roughly ten times the body size so the hierarchy is unmistakable. */
+/* Monumental display numeral with metallic gradient sheen */
 .hero__num {
   display: block;
-  /* Sized for its own column rather than the viewport: the numeral is the page's
-     whole claim in one run of digits, and it shares the fold with the scoreboard. */
-  font-size: clamp(3.25rem, 7.6vw, 7.5rem);
-  font-weight: 600;
-  line-height: 0.9;
-  letter-spacing: -0.035em;
-  color: var(--text-1);
+  font-size: clamp(3.5rem, 8vw, 8rem);
+  font-weight: 700;
+  line-height: 0.92;
+  letter-spacing: -0.04em;
+  color: #ffffff;
+  background: linear-gradient(180deg, #ffffff 15%, #cbd5e1 90%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 4px 24px rgba(255, 255, 255, 0.15));
 }
 
 .hero__unit {
   display: block;
-  max-width: 40ch;
+  max-width: 44ch;
   margin-top: var(--s-5);
   font-size: var(--fs-lg);
-  line-height: 1.45;
+  line-height: 1.5;
   color: var(--text-2);
 }
 
+.hero__unit .num {
+  color: var(--text-1);
+  font-weight: 600;
+}
+
 .hero__sub {
-  max-width: 54ch;
-  margin-top: var(--s-5);
+  max-width: 52ch;
+  margin-top: var(--s-4);
+  font-size: var(--fs-base);
   color: var(--text-3);
+  line-height: 1.6;
+}
+
+/* Credential highlight capsules */
+.hero__results {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  max-width: 56ch;
+  margin-top: var(--s-6);
+}
+
+.hero__result {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.025);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  box-shadow: var(--shadow-sm), var(--glass-highlight-subtle);
+  transition: all var(--transition-fast);
+}
+
+.hero__result:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--line-strong);
+  transform: translateX(3px);
+  box-shadow: var(--shadow-md), var(--glass-highlight);
+}
+
+.hero__result-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  padding: 3px 8px;
+  border-radius: var(--r-1);
+  font-family: var(--mono);
+  font-size: var(--fs-micro);
+  font-weight: 700;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: var(--gold);
+}
+
+.hero__result:nth-child(2) .hero__result-mark {
+  background: rgba(203, 213, 225, 0.12);
+  border-color: rgba(203, 213, 225, 0.3);
+  color: var(--silver);
+}
+
+.hero__result-text {
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  color: var(--text-1);
+}
+
+.hero__result-alt {
+  color: var(--text-3);
+  font-weight: 400;
 }
 
 .cta-row {
   display: flex;
   flex-wrap: wrap;
   gap: var(--s-3);
-  margin-top: var(--s-6);
+  margin-top: var(--s-8);
 }
 
-/* Two results, one line each, subordinate to the numeral above them: hairline
-   rules and a mono placement, the same ledger grammar as the Results section. */
-.hero__results {
-  max-width: 52ch;
-  margin-top: var(--s-6);
-}
-
-.hero__result {
-  display: flex;
-  align-items: baseline;
-  gap: var(--s-4);
-  padding: var(--s-2) 0;
-  border-top: 1px solid var(--line);
-}
-
-.hero__result:last-child {
-  border-bottom: 1px solid var(--line);
-}
-
-.hero__result-mark {
-  min-width: 3.6ch;
-  font-size: var(--fs-sm);
-  color: var(--text-1);
-}
-
-.hero__result-text {
-  font-size: var(--fs-sm);
-  color: var(--text-2);
-}
-
-.hero__result-alt {
-  color: var(--text-3);
-}
-
-/* Provenance as a terminal readout: one mono line of facts, hairline-separated,
-   so it reads as a status bar instead of a row of promotional badges. */
+/* Telemetry command ribbon */
 .readout {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--s-3) var(--s-5);
+  gap: var(--s-3) var(--s-6);
   margin-top: var(--s-10);
-  padding-top: var(--s-5);
-  border-top: 1px solid var(--line);
+  padding: 10px 20px;
+  background: var(--glass-surface);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  box-shadow: var(--shadow-sm), var(--glass-highlight-subtle);
   font-family: var(--mono);
   font-size: var(--fs-micro);
   letter-spacing: 0.04em;
@@ -164,43 +205,40 @@
   gap: var(--s-2);
 }
 
-.readout__item:not(:last-child)::after {
-  content: "";
-  width: 1px;
-  height: 9px;
-  background: var(--line-strong);
-}
-
 .readout__val {
-  color: var(--text-2);
+  color: var(--text-1);
   font-weight: 600;
 }
 
-/* The timestamp is the one value worth reading as text, so it keeps its case. */
 .readout__item--live .readout__val {
-  color: var(--text-1);
+  color: #ffffff;
   letter-spacing: 0;
   text-transform: none;
 }
 
-/* The only looping cue besides the sync spinner, and it encodes live state. */
-@keyframes live-pulse {
-  50% {
-    opacity: 0.35;
-  }
-}
+/* 5b. The Telemetry Scoreboard ============================================= */
 
-.readout__item--live .dot--live {
-  animation: live-pulse 2.8s ease-in-out infinite;
-}
-
-/* 5b. The scoreboard ======================================================= */
-
-/* Three tier rows, rendered from config.json so they can never drift from the
-   cards below. Borderless: hairline rules carry the structure, as everywhere
-   else on the page. */
 .board {
   min-width: 0;
+  background: var(--glass-card);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--line);
+  border-radius: var(--r-3);
+  padding: var(--s-6);
+  box-shadow: var(--shadow-glass);
+  position: relative;
+  overflow: hidden;
+}
+
+.board::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.45), transparent);
 }
 
 .board__head {
@@ -209,12 +247,15 @@
   align-items: baseline;
   justify-content: space-between;
   gap: var(--s-2) var(--s-4);
-  padding-bottom: var(--s-3);
-  border-bottom: 1px solid var(--line-strong);
+  padding-bottom: var(--s-4);
+  border-bottom: 1px solid var(--line);
 }
 
 .board__title {
-  font-size: var(--fs-base);
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: #ffffff;
 }
 
 .board__note {
@@ -224,9 +265,15 @@
 
 .standing {
   display: grid;
-  gap: var(--s-2);
-  padding: var(--s-4) 0;
+  gap: var(--s-3);
+  padding: var(--s-5) 0;
   border-bottom: 1px solid var(--line);
+  transition: background var(--transition-fast);
+}
+
+.standing:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
 }
 
 .standing__head {
@@ -247,22 +294,30 @@
 
 .standing__value {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: var(--s-3);
 }
 
 .standing__num {
   font-size: var(--fs-2xl);
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
+  color: #ffffff;
 }
 
-/* The judge's own tier vocabulary, in that judge's own colour. */
+/* Tier badge with colored glow */
 .standing__tier {
-  font-size: var(--fs-lg);
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: var(--r-pill);
+  font-size: var(--fs-sm);
   font-weight: 600;
-  color: var(--tier, var(--text-1));
+  color: var(--tier, #ffffff);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 0 16px -2px rgba(255, 255, 255, 0.08);
 }
 
 .standing__qual {
@@ -270,55 +325,72 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-3);
+  margin-inline-start: auto;
 }
 
 .standing__note {
   font-size: var(--fs-micro);
   line-height: 1.5;
-  color: var(--text-3);
-}
-
-.standing__note .num {
   color: var(--text-2);
 }
 
-/* The rating ladder. Ticks are published tier boundaries, the marker is the peak;
-   it answers "how good is 1774?" in one glance. Decorative — the note above
-   states the band and the distance as text. */
+.standing__note .num {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* Precision Rating Ladder */
 .ladder-row {
   display: flex;
   align-items: center;
   gap: var(--s-3);
-  margin-top: var(--s-1);
+  margin-top: 2px;
 }
 
 .ladder {
   position: relative;
   flex: 1;
-  height: 10px;
+  height: 12px;
 }
 
 .ladder__track {
   position: absolute;
   inset: 0;
   border-radius: var(--r-pill);
-  background: var(--well);
+  background: rgba(0, 0, 0, 0.45);
   border: 1px solid var(--line);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .ladder__fill {
   position: absolute;
-  top: 1px;
-  bottom: 1px;
-  left: 1px;
-  width: calc((100% - 2px) * var(--pct, 0));
+  top: 2px;
+  bottom: 2px;
+  left: 2px;
+  width: calc((100% - 4px) * var(--pct, 0));
   border-radius: var(--r-pill);
-  /* Directional: the wash darkens toward the marker, so the fill reads as
-     distance covered rather than as a filled bar chart. */
-  background: linear-gradient(90deg, rgba(56, 189, 248, 0.05), rgba(56, 189, 248, 0.24));
-  /* Grows once, left to right: the marker is what is being read. */
-  animation: ladder-fill 0.7s cubic-bezier(0.2, 0.8, 0.3, 1) both;
+  background: linear-gradient(90deg, rgba(56, 189, 248, 0.2) 0%, rgba(56, 189, 248, 0.85) 100%);
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+  animation: ladder-fill 0.8s var(--ease-spring) both;
   transform-origin: left center;
+}
+
+/* LeetCode Amber Fill */
+.standing:first-child .ladder__fill {
+  background: linear-gradient(90deg, rgba(245, 158, 11, 0.2) 0%, rgba(245, 158, 11, 0.9) 100%);
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
+}
+
+/* Codeforces Blue Fill */
+.standing:nth-child(2) .ladder__fill {
+  background: linear-gradient(90deg, rgba(56, 189, 248, 0.2) 0%, rgba(56, 189, 248, 0.9) 100%);
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.45);
+}
+
+/* CodeChef Copper/Orange Fill */
+.standing:nth-child(3) .ladder__fill {
+  background: linear-gradient(90deg, rgba(217, 119, 6, 0.2) 0%, rgba(217, 119, 6, 0.9) 100%);
+  box-shadow: 0 0 12px rgba(217, 119, 6, 0.4);
 }
 
 @keyframes ladder-fill {
@@ -329,51 +401,57 @@
 
 .ladder__tick {
   position: absolute;
-  top: 0;
-  bottom: 0;
+  top: 1px;
+  bottom: 1px;
   left: var(--at);
   width: 1px;
-  background: var(--line-strong);
+  background: rgba(255, 255, 255, 0.15);
+  z-index: 2;
 }
 
 .ladder__marker {
   position: absolute;
-  top: -4px;
-  bottom: -4px;
+  top: -3px;
+  bottom: -3px;
   left: var(--at);
-  width: 3px;
-  background: var(--accent);
-  border-radius: 1px;
-  /* A hairline of canvas either side so the marker reads over its own fill. */
-  box-shadow: 0 0 0 2px var(--ink);
+  width: 4px;
+  background: #ffffff;
+  border-radius: 2px;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.8), 0 0 0 1px var(--ink);
+  z-index: 3;
 }
 
 .ladder__scale {
   font-family: var(--mono);
   font-size: var(--fs-micro);
   color: var(--text-3);
+  font-weight: 500;
 }
 
-/* Provenance chip: the same vocabulary in the scoreboard, the cards and the
-   Verify section. The dot carries the class, the label spells it out. */
+/* Source indicator chips */
 .source {
   display: inline-flex;
   align-items: center;
-  gap: var(--s-2);
+  gap: 6px;
   font-family: var(--mono);
   font-size: var(--fs-micro);
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--text-3);
+  color: var(--text-2);
   white-space: nowrap;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 3px 8px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--line-subtle);
 }
 
 .source__dot {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
   flex: none;
   border-radius: 50%;
   background: var(--src, var(--text-3));
+  box-shadow: 0 0 6px var(--src, transparent);
 }
 
 .source--api {
@@ -387,4 +465,3 @@
 .source--snapshot {
   --src: var(--text-3);
 }
-

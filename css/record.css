@@ -1,13 +1,22 @@
 /* 7. Record bar ============================================================ */
 
-/* The one full-bleed object on the page. Left inside the content column it
-   would read as a chart; broken to both viewport edges it reads as the record
-   itself, and a single judge can visibly own more than half of it. */
+/* Full-bleed visual proportion section */
 .band {
-  padding: var(--s-8) 0 var(--s-10);
-  background: var(--surface-1);
+  padding: var(--s-10) 0 var(--s-10);
+  background: linear-gradient(180deg, rgba(12, 15, 22, 0.7) 0%, rgba(7, 8, 12, 0.85) 100%);
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
+  position: relative;
+}
+
+.band::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.35), transparent);
 }
 
 .band__head {
@@ -20,57 +29,64 @@
 
 .band__title {
   font-size: var(--fs-xl);
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: -0.02em;
 }
 
 .band__note {
   font-size: var(--fs-sm);
-  color: var(--text-3);
-  max-width: 56ch;
+  color: var(--text-2);
+  max-width: 58ch;
+  line-height: 1.5;
 }
 
-/* --- Record Inspector: live tactile feedback on click or hover ----------- */
+/* --- Record Inspector: Floating Glass HUD Card --------------------------- */
 .record-inspector {
-  margin-top: var(--s-5);
-  margin-bottom: var(--s-2);
-  padding: 10px 16px;
-  background: var(--surface-2);
+  margin-top: var(--s-6);
+  margin-bottom: var(--s-3);
+  padding: 12px 18px;
+  background: var(--glass-card);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--line);
   border-radius: var(--r-2);
   font-size: var(--fs-sm);
-  min-height: 52px;
+  min-height: 56px;
   display: flex;
   align-items: center;
-  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: var(--shadow-sm), var(--glass-highlight-subtle);
+  transition: all var(--transition-normal);
 }
 
 .record-inspector.is-active {
-  background: linear-gradient(90deg, rgba(56, 189, 248, 0.09) 0%, var(--surface-2) 100%);
-  border-color: var(--accent-line);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 1px var(--accent);
+  background: linear-gradient(90deg, rgba(56, 189, 248, 0.14) 0%, rgba(13, 16, 23, 0.85) 100%);
+  border-color: rgba(56, 189, 248, 0.45);
+  box-shadow: 0 8px 30px -4px rgba(56, 189, 248, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 .record-inspector__idle {
   display: flex;
   align-items: center;
   gap: var(--s-3);
-  color: var(--text-3);
+  color: var(--text-2);
   font-size: var(--fs-sm);
   width: 100%;
 }
 
 .record-inspector__pulse {
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
   border-radius: var(--r-pill);
   background: var(--accent);
-  box-shadow: 0 0 8px var(--accent);
+  box-shadow: 0 0 10px var(--accent);
   animation: inspector-pulse-dot 2s infinite ease-in-out;
   flex: none;
 }
 
 @keyframes inspector-pulse-dot {
-  0%, 100% { opacity: 0.4; transform: scale(0.9); }
-  50% { opacity: 1; transform: scale(1.25); }
+  0%, 100% { opacity: 0.5; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.3); }
 }
 
 .record-inspector__active {
@@ -92,11 +108,12 @@
   font-family: var(--mono);
   font-size: var(--fs-micro);
   font-weight: 700;
-  padding: 2px 7px;
+  padding: 3px 8px;
   background: var(--accent);
   color: var(--ink);
   border-radius: var(--r-1);
   letter-spacing: 0.04em;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
 }
 
 .record-inspector__identity {
@@ -107,7 +124,7 @@
 .record-inspector__name {
   font-weight: 600;
   font-size: var(--fs-base);
-  color: var(--text-1);
+  color: #ffffff;
   line-height: 1.2;
 }
 
@@ -126,21 +143,21 @@
 .record-inspector__metric {
   display: flex;
   align-items: baseline;
-  gap: 4px;
+  gap: 5px;
 }
 
 .record-inspector__val {
   font-family: var(--mono);
   font-size: var(--fs-lg);
-  font-weight: 600;
+  font-weight: 700;
   color: var(--accent);
 }
 
 .record-inspector__pct {
   font-family: var(--mono);
   font-size: var(--fs-lg);
-  font-weight: 600;
-  color: var(--text-1);
+  font-weight: 700;
+  color: #ffffff;
 }
 
 .record-inspector__label,
@@ -148,7 +165,7 @@
   font-size: var(--fs-micro);
   color: var(--text-3);
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
 }
 
 .record-inspector__sep {
@@ -168,46 +185,45 @@
   font-size: 0.625rem;
   font-weight: 700;
   letter-spacing: 0.08em;
-  padding: 2px 6px;
+  padding: 3px 8px;
   border-radius: var(--r-1);
-  background: rgba(251, 191, 36, 0.15);
+  background: rgba(245, 158, 11, 0.15);
   color: var(--warn);
-  border: 1px solid rgba(251, 191, 36, 0.35);
+  border: 1px solid rgba(245, 158, 11, 0.35);
 }
 
 .record-inspector__btn {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 5px 12px;
-  background: var(--surface-3);
+  padding: 6px 14px;
+  background: rgba(255, 255, 255, 0.05);
   border: 1px solid var(--line-strong);
   border-radius: var(--r-1);
   color: var(--text-1);
   font-size: var(--fs-micro);
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.15s ease;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
 }
 
 .record-inspector__btn:hover {
-  background: var(--accent-weak);
+  background: var(--accent);
   border-color: var(--accent);
-  color: var(--accent);
+  color: var(--accent-ink);
+  transform: translateY(-1px);
+  box-shadow: var(--glow-accent);
 }
 
-/* A measuring rule, read left to right: width is the figure, height is just
-   the room the object needs to be seen. It sits between an annotation layer and
-   a share axis, so the shape can actually be read rather than only admired. */
+/* Measuring Proportion Bar */
 .record-figure {
   margin: 0;
 }
 
-/* Annotations for the bands wide enough to carry one (placed by JS). A tick
-   drops from the label to its band so the pairing is unambiguous. */
 .record__annot {
   position: relative;
-  height: 20px;
+  height: 22px;
   margin-top: var(--s-6);
 }
 
@@ -217,6 +233,7 @@
   transform: translateX(-50%);
   font-family: var(--mono);
   font-size: var(--fs-micro);
+  font-weight: 500;
   letter-spacing: 0.04em;
   color: var(--text-2);
   white-space: nowrap;
@@ -234,17 +251,23 @@
 .record {
   position: relative;
   display: flex;
-  gap: 2px;
-  height: clamp(64px, 8.5vw, 112px);
+  gap: 3px;
+  height: clamp(68px, 8.5vw, 116px);
   margin: 0;
+  padding: 4px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: var(--r-2);
+  border: 1px solid var(--line);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.6);
   animation: record-draw 1.15s cubic-bezier(0.22, 0.9, 0.24, 1) both;
 }
 
-/* The share axis: the keyline under the bar, with quarter ticks. */
+/* The share axis: the keyline under the bar */
 .record__axis {
   position: relative;
   display: block;
-  height: 22px;
+  height: 24px;
+  margin-top: 4px;
   border-top: 1px solid var(--line-strong);
   font-family: var(--mono);
   font-size: var(--fs-micro);
@@ -253,7 +276,7 @@
 
 .record__axis-label {
   position: absolute;
-  top: 5px;
+  top: 6px;
   left: 0;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -263,7 +286,7 @@
   position: absolute;
   top: 0;
   left: var(--at);
-  padding-top: 5px;
+  padding-top: 6px;
   transform: translateX(-50%);
 }
 
@@ -276,7 +299,7 @@
   top: 0;
   left: 50%;
   width: 1px;
-  height: 4px;
+  height: 5px;
   background: var(--line-strong);
 }
 
@@ -285,12 +308,12 @@
   right: 0;
 }
 
-/* The counting caveat, beside the object it qualifies. */
 .record__method {
   padding-block: var(--s-4) var(--s-6);
   border-bottom: 1px solid var(--line);
   font-size: var(--fs-sm);
   color: var(--text-3);
+  line-height: 1.6;
 }
 
 .record__method-label {
@@ -300,44 +323,46 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-2);
+  font-weight: 600;
 }
 
 /* --- Bar Segments with Rich Tactile Interaction ------------------------- */
 .record__seg {
   flex: var(--w, 1) 1 0;
-  min-width: 4px;
+  min-width: 5px;
   background: rgba(56, 189, 248, var(--ramp, 0.5));
+  border-radius: 4px;
   cursor: pointer;
   position: relative;
   outline: none;
-  transition: transform 0.16s cubic-bezier(0.16, 1, 0.3, 1),
-              filter 0.16s ease,
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  transition: transform 0.2s var(--ease-spring),
+              filter 0.2s ease,
               opacity 0.2s ease,
-              box-shadow 0.16s ease;
+              box-shadow 0.2s ease;
 }
 
 .record__seg:hover {
   background: var(--accent) !important;
-  transform: translateY(-2px);
+  transform: translateY(-3px) scaleY(1.04);
   z-index: 10;
-  box-shadow: 0 0 16px rgba(56, 189, 248, 0.8), 0 -2px 0 #ffffff;
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.85), 0 -2px 0 #ffffff;
   filter: brightness(1.2);
 }
 
 .record__seg.is-active {
   background: var(--accent) !important;
   z-index: 12;
-  box-shadow: 0 0 22px rgba(56, 189, 248, 0.95), 0 -3px 0 #ffffff;
+  box-shadow: 0 0 26px rgba(56, 189, 248, 0.95), 0 -3px 0 #ffffff;
   filter: brightness(1.25);
-  transform: translateY(-3px);
+  transform: translateY(-4px) scaleY(1.06);
 }
 
 .record.has-active .record__seg:not(.is-active) {
-  opacity: 0.25;
-  filter: grayscale(50%);
+  opacity: 0.22;
+  filter: grayscale(60%);
 }
 
-/* The record draws itself once, left to right. */
 @keyframes record-draw {
   from {
     clip-path: inset(0 100% 0 0);
@@ -350,13 +375,14 @@
 /* --- Ranked Ledger with High-Contrast Spotlight Effect ------------------- */
 .record-legend {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
-  gap: 0 var(--s-10);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: 4px var(--s-8);
+  margin-top: var(--s-6);
   transition: opacity 0.2s ease;
 }
 
 .record-legend.has-active .record__row:not(.is-active) {
-  opacity: 0.28;
+  opacity: 0.25;
   filter: grayscale(40%);
   transition: opacity 0.2s ease, filter 0.2s ease;
 }
@@ -367,35 +393,35 @@
   align-items: center;
   gap: 0 var(--s-3);
   padding: 8px 12px;
-  margin: 0 -12px;
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid var(--line-subtle);
   font-size: var(--fs-sm);
   cursor: pointer;
   border-radius: var(--r-1);
   outline: none;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.2s var(--ease-spring);
   position: relative;
 }
 
 .record__row:hover:not(.is-active) {
-  background: rgba(255, 255, 255, 0.035);
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .record__row.is-active {
-  background: linear-gradient(90deg, rgba(56, 189, 248, 0.18) 0%, rgba(56, 189, 248, 0.03) 100%);
+  background: linear-gradient(90deg, rgba(56, 189, 248, 0.16) 0%, rgba(56, 189, 248, 0.02) 100%);
   border-left: 3px solid var(--accent);
   box-shadow: 0 2px 14px rgba(56, 189, 248, 0.15);
 }
 
 .record__row.is-pinned {
   border-left: 3px solid var(--warn);
-  background: linear-gradient(90deg, rgba(251, 191, 36, 0.14) 0%, rgba(251, 191, 36, 0.02) 100%);
+  background: linear-gradient(90deg, rgba(245, 158, 11, 0.14) 0%, rgba(245, 158, 11, 0.02) 100%);
 }
 
 .record__rank {
+  font-family: var(--mono);
   font-size: var(--fs-micro);
   color: var(--text-3);
-  padding: 2px 5px;
+  padding: 2px 6px;
   border-radius: 3px;
   transition: all 0.15s ease;
 }
@@ -411,7 +437,7 @@
   background: var(--warn);
   color: var(--ink);
   font-weight: 700;
-  box-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
 }
 
 .record__name {
@@ -420,21 +446,19 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   font-weight: 500;
-  transition: color 0.15s ease, font-size 0.15s ease;
+  transition: color 0.15s ease;
 }
 
 .record__row.is-active .record__name {
   color: #ffffff;
   font-weight: 600;
-  font-size: 0.92rem;
   text-shadow: 0 0 12px rgba(255, 255, 255, 0.25);
 }
 
-/* Leader rule — the editorial device that ties a name to its figure. */
 .record__lead {
   align-self: center;
   height: 1px;
-  border-bottom: 1px dotted var(--line-strong);
+  border-bottom: 1px dotted rgba(255, 255, 255, 0.12);
   transition: border-color 0.15s ease;
 }
 
@@ -445,7 +469,7 @@
 
 .record__val {
   font-family: var(--mono);
-  font-weight: 500;
+  font-weight: 600;
   color: var(--text-1);
   transition: color 0.15s ease;
 }
@@ -453,12 +477,12 @@
 .record__row.is-active .record__val {
   color: var(--accent);
   font-weight: 700;
-  font-size: 0.98rem;
 }
 
 .record__pct {
-  min-width: 46px;
+  min-width: 48px;
   text-align: right;
+  font-family: var(--mono);
   font-size: var(--fs-micro);
   color: var(--text-3);
   transition: color 0.15s ease;
@@ -469,7 +493,6 @@
   font-weight: 600;
 }
 
-/* The shape of the record, stated as numbers rather than left to the eye. */
 .record-callout {
   max-width: 78ch;
   margin-top: var(--s-6);
@@ -479,5 +502,5 @@
 
 .record-callout .num {
   color: var(--text-1);
-  font-weight: 500;
+  font-weight: 600;
 }

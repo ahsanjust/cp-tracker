@@ -2,6 +2,7 @@
 
 .section {
   margin-top: var(--section-gap);
+  position: relative;
 }
 
 .section-head {
@@ -13,15 +14,31 @@
   padding-bottom: var(--s-4);
   border-bottom: 1px solid var(--line);
   margin-bottom: var(--s-6);
+  position: relative;
+}
+
+.section-head::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 48px;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 1px;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
 }
 
 .section-head__title {
   font-size: var(--fs-2xl);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: #ffffff;
 }
 
 .section-head__note {
   font-size: var(--fs-sm);
-  color: var(--text-3);
-  max-width: 52ch;
+  color: var(--text-2);
+  max-width: 58ch;
+  line-height: 1.55;
 }
-
