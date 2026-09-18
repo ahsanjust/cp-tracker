@@ -79,7 +79,7 @@ accent, and colour reserved for meaning.
 **Principles**
 
 1. **Restraint reads as confidence.** One accent colour, monochrome surfaces, colour only where it encodes something (judge identity, difficulty, state).
-2. **Numbers are the hero.** Tabular monospace numerals, right-sized, aligned; never decorated with glow.
+2. **The number is the wordmark.** The headline total is set an order of magnitude above body copy and carries the page the way a logotype would. Every other figure is tabular monospace, aligned, and undecorated.
 3. **Hierarchy through type, not effects.** Weight, size and spacing do the work that gradients and shadows were doing.
 4. **Every element earns its place.** No element may merely look impressive; if it carries no information it is removed.
 5. **Trust is a feature.** Show data provenance, "last verified" time and working links to sources.
@@ -103,12 +103,19 @@ Dark, near-neutral ink. Verified against WCAG AA on every surface.
 | `--text-1` | `#F2F5F9` | Primary text | 16.4:1 |
 | `--text-2` | `#A8B2C0` | Secondary text | 8.4:1 |
 | `--text-3` | `#8A94A6` | Meta / captions | 5.9:1 |
-| `--accent` | `#38BDF8` | Focus, active, links, data bars | 8.4:1 |
+| `--accent` | `#38BDF8` | Focus, active tab, live state, links, data bars | 8.4:1 |
+| `--gold` | `#FBBF24` | Championship placement only | 10:1 |
 | `--easy / --medium / --hard` | `#34D399` / `#FBBF24` / `#FB7185` | Difficulty only | 8.7:1 / 10:1 / 6.5:1 |
 
-Elevation is expressed with hairline borders and at most an ambient shadow — never with
-coloured glow. Judge brand colours appear **only** as a 14%-tinted icon chip and its
-glyph, using `accentColor` (the lighter variant) so dark brands stay legible.
+Elevation is expressed with hairline borders (`--line` is ~9% white over `--ink`) and
+a 2–3% brightness step between surfaces — never with a shadow. The only light in the
+system sits behind the hero: a 64px hairline grid and one accent wash, both under 10%
+opacity, both inert, the grid faded by a radial mask so it reads as an instrument panel
+rather than a tiled background. Verified in the rendered pixels: grid lines land at
+exactly 64px and the wash measures +7 blue over the control region.
+
+Judge brand colours appear **only** as a 14%-tinted icon chip and its glyph, using
+`accentColor` (the lighter variant) so dark brands stay legible.
 
 ### Typography
 
@@ -119,7 +126,7 @@ tell.
 
 | Step | Size | Use |
 | :-- | :-- | :-- |
-| `--fs-display` | 36px | Hero headline only |
+| *hero numeral* | `clamp(60px, 12.5vw, 152px)` | The headline total (a one-off clamp, not a token) |
 | `--fs-2xl` | 28px | Section titles |
 | `--fs-xl` | 22px | Count-up value, panel titles |
 | `--fs-lg` | 17px | Card titles, lead text |
@@ -127,7 +134,8 @@ tell.
 | `--fs-sm` | 13px | Meta, labels |
 | `--fs-micro` | 11px | Uppercase eyebrow labels |
 
-Body copy is capped at ~62ch; headlines at ~32ch. Seven steps, not nineteen.
+Body copy is capped at ~62ch; headlines at ~32ch. Six steps plus one editorial clamp,
+not nineteen sizes.
 
 ### Space & radius
 
@@ -166,10 +174,13 @@ hidden behind an invisible horizontal scroll reads as a broken field.
 
 - **Header** — sticky identity bar; gains a hairline and blur only once content scrolls beneath it. Section nav is progressive enhancement (hidden under 900px), and the duplicate social buttons are dropped under 600px so the name always has room.
 - **Button** — `primary` (accent fill), `default` (surface + hairline), `icon` (32px, label via `aria-label`). One height scale, one radius, one focus ring.
-- **Segment control** — `role="group"` of `aria-pressed` toggles with computed counts. Replaces the invalid tablist.
+- **Hero** — an uppercase eyebrow, the oversized total, a lead line, the CTAs, and a provenance **readout** (one mono line of hairline-separated facts, not four badges).
+- **Tabs** — `role="group"` of `aria-pressed` buttons with computed counts, styled as underline tabs on one hairline. A single `aria-hidden` element slides between them, positioned from the active tab's own `offsetLeft`/`offsetTop` so it lands on the right row when the tabs wrap. Still not a `role="tablist"` — that would need panels.
+- **Ledger** — the achievements, as hairline-divided rows: a mono placement marker (1st, 34th, 1.24%, 1774, #39) in a fixed column, then the result. No cards, no icon chips; a 2px accent rule grows into the row on hover.
 - **Switch** — native checkbox, custom track, label + hint wired by `aria-describedby`.
 - **Judge card** — icon chip, name, handle, count, tier tags, details, outbound link. Details sit on a hairline pinned to the card foot so rows align on desktop; on phones the name and count share the first line and tabs/details span the card.
-- **Bar list** — replaces both Chart.js canvases. Label / value / share % / proportional bar, one row per series. Real DOM, screen-reader readable, no CDN, no canvas.
+- **Bar list** — replaces the Chart.js canvases. Label / value / share % / proportional bar, one row per series. Real DOM, screen-reader readable, no CDN, no canvas.
+- **Stack bar** — the LeetCode difficulty mix as one bar with three bands, with the numbers in a mono legend beside it. Band widths come from `flex-grow`, so the drawn proportion cannot drift from the printed percentage (asserted in the harness to within 1.5%). The bar is `aria-hidden`; the legend carries the data as text.
 - **Panel** — titled surface used by analytics and the share block.
 - **Toast** — `role="status"`, tone variants, no emoji.
 
@@ -177,10 +188,15 @@ hidden behind an invisible horizontal scroll reads as a broken field.
 
 ## 5. Interaction & motion
 
-Motion is limited to three purposeful moments: the count-up on first paint, a single
-fade-and-rise as cards and bars enter the viewport, and the sync spinner. All of them
-collapse to instant under `prefers-reduced-motion: reduce`. Nothing loops, nothing
-floats, nothing glows on hover — hover only clarifies (border, surface, pointer).
+Motion is limited to five purposeful moments: the count-up on first paint, a single
+fade-and-rise as cards and bars enter the viewport, the sync spinner, the tab underline
+sliding between filters, and the difficulty bands growing once. Two cues loop, and both
+encode state rather than decorate: the live dot's slow pulse, and the sync spinner while
+a request is in flight. All of them collapse to instant under
+`prefers-reduced-motion: reduce`. Nothing floats. Hover only clarifies — a border, a
+surface, a 2px rule growing into the ledger row being read — and the underline is
+re-measured on resize and on `document.fonts.ready`, because a web font arriving after
+first paint would otherwise leave it too short to match its tab.
 
 ## 6. Accessibility contract
 
@@ -220,10 +236,10 @@ real UI and asserts the outcome of every workflow.
 
 | Measure | Before | After |
 | :-- | :-- | :-- |
-| Distinct font sizes | 19 | **7** (all from the scale, plus one mobile step) |
+| Distinct font sizes | 19 | **7** (6 scale steps + the hero clamp) |
 | Font weights | 400/600/700/800/900 | **400/500/600** |
 | Border radii | 7 values (`8/10/12/14/20/24/9999px`) | **3 + pill** |
-| Contrast failures (WCAG AA) | 1 measured, palette failing down to 3.52:1 | **0 of 218 checks, every surface** |
+| Contrast failures (WCAG AA) | 1 measured, palette failing down to 3.52:1 | **0 of 229 checks, every surface** |
 | Pointer targets under 24px | 4 | **0** |
 | Invalid ARIA (`role=tab` without panels) | 4 | **0** |
 | Emoji in UI chrome | 14 | **0** |
@@ -236,12 +252,13 @@ real UI and asserts the outcome of every workflow.
 
 ### Workflow tests
 
-49 assertions covering the real user paths, passing at 1440px and 500px and over both
-`file://` and HTTP: category filters (6/3/5 cards), filter state, the forced empty state
-and its reset, the deduplicate toggle (5,616 → 5,033, Virtual Judge flagged excluded,
-distribution drops to 13 rows and re-sums to 5,033, restored on toggle-off), sticky-header
-state, offline notice, clipboard feedback, and the sync button's busy → idle → outcome
-cycle including a double-fire guard.
+56 assertions covering the real user paths, passing at 320 / 390 / 1440px over HTTP:
+category filters (6/3/5 cards) and the tab underline's alignment on each, the forced
+empty state and its reset, the deduplicate toggle (5,616 → 5,033, Virtual Judge flagged
+excluded, distribution drops to 13 rows and re-sums to 5,033, restored on toggle-off),
+the difficulty stack (3 bands, percentages summing to 100, and each drawn band matching
+its printed percentage to within 1.5%), sticky-header state, offline notice, clipboard
+feedback, and the sync button's busy → idle → outcome cycle including a double-fire guard.
 
 ### Data integrity
 
@@ -262,3 +279,6 @@ same 13 rendered fields, same per-judge breakdowns, same 5,616 total.
   is bounded by a timeout and falls back to `execCommand`. The fallback is what the
   harness exercises.
 - Contrast is verified for the default (dark) theme only; the product ships one theme.
+- The hero's hairline grid and accent wash were confirmed by reading the rendered pixels
+  (grid spacing measured at exactly 64px, wash at +7 blue over a control region) because
+  they are too faint to judge by eye at a glance.

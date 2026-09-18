@@ -90,8 +90,11 @@
       <!-- Hero: the claim, backed by provenance -->
       <section class="hero" aria-labelledby="hero-title">
         <h1 class="hero__title" id="hero-title">
-          <span class="hero__name">Ahsanul Haque — competitive programming record</span>
-          <span class="hero__claim">Tracking <span class="num" id="hero-total">5,616</span> solved problems across <span class="num" id="hero-judges">14</span> online judges.</span>
+          <span class="hero__eyebrow">Ahsanul Haque — competitive programming record</span>
+          <span class="hero__figure">
+            <span class="hero__num num" id="hero-total">5,616</span>
+            <span class="hero__unit">problems solved across <span class="num" id="hero-judges">14</span> online judges</span>
+          </span>
         </h1>
         <p class="hero__sub" id="hero-sub">Aggregated from live judge APIs, public profiles and tracked snapshots — Codeforces, LeetCode, CodeChef, AtCoder, Virtual Judge, Toph, CSES and seven more. Totals sum each judge's own record, so a problem solved on two judges counts twice.</p>
 
@@ -101,26 +104,25 @@
           <a class="btn" href="https://github.com/ahsanjust" target="_blank" rel="noopener noreferrer">GitHub</a>
         </div>
 
-        <div class="hero__meta">
-          <div class="meta-item meta-item--live">
-            <span class="meta-item__value">
-              <span class="dot dot--live" aria-hidden="true"></span>
-              <time id="last-updated">Verifying data…</time>
-            </span>
-            <span class="meta-item__label">Last verified</span>
-          </div>
-          <div class="meta-item">
-            <span class="meta-item__value" id="count-live">6</span>
-            <span class="meta-item__label">Live judge APIs</span>
-          </div>
-          <div class="meta-item">
-            <span class="meta-item__value" id="count-sync">4</span>
-            <span class="meta-item__label">Profile syncs</span>
-          </div>
-          <div class="meta-item">
-            <span class="meta-item__value" id="count-snapshot">4</span>
-            <span class="meta-item__label">Tracked snapshots</span>
-          </div>
+        <!-- Provenance, read as instrumentation: one mono line, not four badges. -->
+        <div class="readout">
+          <span class="readout__item readout__item--live">
+            <span class="dot dot--live" aria-hidden="true"></span>
+            <span class="readout__key">Last verified</span>
+            <time class="readout__val num" id="last-updated">Verifying data…</time>
+          </span>
+          <span class="readout__item">
+            <span class="readout__val num" id="count-live">6</span>
+            <span class="readout__key">live APIs</span>
+          </span>
+          <span class="readout__item">
+            <span class="readout__val num" id="count-sync">4</span>
+            <span class="readout__key">profile syncs</span>
+          </span>
+          <span class="readout__item">
+            <span class="readout__val num" id="count-snapshot">4</span>
+            <span class="readout__key">tracked snapshots</span>
+          </span>
         </div>
       </section>
 
@@ -131,59 +133,65 @@
           <p class="section-head__note">Contest placements and ratings, verified on the judges cited.</p>
         </div>
 
-        <ul class="achievements">
-          <li class="achievement achievement--gold">
-            <span class="achievement__icon" aria-hidden="true">
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v5a4 4 0 0 1-8 0V4Z"/><path d="M8 5H5.5A2.5 2.5 0 0 0 8 9.5"/><path d="M16 5h2.5A2.5 2.5 0 0 1 16 9.5"/><path d="M12 13v4"/><path d="M8.5 20h7"/><path d="M10 17h4v3h-4z"/></svg>
+        <ul class="ledger">
+          <li class="ledger__row ledger__row--gold">
+            <span class="ledger__mark">
+              <span class="num">1st</span>
+              <span class="ledger__unit">place</span>
             </span>
             <div>
-              <p class="achievement__title">JUST IDPC — Champion</p>
-              <p class="achievement__meta">1st place, inter-departmental programming contest</p>
+              <p class="ledger__title">JUST IDPC — Champion</p>
+              <p class="ledger__meta">Inter-departmental programming contest</p>
             </div>
           </li>
-          <li class="achievement">
-            <span class="achievement__icon" aria-hidden="true">
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M5.5 6h13l-1.2 8.2A5.6 5.6 0 0 1 12 19a5.6 5.6 0 0 1-5.3-4.8L5.5 6Z"/><path d="M9.5 19h5l1 3h-7l1-3Z"/></svg>
+          <li class="ledger__row">
+            <span class="ledger__mark">
+              <span class="num">34th</span>
+              <span class="ledger__unit">regional</span>
             </span>
             <div>
-              <p class="achievement__title">ICPC Asia Dhaka Regional</p>
-              <p class="achievement__meta">34th (2025) · 63rd (2024) — two regional appearances</p>
+              <p class="ledger__title">ICPC Asia Dhaka Regional</p>
+              <p class="ledger__meta">Two regional appearances · 63rd in 2024</p>
             </div>
           </li>
-          <li class="achievement">
-            <span class="achievement__icon" aria-hidden="true">
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="14" r="5.5"/><path d="M8.8 9.2 6.5 3h11l-2.3 6.2"/><path d="M12 12.5v3"/></svg>
+          <li class="ledger__row">
+            <span class="ledger__mark">
+              <span class="num">2nd</span>
+              <span class="ledger__unit">place</span>
             </span>
             <div>
-              <p class="achievement__title">NWU IUPC 2025 — 1st Runner-Up</p>
-              <p class="achievement__meta">Second place, national inter-university contest</p>
+              <p class="ledger__title">NWU IUPC 2025 — 1st Runner-Up</p>
+              <p class="ledger__meta">National inter-university contest</p>
             </div>
           </li>
-          <li class="achievement">
-            <span class="achievement__icon" aria-hidden="true">
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4.5 6v6c0 4.5 3.1 7.9 7.5 9 4.4-1.1 7.5-4.5 7.5-9V6L12 3Z"/><path d="m9 12 2.2 2.2L15.5 10"/></svg>
+          <li class="ledger__row">
+            <span class="ledger__mark">
+              <span class="num">1.24%</span>
+              <span class="ledger__unit">worldwide</span>
             </span>
             <div>
-              <p class="achievement__title">LeetCode Guardian</p>
-              <p class="achievement__meta">Rating 2142 · ranked inside the top 1.24% worldwide</p>
+              <p class="ledger__title">LeetCode Guardian</p>
+              <p class="ledger__meta">Contest rating 2142 · inside the top 1.24% worldwide</p>
             </div>
           </li>
-          <li class="achievement">
-            <span class="achievement__icon" aria-hidden="true">
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17.5 9.5 11l3.6 3.6L21 6.7"/><path d="M15.5 6.5H21v5.5"/></svg>
+          <li class="ledger__row">
+            <span class="ledger__mark">
+              <span class="num">1774</span>
+              <span class="ledger__unit">peak rating</span>
             </span>
             <div>
-              <p class="achievement__title">Codeforces Expert</p>
-              <p class="achievement__meta">Peak rating 1774 · CodeChef 4-star at 1900</p>
+              <p class="ledger__title">Codeforces Expert</p>
+              <p class="ledger__meta">CodeChef 4-star at 1900</p>
             </div>
           </li>
-          <li class="achievement">
-            <span class="achievement__icon" aria-hidden="true">
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4"/><path d="M6 5h11l-1.6 3.5L17 12H6"/></svg>
+          <li class="ledger__row">
+            <span class="ledger__mark">
+              <span class="num">#39</span>
+              <span class="ledger__unit">national</span>
             </span>
             <div>
-              <p class="achievement__title">Toph — Rank #39 nationally</p>
-              <p class="achievement__meta">Top 40 on Bangladesh's national contest platform</p>
+              <p class="ledger__title">Toph</p>
+              <p class="ledger__meta">Top 40 on Bangladesh's national contest platform</p>
             </div>
           </li>
         </ul>
@@ -197,11 +205,12 @@
         </div>
 
         <div class="toolbar">
-          <div class="seg" role="group" aria-label="Filter judges by category" id="judge-filter">
-            <button type="button" class="seg__btn" data-filter="all" aria-pressed="true">All Judges <span class="seg__n" data-count="all">14</span></button>
-            <button type="button" class="seg__btn" data-filter="competitive" aria-pressed="false" title="Contests and speed-solving judges">Contests &amp; Speed <span class="seg__n" data-count="competitive">6</span></button>
-            <button type="button" class="seg__btn" data-filter="practice" aria-pressed="false" title="Interview preparation and practice platforms">Interview &amp; Prep <span class="seg__n" data-count="practice">3</span></button>
-            <button type="button" class="seg__btn" data-filter="national" aria-pressed="false" title="National judges and classic archives">National &amp; Archives <span class="seg__n" data-count="national">5</span></button>
+          <div class="tabs" role="group" aria-label="Filter judges by category" id="judge-filter">
+            <span class="tabs__indicator" aria-hidden="true"></span>
+            <button type="button" class="tabs__btn" data-filter="all" aria-pressed="true">All Judges <span class="tabs__n" data-count="all">14</span></button>
+            <button type="button" class="tabs__btn" data-filter="competitive" aria-pressed="false" title="Contests and speed-solving judges">Contests &amp; Speed <span class="tabs__n" data-count="competitive">6</span></button>
+            <button type="button" class="tabs__btn" data-filter="practice" aria-pressed="false" title="Interview preparation and practice platforms">Interview &amp; Prep <span class="tabs__n" data-count="practice">3</span></button>
+            <button type="button" class="tabs__btn" data-filter="national" aria-pressed="false" title="National judges and classic archives">National &amp; Archives <span class="tabs__n" data-count="national">5</span></button>
           </div>
 
           <div class="switch-field">
@@ -253,7 +262,12 @@
               <h3 class="panel__title" id="difficulty-bars-title">LeetCode difficulty mix</h3>
               <p class="panel__note" id="difficulty-bars-note"></p>
             </div>
-            <ul class="bars" id="bars-difficulty" aria-labelledby="difficulty-bars-title"></ul>
+            <!-- One bar, three bands. The bar is decorative; the legend carries
+                 the numbers as text for screen readers and copy/paste. -->
+            <div class="stack-block" aria-labelledby="difficulty-bars-title">
+              <div class="stack" id="difficulty-bar" aria-hidden="true"></div>
+              <ul class="stack__legend" id="difficulty-legend"></ul>
+            </div>
           </div>
         </div>
       </section>
