@@ -28,10 +28,6 @@
     grid-template-columns: minmax(0, 1.06fr) minmax(0, 1fr);
     gap: var(--s-14);
   }
-
-  .verify {
-    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
-  }
 }
 
 @media (min-width: 900px) {
