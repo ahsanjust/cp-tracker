@@ -3,7 +3,7 @@
     "name": "Ahsanul Haque",
     "headline": "LeetCode Guardian (2142) \u2022 Codeforces Expert (1774) \u2022 2x ICPC Regionalist",
     "institution": "Jashore University of Science and Technology",
-    "avatar": "assets/avatar.png",
+    "avatar": "assets/avatar-160.png",
     "github": "https://github.com/ahsanjust",
     "linkedin": "https://linkedin.com/in/ahsanul-haque-8b2485379"
   },
@@ -14,16 +14,18 @@
       "handle": "Ahsan_",
       "profileUrl": "https://codeforces.com/profile/Ahsan_",
       "solved": 3183,
-      "rating": 1477,
-      "rank": "Specialist",
+      "rating": 1774,
+      "rank": "Expert",
       "maxRating": 1774,
-      "badge": "Specialist (1477)",
+      "currentRating": 1477,
+      "currentRank": "Specialist",
+      "badge": "Expert (1774)",
       "color": "#3B82F6",
       "accentColor": "#60A5FA",
       "category": "competitive",
       "fetchType": "codeforces_api",
       "icon": "cf",
-      "details": "3,183 problems solved for all time across official rounds & practice"
+      "details": "Current 1477 • Peak 1774 (Expert) • 3,183 problems solved across official rounds & practice"
     },
     {
       "id": "vjudge",
@@ -191,7 +193,7 @@
       "color": "#1E293B",
       "accentColor": "#38BDF8",
       "category": "practice",
-      "fetchType": "hackerearth_cached",
+      "fetchType": "hackerearth_scraper",
       "icon": "he",
       "details": "280 Points \u2022 56 Submissions \u2022 Top 18% in Data Structures"
     },
