@@ -1,0 +1,92 @@
+/* 8. Ledger ================================================================ */
+
+/* Achievements as an editorial ledger: hairline rules instead of cards, and the
+   placement set in mono as the scannable element. */
+.ledger {
+  border-top: 1px solid var(--line);
+}
+
+.ledger__row {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(80px, auto) minmax(0, 1fr);
+  align-items: start;
+  gap: var(--s-2) var(--s-6);
+  padding: var(--s-5) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+/* One hairline grows into the row on hover, so motion marks the row being read
+   rather than decorating every row at rest. */
+.ledger__row::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 2px;
+  background: var(--accent);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.22s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+
+.ledger__row:hover::before {
+  transform: scaleY(1);
+}
+
+.ledger__mark {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-family: var(--mono);
+  font-size: var(--fs-xl);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--text-2);
+  transition: color 0.15s ease;
+}
+
+.ledger__row:hover .ledger__mark {
+  color: var(--accent);
+}
+
+.ledger__row--gold .ledger__mark,
+.ledger__row--gold:hover .ledger__mark {
+  color: var(--gold);
+}
+
+.ledger__unit {
+  font-size: var(--fs-micro);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.ledger__title {
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: var(--track-tight);
+}
+
+.ledger__meta {
+  margin-top: 4px;
+  font-size: var(--fs-sm);
+  color: var(--text-3);
+}
+
+/* An achievement that can be checked against a public source says so. */
+.ledger__link {
+  color: var(--text-2);
+  border-bottom: 1px solid var(--line-strong);
+  /* Inline links keep their line box; block padding lifts the target to 24px. */
+  padding-block: 5px;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.ledger__link:hover {
+  color: var(--accent);
+  border-bottom-color: var(--accent-line);
+}
+

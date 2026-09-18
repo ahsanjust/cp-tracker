@@ -1,0 +1,390 @@
+/* 5. Hero ================================================================== */
+
+.hero {
+  position: relative;
+  /* Contains the z-index:-1 wash so it cannot slip behind the page. */
+  isolation: isolate;
+  padding: var(--s-14) 0 var(--s-10);
+}
+
+/* The claim and the instrument that measures it, side by side in the first
+   viewport. Everything above the fold is information, nothing is filler. */
+.hero__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--s-10);
+  align-items: start;
+}
+
+.hero__claim {
+  min-width: 0;
+}
+
+/* Instrumentation rather than decoration: a hairline grid that fades out toward
+   the edges, and one soft accent wash behind the numeral. Both are inert. */
+.hero::before,
+.hero::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.hero::before {
+  inset: 0 0 30% 0;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 64px 64px;
+  -webkit-mask-image: radial-gradient(115% 85% at 15% 0%, #000 0%, transparent 70%);
+  mask-image: radial-gradient(115% 85% at 15% 0%, #000 0%, transparent 70%);
+}
+
+.hero::after {
+  top: -12%;
+  left: -6%;
+  width: min(720px, 88%);
+  height: 520px;
+  /* Trimmed: the record band below it is the loudest object on the page, and
+     two competing accent fields would flatten both. */
+  background: radial-gradient(closest-side, rgba(56, 189, 248, 0.065), transparent 100%);
+}
+
+.hero__title {
+  display: block;
+  /* The h1 holds the eyebrow, the numeral and the lead line, all of which set
+     their own size. Inheriting stops the UA's 2em default leaking a phantom
+     30px step into the type scale. */
+  font-size: inherit;
+}
+
+.hero__eyebrow {
+  display: block;
+  font-size: var(--fs-micro);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.hero__figure {
+  display: block;
+  margin-top: var(--s-6);
+}
+
+/* The numeral is the wordmark: the page's whole claim in one run of digits, set
+   at roughly ten times the body size so the hierarchy is unmistakable. */
+.hero__num {
+  display: block;
+  /* Sized for its own column rather than the viewport: the numeral is the page's
+     whole claim in one run of digits, and it shares the fold with the scoreboard. */
+  font-size: clamp(3.25rem, 7.6vw, 7.5rem);
+  font-weight: 600;
+  line-height: 0.9;
+  letter-spacing: -0.035em;
+  color: var(--text-1);
+}
+
+.hero__unit {
+  display: block;
+  max-width: 40ch;
+  margin-top: var(--s-5);
+  font-size: var(--fs-lg);
+  line-height: 1.45;
+  color: var(--text-2);
+}
+
+.hero__sub {
+  max-width: 54ch;
+  margin-top: var(--s-5);
+  color: var(--text-3);
+}
+
+.cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+  margin-top: var(--s-6);
+}
+
+/* Two results, one line each, subordinate to the numeral above them: hairline
+   rules and a mono placement, the same ledger grammar as the Results section. */
+.hero__results {
+  max-width: 52ch;
+  margin-top: var(--s-6);
+}
+
+.hero__result {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-4);
+  padding: var(--s-2) 0;
+  border-top: 1px solid var(--line);
+}
+
+.hero__result:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+.hero__result-mark {
+  min-width: 3.6ch;
+  font-size: var(--fs-sm);
+  color: var(--text-1);
+}
+
+.hero__result-text {
+  font-size: var(--fs-sm);
+  color: var(--text-2);
+}
+
+.hero__result-alt {
+  color: var(--text-3);
+}
+
+/* Provenance as a terminal readout: one mono line of facts, hairline-separated,
+   so it reads as a status bar instead of a row of promotional badges. */
+.readout {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-3) var(--s-5);
+  margin-top: var(--s-10);
+  padding-top: var(--s-5);
+  border-top: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: var(--fs-micro);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.readout__item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+}
+
+.readout__item:not(:last-child)::after {
+  content: "";
+  width: 1px;
+  height: 9px;
+  background: var(--line-strong);
+}
+
+.readout__val {
+  color: var(--text-2);
+  font-weight: 600;
+}
+
+/* The timestamp is the one value worth reading as text, so it keeps its case. */
+.readout__item--live .readout__val {
+  color: var(--text-1);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* The only looping cue besides the sync spinner, and it encodes live state. */
+@keyframes live-pulse {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.readout__item--live .dot--live {
+  animation: live-pulse 2.8s ease-in-out infinite;
+}
+
+/* 5b. The scoreboard ======================================================= */
+
+/* Three tier rows, rendered from config.json so they can never drift from the
+   cards below. Borderless: hairline rules carry the structure, as everywhere
+   else on the page. */
+.board {
+  min-width: 0;
+}
+
+.board__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-2) var(--s-4);
+  padding-bottom: var(--s-3);
+  border-bottom: 1px solid var(--line-strong);
+}
+
+.board__title {
+  font-size: var(--fs-base);
+}
+
+.board__note {
+  font-size: var(--fs-micro);
+  color: var(--text-3);
+}
+
+.standing {
+  display: grid;
+  gap: var(--s-2);
+  padding: var(--s-4) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.standing__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+}
+
+.standing__platform {
+  font-family: var(--mono);
+  font-size: var(--fs-micro);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+
+.standing__value {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-3);
+}
+
+.standing__num {
+  font-size: var(--fs-2xl);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+/* The judge's own tier vocabulary, in that judge's own colour. */
+.standing__tier {
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  color: var(--tier, var(--text-1));
+}
+
+.standing__qual {
+  font-size: var(--fs-micro);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.standing__note {
+  font-size: var(--fs-micro);
+  line-height: 1.5;
+  color: var(--text-3);
+}
+
+.standing__note .num {
+  color: var(--text-2);
+}
+
+/* The rating ladder. Ticks are published tier boundaries, the marker is the peak;
+   it answers "how good is 1774?" in one glance. Decorative — the note above
+   states the band and the distance as text. */
+.ladder-row {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  margin-top: var(--s-1);
+}
+
+.ladder {
+  position: relative;
+  flex: 1;
+  height: 10px;
+}
+
+.ladder__track {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--r-pill);
+  background: var(--well);
+  border: 1px solid var(--line);
+}
+
+.ladder__fill {
+  position: absolute;
+  top: 1px;
+  bottom: 1px;
+  left: 1px;
+  width: calc((100% - 2px) * var(--pct, 0));
+  border-radius: var(--r-pill);
+  /* Directional: the wash darkens toward the marker, so the fill reads as
+     distance covered rather than as a filled bar chart. */
+  background: linear-gradient(90deg, rgba(56, 189, 248, 0.05), rgba(56, 189, 248, 0.24));
+  /* Grows once, left to right: the marker is what is being read. */
+  animation: ladder-fill 0.7s cubic-bezier(0.2, 0.8, 0.3, 1) both;
+  transform-origin: left center;
+}
+
+@keyframes ladder-fill {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+.ladder__tick {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--at);
+  width: 1px;
+  background: var(--line-strong);
+}
+
+.ladder__marker {
+  position: absolute;
+  top: -4px;
+  bottom: -4px;
+  left: var(--at);
+  width: 3px;
+  background: var(--accent);
+  border-radius: 1px;
+  /* A hairline of canvas either side so the marker reads over its own fill. */
+  box-shadow: 0 0 0 2px var(--ink);
+}
+
+.ladder__scale {
+  font-family: var(--mono);
+  font-size: var(--fs-micro);
+  color: var(--text-3);
+}
+
+/* Provenance chip: the same vocabulary in the scoreboard, the cards and the
+   Verify section. The dot carries the class, the label spells it out. */
+.source {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-family: var(--mono);
+  font-size: var(--fs-micro);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  white-space: nowrap;
+}
+
+.source__dot {
+  width: 5px;
+  height: 5px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--src, var(--text-3));
+}
+
+.source--api {
+  --src: var(--ok);
+}
+
+.source--sync {
+  --src: var(--accent);
+}
+
+.source--snapshot {
+  --src: var(--text-3);
+}
+

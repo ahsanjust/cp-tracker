@@ -1,0 +1,342 @@
+/* 9. Toolbar =============================================================== */
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-4);
+  margin-bottom: var(--s-6);
+}
+
+/* Underline tabs on a single hairline, with one underline element that slides
+   between them (positioned by JS). The 2px transparent border keeps every tab
+   the same height so the rule never steps. */
+.tabs {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--s-2);
+  border-bottom: 1px solid var(--line);
+}
+
+.tabs__indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--accent);
+  transition: transform 0.26s cubic-bezier(0.2, 0.8, 0.3, 1),
+    width 0.26s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+
+.tabs__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  min-height: 40px;
+  padding: 0 var(--s-3);
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--text-3);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.tabs__btn:hover {
+  color: var(--text-1);
+}
+
+.tabs__btn[aria-pressed="true"] {
+  color: var(--text-1);
+}
+
+.tabs__n {
+  font-family: var(--mono);
+  font-size: var(--fs-micro);
+  color: var(--text-3);
+}
+
+.tabs__btn[aria-pressed="true"] .tabs__n {
+  color: var(--accent);
+}
+
+.switch-field {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s-3);
+}
+
+.switch {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  width: 38px;
+  height: 22px;
+  margin-top: 1px;
+}
+
+.switch__input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.switch__track {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--r-pill);
+  background: var(--surface-3);
+  border: 1px solid var(--line-strong);
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.switch__track::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--text-2);
+  transition: transform 0.18s cubic-bezier(0.2, 0.8, 0.3, 1), background 0.15s ease;
+}
+
+.switch__input:checked + .switch__track {
+  background: var(--accent-weak);
+  border-color: var(--accent-line);
+}
+
+.switch__input:checked + .switch__track::after {
+  background: var(--accent);
+  transform: translateX(16px);
+}
+
+.switch__input:focus-visible + .switch__track {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.switch-field__text {
+  display: flex;
+  flex-direction: column;
+}
+
+.switch-field__label {
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.switch-field__hint {
+  font-size: var(--fs-micro);
+  color: var(--text-3);
+  max-width: 34ch;
+}
+
+/* 10. Judge grid =========================================================== */
+
+.judge-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 264px), 1fr));
+  gap: var(--s-4);
+}
+
+.judge-card {
+  display: flex;
+  flex-direction: column;
+  padding: var(--s-5);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.judge-card:hover {
+  background: var(--surface-3);
+  border-color: var(--line-strong);
+}
+
+.judge-card__head {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s-3);
+}
+
+.judge-chip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  flex: none;
+  border-radius: var(--r-1);
+  background: var(--chip-bg, var(--accent-weak));
+  border: 1px solid var(--chip-line, var(--line));
+  color: var(--chip-fg, var(--accent));
+}
+
+.judge-chip__text {
+  font-family: var(--mono);
+  font-size: var(--fs-micro);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.judge-card__id {
+  min-width: 0;
+  flex: 1;
+}
+
+.judge-card__name {
+  font-size: var(--fs-base);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.judge-card__handle {
+  display: block;
+  font-family: var(--mono);
+  font-size: var(--fs-micro);
+  color: var(--text-3);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.judge-card__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  flex: none;
+  margin-top: -4px;
+  border-radius: var(--r-1);
+  color: var(--text-3);
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.judge-card__link:hover {
+  color: var(--accent);
+  background: var(--accent-weak);
+}
+
+.judge-card__count {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-2);
+  margin-top: var(--s-5);
+}
+
+.judge-card__num {
+  font-family: var(--mono);
+  font-size: var(--fs-xl);
+  font-weight: 600;
+  line-height: 1;
+}
+
+.judge-card__unit {
+  font-size: var(--fs-micro);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.judge-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  margin-top: var(--s-3);
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px var(--s-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-1);
+  background: var(--surface-1);
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  color: var(--text-2);
+}
+
+.tag--accent {
+  background: var(--accent-weak);
+  border-color: var(--accent-line);
+  color: var(--accent);
+}
+
+.tag--muted {
+  color: var(--text-3);
+  border-style: dashed;
+}
+
+.judge-card__details {
+  margin-top: var(--s-4);
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+  color: var(--text-3);
+  /* Two lines of room, so a one-line and a three-line details block still produce
+     the same card height and the grid keeps clean rows. */
+  min-height: calc(1.5em * 2);
+}
+
+/* The card's foot: where this judge sits in the record, and how its number was
+   read. Pinned to the bottom so every row in the grid aligns. */
+.judge-card__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  margin-block-start: auto;
+  padding-top: var(--s-4);
+  border-top: 1px solid var(--line);
+  font-size: var(--fs-micro);
+  color: var(--text-3);
+}
+
+.judge-card__rank {
+  font-family: var(--mono);
+  font-size: var(--fs-micro);
+  color: var(--text-2);
+}
+
+.judge-card__rank-unit {
+  font-family: var(--font);
+  color: var(--text-3);
+}
+
+/* Deduplicate mode: excluded judges stay visible but read as inactive. */
+.judge-card.is-excluded {
+  opacity: 0.55;
+}
+
+/* Card spotlight jump pulse */
+.judge-card.is-target-highlight {
+  animation: card-target-pulse 1.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes card-target-pulse {
+  0% {
+    box-shadow: 0 0 0 0 var(--accent), 0 0 24px var(--accent-weak);
+    border-color: var(--accent);
+  }
+  30% {
+    box-shadow: 0 0 0 4px var(--accent-line), 0 0 32px var(--accent-weak);
+    border-color: var(--accent);
+  }
+  100% {
+    box-shadow: none;
+    border-color: var(--line);
+  }
+}
+
