@@ -506,6 +506,8 @@
     list.forEach((platform) => {
       const excluded = state.dedup && platform.id === 'vjudge';
       const card = document.createElement('li');
+      card.id = `p-${platform.id}`;
+      card.dataset.judge = platform.id;
       card.className = `judge-card reveal${excluded ? ' is-excluded' : ''}`;
       card.innerHTML = judgeCard(platform, excluded, order.get(platform.id) || 0);
       fragment.appendChild(card);
@@ -679,6 +681,7 @@
 
       if (jumpBtn) {
         jumpBtn.onclick = (e) => {
+          e.preventDefault();
           e.stopPropagation();
           jumpToJudgeCard(p.id);
         };
@@ -686,11 +689,22 @@
     }
 
     function jumpToJudgeCard(id) {
-      const card = $(`p-${id}`);
+      if (!id) return;
+      const platform = state.platforms.find((p) => p.id === id);
+      if (state.filter !== 'all' && platform && platform.category !== state.filter) {
+        state.filter = 'all';
+        syncFilters();
+        renderJudges();
+      }
+
+      let card = $(`p-${id}`) || document.querySelector(`.judge-card[data-judge="${id}"]`);
       if (card) {
         card.scrollIntoView({ behavior: 'smooth', block: 'center' });
         card.classList.add('is-target-highlight');
-        setTimeout(() => card.classList.remove('is-target-highlight'), 2200);
+        setTimeout(() => card.classList.remove('is-target-highlight'), 2400);
+      } else {
+        const section = $('judges') || $('judge-grid');
+        if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     }
 
