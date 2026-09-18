@@ -25,7 +25,7 @@
       "category": "competitive",
       "fetchType": "codeforces_api",
       "icon": "cf",
-      "details": "Current 1477 • Peak 1774 (Expert) • 3,183 problems solved across official rounds & practice"
+      "details": "Current 1477 \u2022 Peak 1774 (Expert) \u2022 3,183 problems solved across official rounds & practice"
     },
     {
       "id": "vjudge",
@@ -228,5 +228,5 @@
       "details": "Rating: 650 Expert \u2022 272 Submissions \u2022 89 Accepted \u2022 Band 500-700"
     }
   ],
-  "lastUpdated": "2026-09-18T00:25:41.904082+00:00"
+  "lastUpdated": "2026-09-18T05:09:26.431867+00:00"
 }
