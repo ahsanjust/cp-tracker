@@ -47,10 +47,14 @@
 ---
 
 ## 🛠️ Features
-- **Dynamic Odometer**: Animated count-up displaying the aggregate total problem count across all judges.
-- **Deduplication Mode**: Toggle to view either the full grand total or the deduplicated count excluding VJudge virtual submissions.
-- **Glassmorphic Obsidian Dark Theme**: Tailored with brand color glowing borders and sleek micro-animations.
-- **Automated Daily Sync**: GitHub Actions runs daily at midnight UTC to query live APIs, update numbers, and redeploy.
+- **Live aggregate counter**: the hero total animates to the exact solved count across all judges, and updates when you filter.
+- **Deduplication mode**: toggle off Virtual Judge overlaps for a deduplicated total; the distribution chart and total follow the same figure.
+- **Accessible analytics**: per-judge ranking and LeetCode difficulty mix rendered as real HTML lists — readable by screen readers, no canvas, no chart library to load.
+- **Honest provenance**: the hero reports how many judges are read from live APIs, scheduled profile syncs, and tracked snapshots, plus the last verification time.
+- **Category filters**: contests & speed / interview & prep / national & archives, with counts computed from the data.
+- **Automated daily sync**: GitHub Actions runs daily at midnight UTC to query live APIs, update numbers, and redeploy.
+
+See [DESIGN.md](DESIGN.md) for the design system, the accessibility contract, and why each decision was made.
 
 ---
 
@@ -63,3 +67,7 @@ cd cp-tracker
 python3 sync_server.py
 ```
 Open `http://localhost:3333` in your browser.
+
+Opening `index.html` directly over `file://` also works — the page falls back to its
+offline snapshot and says so — but the local server is needed for **Sync live** to
+query every judge.

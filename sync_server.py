@@ -26,6 +26,33 @@ def save_config(data):
     with open(CONFIG_FILE, "w") as f:
         json.dump(data, f, indent=2)
 
+def codeforces_rank_title(rating):
+    """Portfolio shows the PEAK rank — a live dip must not rewrite the headline badge."""
+    try:
+        r = int(rating)
+    except (TypeError, ValueError):
+        return None
+    if r >= 3000:
+        return "Legendary Grandmaster"
+    if r >= 2600:
+        return "International Grandmaster"
+    if r >= 2400:
+        return "Grandmaster"
+    if r >= 2300:
+        return "International Master"
+    if r >= 2100:
+        return "Master"
+    if r >= 1900:
+        return "Candidate Master"
+    if r >= 1600:
+        return "Expert"
+    if r >= 1400:
+        return "Specialist"
+    if r >= 1200:
+        return "Pupil"
+    return "Newbie"
+
+
 def fetch_platform_live(p):
     fid = p.get("id")
     handle = p.get("handle")
@@ -55,7 +82,9 @@ def fetch_platform_live(p):
                     p["solved"] = max(prev, api_unique)
                     p["details"] = f"{p['solved']:,} problems solved for all time across official rounds & practice"
                     updated = True
-            # Also refresh live rating / rank (best-effort, never fails sync)
+            # Also refresh peak rating / rank (best-effort, never fails sync).
+            # The headline badge tracks the PEAK, so a live dip never
+            # rewrites "Expert (1774)" into something weaker on its own.
             try:
                 info_url = f"https://codeforces.com/api/user.info?handles={urllib.parse.quote(handle)}"
                 info_req = urllib.request.Request(info_url, headers=headers)
@@ -63,15 +92,27 @@ def fetch_platform_live(p):
                     idata = json.loads(iresp.read().decode())
                     if idata.get("status") == "OK" and idata.get("result"):
                         u = idata["result"][0]
-                        if u.get("rating"):
-                            p["rating"] = int(u["rating"])
-                        if u.get("maxRating"):
-                            p["maxRating"] = int(u["maxRating"])
-                        if u.get("rank"):
-                            # Keep human-readable "Expert (1774)" badge in sync
-                            rank_title = u["rank"].capitalize()
-                            p["rank"] = rank_title
-                            p["badge"] = f"{rank_title} ({p.get('rating', u.get('rating'))})"
+                        peak = max(
+                            int(p.get("maxRating") or 0),
+                            int(u.get("maxRating") or 0),
+                            int(u.get("rating") or 0),
+                        )
+                        if peak > 0:
+                            p["maxRating"] = peak
+                            p["rating"] = peak
+                            peak_rank = codeforces_rank_title(peak)
+                            if peak_rank:
+                                p["rank"] = peak_rank
+                                p["badge"] = f"{peak_rank} ({peak})"
+                        p["currentRating"] = u.get("rating", p.get("currentRating"))
+                        raw_rank = u.get("rank")
+                        if raw_rank:
+                            p["currentRank"] = raw_rank.capitalize()
+                        cur = f"Current {p['currentRating']} • " if p.get("currentRating") else ""
+                        p["details"] = (
+                            f"{cur}Peak {p.get('maxRating')} ({p.get('rank')}) • "
+                            f"{p['solved']:,} problems solved across official rounds & practice"
+                        )
             except Exception as e:
                 print(f"[codeforces] rating refresh note: {e}")
 
@@ -180,6 +221,23 @@ def fetch_platform_live(p):
                 if m:
                     p["solved"] = int(m.group(1))
                     updated = True
+
+        elif fid == "codechef":
+            # CodeChef exposes no public JSON API, so the profile page is the
+            # source. Anchored on the stat's label so unrelated numbers on the
+            # page cannot match; a failed match leaves the verified value intact.
+            url = f"https://www.codechef.com/users/{urllib.parse.quote(handle)}"
+            req = urllib.request.Request(url, headers=headers)
+            with urllib.request.urlopen(req, timeout=12) as resp:
+                html = resp.read().decode("utf-8", errors="ignore")
+                m = re.search(r"Total Problems Solved[^0-9]{0,40}(\d+)", html, re.IGNORECASE)
+                if m:
+                    solved = int(m.group(1))
+                    if 0 < solved <= 10000:
+                        p["solved"] = solved
+                        updated = True
+                    else:
+                        print(f"[codechef] implausible value {solved}, keeping {p.get('solved')}")
 
     except Exception as e:
         print(f"[{fid}] live sync note: {e}")

@@ -1,818 +1,791 @@
-// Competitive Programming Solved Hub - Application Logic
+/* ==========================================================================
+   CP Tracker — application logic
+   Renders the record from config.json, with an inline offline snapshot,
+   live sync, and an accessible (canvas-free) analytics layer.
 
-const DEFAULT_CONFIG = {
-  "user": {
-    "name": "Ahsanul Haque",
-    "headline": "LeetCode Guardian (2142) • Codeforces Expert (1774) • 2x ICPC Regionalist",
-    "institution": "Jashore University of Science and Technology",
-    "avatar": "assets/avatar.png",
-    "github": "https://github.com/ahsanjust",
-    "linkedin": "https://linkedin.com/in/ahsanul-haque-8b2485379"
-  },
-  "platforms": [
-    {
-      "id": "codeforces",
-      "name": "Codeforces",
-      "handle": "Ahsan_",
-      "profileUrl": "https://codeforces.com/profile/Ahsan_",
-      "solved": 3183,
-      "rating": 1774,
-      "rank": "Expert",
-      "maxRating": 1774,
-      "badge": "Expert (1774)",
-      "color": "#3B82F6",
-      "accentColor": "#60A5FA",
-      "category": "competitive",
-      "fetchType": "codeforces_api",
-      "icon": "cf",
-      "details": "3,183 problems solved for all time across official rounds & practice"
-    },
-    {
-      "id": "vjudge",
-      "name": "Virtual Judge",
-      "handle": "Ahsan_",
-      "profileUrl": "https://vjudge.net/user/Ahsan_",
-      "solved": 583,
-      "rank": "National Contestant",
-      "badge": "21 Sub-Judges",
-      "color": "#EC4899",
-      "accentColor": "#F472B6",
-      "category": "competitive",
-      "fetchType": "vjudge_api",
-      "icon": "vj",
-      "details": "Solved across CodeForces, SPOJ, UVA, AtCoder, CSES, HDU, LightOJ & more"
-    },
-    {
-      "id": "leetcode",
-      "name": "LeetCode",
-      "handle": "Ahsanul_haque_",
-      "profileUrl": "https://leetcode.com/u/Ahsanul_haque_/",
-      "solved": 364,
-      "rating": 2142,
-      "rank": "Guardian",
-      "badge": "Guardian (Top 1.24%)",
-      "color": "#F59E0B",
-      "accentColor": "#FCD34D",
-      "category": "practice",
-      "fetchType": "leetcode_api",
-      "icon": "lc",
-      "breakdown": { "easy": 124, "medium": 168, "hard": 72 },
-      "details": "Rating: 2142 • Top 1.24% worldwide • 72 Hard solves"
-    },
-    {
-      "id": "toph",
-      "name": "Toph",
-      "handle": "AhSaN.x",
-      "profileUrl": "https://toph.co/u/AhSaN.x",
-      "solved": 364,
-      "rank": "Rank #39",
-      "badge": "Rank #39 National",
-      "color": "#0284C7",
-      "accentColor": "#38BDF8",
-      "category": "national",
-      "fetchType": "toph_scraper",
-      "icon": "toph",
-      "details": "Mathematics (66), Easy (21), Brute Force (19), Game Theory & Nim (8)"
-    },
-    {
-      "id": "codechef",
-      "name": "CodeChef",
-      "handle": "ahsanul_haque",
-      "profileUrl": "https://www.codechef.com/users/ahsanul_haque",
-      "solved": 265,
-      "rating": 1900,
-      "rank": "4 Stars",
-      "badge": "4 Stars (★★★★)",
-      "color": "#935424",
-      "accentColor": "#D97706",
-      "category": "competitive",
-      "fetchType": "codechef_scraper",
-      "icon": "cc",
-      "details": "Max Rating 1900 • Division 2 Contestant"
-    },
-    {
-      "id": "cses",
-      "name": "CSES Problem Set",
-      "handle": "Ahsanul_Haque",
-      "profileUrl": "https://cses.fi/problemset/stats/friends/",
-      "solved": 262,
-      "rank": "Rank #2 Friends",
-      "badge": "262 / 400 Tasks",
-      "color": "#E11D48",
-      "accentColor": "#FB7185",
-      "category": "national",
-      "fetchType": "cses_cached",
-      "icon": "cses",
-      "details": "65.5% completion of the prestigious CSES algorithm suite"
-    },
-    {
-      "id": "atcoder",
-      "name": "AtCoder",
-      "handle": "AHSANx",
-      "profileUrl": "https://atcoder.jp/users/AHSANx",
-      "solved": 148,
-      "rank": "Rank 45,634",
-      "badge": "148 Solved",
-      "color": "#10B981",
-      "accentColor": "#34D399",
-      "category": "competitive",
-      "fetchType": "atcoder_api",
-      "icon": "ac",
-      "details": "Solved on ABC, ARC & AGC contests via Kenkoooo API"
-    },
-    {
-      "id": "lightoj",
-      "name": "LightOJ",
-      "handle": "ahsanul_haque99",
-      "profileUrl": "https://lightoj.com/user/ahsanul_haque99",
-      "solved": 133,
-      "badge": "181 AC Submissions",
-      "color": "#6366F1",
-      "accentColor": "#818CF8",
-      "category": "national",
-      "fetchType": "lightoj_api",
-      "icon": "loj",
-      "details": "Classic Bangladeshi judge • 391 Submissions • 133 Distinct Problems"
-    },
-    {
-      "id": "beecrowd",
-      "name": "Beecrowd (URI)",
-      "handle": "ahsanulhaque5588",
-      "profileUrl": "https://judge.beecrowd.com/en/",
-      "solved": 105,
-      "rank": "Rank 26,871 (Top 1%)",
-      "badge": "316.60 Points",
-      "color": "#8B5CF6",
-      "accentColor": "#A78BFA",
-      "category": "national",
-      "fetchType": "beecrowd_cached",
-      "icon": "bee",
-      "details": "Top 1% worldwide with 316.60 academic & contest points"
-    },
-    {
-      "id": "seriousoj",
-      "name": "Serious OJ",
-      "handle": "_ahsan_",
-      "profileUrl": "https://serious-oj.com/user/_ahsan_",
-      "solved": 85,
-      "rating": 650,
-      "rank": "Expert",
-      "badge": "Expert (650)",
-      "color": "#06B6D4",
-      "accentColor": "#22D3EE",
-      "category": "competitive",
-      "fetchType": "seriousoj_scraper",
-      "icon": "soj",
-      "details": "Rating: 650 Expert • 272 Submissions • 89 Accepted • Band 500-700"
-    },
-    {
-      "id": "spoj",
-      "name": "SPOJ",
-      "handle": "ahsanul_haque",
-      "profileUrl": "https://www.spoj.com/users/ahsanul_haque/",
-      "solved": 68,
-      "rank": "World Rank #5140",
-      "badge": "68 Classical Solves",
-      "color": "#2563EB",
-      "accentColor": "#60A5FA",
-      "category": "national",
-      "fetchType": "spoj_cached",
-      "icon": "spoj",
-      "details": "68 Classical problems • 316 Submissions • 6.9 Score Points"
-    },
-    {
-      "id": "hackerrank",
-      "name": "HackerRank",
-      "handle": "_AhSaN_",
-      "profileUrl": "https://www.hackerrank.com/profile/_AhSaN_",
-      "solved": 30,
-      "badge": "Problem Solving ★★★",
-      "color": "#059669",
-      "accentColor": "#10B981",
-      "category": "practice",
-      "fetchType": "hackerrank_api",
-      "icon": "hr",
-      "details": "C (12), Problem Solving (8), C++ (8), 30 Days of Code (2)"
-    },
-    {
-      "id": "hackerearth",
-      "name": "HackerEarth",
-      "handle": "ahsanulhaque5588",
-      "profileUrl": "https://www.hackerearth.com/@ahsanulhaque5588/",
-      "solved": 14,
-      "badge": "Top 18% Data Structures",
-      "color": "#1E293B",
-      "accentColor": "#38BDF8",
-      "category": "practice",
-      "fetchType": "hackerearth_cached",
-      "icon": "he",
-      "details": "280 Points • 56 Submissions • Top 18% in Data Structures"
-    },
-    {
-      "id": "yosupo",
-      "name": "Library Checker",
-      "handle": "_AhSaN_",
-      "profileUrl": "https://judge.yosupo.jp/profile",
-      "solved": 12,
-      "badge": "Advanced Algorithms",
-      "color": "#0EA5E9",
-      "accentColor": "#38BDF8",
-      "category": "competitive",
-      "fetchType": "yosupo_cached",
-      "icon": "yosupo",
-      "details": "Rigorous algorithm verification library for ICPC competitors"
-    }
-  ]
-};
+   Sections
+   1. Offline snapshot   4. Renderers
+   2. Platform helpers   5. Sync
+   3. State              6. Interaction & init
+   ========================================================================== */
 
-let state = {
-  user: DEFAULT_CONFIG.user,
-  platforms: DEFAULT_CONFIG.platforms,
-  activeFilter: 'all',
-  searchQuery: '',
-  sortBy: 'solved-desc',
-  deduplicateVJudge: false,
-  lastUpdated: null,
-  charts: {
-    distribution: null,
-    skills: null
-  }
-};
+(function () {
+  'use strict';
 
-// DOM Elements
-const totalCounterEl = document.getElementById('total-solved-counter');
-const gridContainerEl = document.getElementById('platform-grid-container');
-const filterPills = document.querySelectorAll('.filter-pill');
-const toggleDedup = document.getElementById('toggle-dedup');
-const btnSyncAll = document.getElementById('btn-sync-all');
-const syncBtnText = document.getElementById('sync-btn-text');
-const toastEl = document.getElementById('toast-message');
-const searchInputEl = document.getElementById('search-judges');
-const sortSelectEl = document.getElementById('sort-judges');
-const lastUpdatedEl = document.getElementById('last-updated');
-const resultsCountEl = document.getElementById('results-count');
+  /* 1. Offline snapshot -----------------------------------------------------
+     config.json is the source of truth: sync_server.py and the daily GitHub
+     Action both write it. This inline mirror keeps the page complete when the
+     fetch cannot run (file:// previews, a failed request), so the record is
+     never blank. When config.json loads it replaces this outright.
+     ------------------------------------------------------------------------ */
 
-// Toast Notification
-function showToast(msg) {
-  if (!toastEl) return;
-  toastEl.textContent = msg;
-  toastEl.classList.add('show');
-  setTimeout(() => {
-    toastEl.classList.remove('show');
-  }, 3200);
-}
-
-// Number Counter Animation
-function animateCounter(element, targetValue, duration = 1200) {
-  if (!element) return;
-  const start = parseInt(element.textContent.replace(/[^\d]/g, '')) || 0;
-  const startTime = performance.now();
-
-  function updateNumber(currentTime) {
-    const elapsed = currentTime - startTime;
-    const progress = Math.min(elapsed / duration, 1);
-    const easeOut = 1 - Math.pow(1 - progress, 3);
-    const current = Math.floor(start + (targetValue - start) * easeOut);
-    element.textContent = current.toLocaleString();
-
-    if (progress < 1) {
-      requestAnimationFrame(updateNumber);
-    } else {
-      element.textContent = targetValue.toLocaleString() + '+';
-    }
-  }
-
-  requestAnimationFrame(updateNumber);
-}
-
-// Calculate Total Solved
-function calculateTotal() {
-  let total = 0;
-  state.platforms.forEach(p => {
-    if (state.deduplicateVJudge && p.id === 'vjudge') {
-      return;
-    }
-    total += (parseInt(p.solved) || 0);
-  });
-  return total;
-}
-
-// Render Hero Counter & Badges
-function renderHero() {
-  const total = calculateTotal();
-  animateCounter(totalCounterEl, total);
-  
-  const subText = document.getElementById('counter-sub-text');
-  if (subText) {
-    if (state.deduplicateVJudge) {
-      subText.textContent = `Across ${state.platforms.length - 1} Native Judges (Excluding VJudge)`;
-    } else {
-      subText.textContent = `Across ${state.platforms.length} Online Judges`;
-    }
-  }
-
-  renderLastUpdated();
-}
-
-function renderLastUpdated() {
-  if (!lastUpdatedEl) return;
-  if (!state.lastUpdated) {
-    lastUpdatedEl.textContent = 'Verified records • Live sync ready';
-    return;
-  }
-  try {
-    const d = new Date(state.lastUpdated);
-    const fmt = d.toLocaleString(undefined, {
-      year: 'numeric', month: 'short', day: 'numeric',
-      hour: '2-digit', minute: '2-digit'
-    });
-    lastUpdatedEl.textContent = `Last synced: ${fmt}`;
-    lastUpdatedEl.setAttribute('datetime', state.lastUpdated);
-  } catch (e) {
-    lastUpdatedEl.textContent = 'Verified records • Live sync ready';
-  }
-}
-
-// Reveal-on-scroll for cards (respects reduced motion)
-let revealObserver = null;
-function initRevealObserver() {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  if (!('IntersectionObserver' in window)) return;
-  revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach((en) => {
-      if (en.isIntersecting) {
-        en.target.classList.add('revealed');
-        revealObserver.unobserve(en.target);
-      }
-    });
-  }, { threshold: 0.08, rootMargin: '0px 0px -20px 0px' });
-}
-
-// Get SVG or Initials for Platform — real brand marks, text fallback only
-function getPlatformIconMarkup(p) {
-  const svgWrap = (inner) => `<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">${inner}</svg>`;
-  const strokeWrap = (inner) => `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${inner}</svg>`;
-  const icons = {
-    codeforces: svgWrap(`<rect x="2" y="9" width="4.5" height="13" rx="1.2"/><rect x="9.5" y="5" width="4.5" height="17" rx="1.2"/><rect x="17" y="2" width="4.5" height="20" rx="1.2"/>`),
-    leetcode: svgWrap(`<path d="M13.2 2.3 4.9 10.6c-.4.4-.6.9-.6 1.5v.5c0 .6.2 1.1.6 1.5l2 2c.8.8 2.1.8 2.9 0l.4-.4 2.4 2.4-.6.6c-2 2-5.3 2-7.3 0l-2-2a5.1 5.1 0 0 1 0-7.2l8.3-8.3c.4-.4 1-.4 1.4 0l.2.2c.4.4.4 1 0 1.4Zm6.6 6.6-2.5 2.5c-.4.4-.4 1 0 1.4l1.2 1.2c.4.4.4 1 0 1.4l-4.1 4.1c-.8.8-2.1.8-2.9 0l-1.2-1.2 2.5-2.5 1.2 1.2c.4.4 1 .4 1.4 0l2.7-2.7-1.2-1.2 2.9-2.9c.4-.4 1-.4 1.4 0l.2.2c.4.4.4 1 0 1.4Z"/>`),
-    atcoder: strokeWrap(`<path d="M12 3 3 20h18L12 3Zm0 5.2L16.2 17H7.8L12 8.2Z"/>`),
-    codechef: svgWrap(`<path d="M7.5 4h9v2.5H14v12h-2v2.5h5.5V23.5H4v-2.5h5.5V18.5h-2v-12H5.5V4h2Z" transform="scale(.95) translate(.5 0)"/><path d="M18 6.5c1.5 0 2.7 2.7 2.7 6s-1.2 6-2.7 6" fill="none" stroke="currentColor" stroke-width="1.6"/>`),
-    toph: svgWrap(`<path d="M4 5h16v3H4zM6 9h12v2.5c0 3.5-2.5 6-6 6s-6-2.5-6-6V9Zm6 6.5a1.8 1.8 0 1 0 0-3.6 1.8 1.8 0 0 0 0 3.6Z"/>`),
-    vjudge: svgWrap(`<path d="M3 5h18l-9 14L3 5Zm4.2 2L12 14.6 16.8 7H7.2Z"/>`),
-    cses: `<span style="font-size:.72rem;letter-spacing:-.02em">CSES</span>`,
-    lightoj: strokeWrap(`<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3.2 2"/>`),
-    beecrowd: svgWrap(`<path d="M12 2 3 7v10l9 5 9-5V7l-9-5Zm0 2.3L18.7 8 12 11.7 5.3 8 12 4.3ZM5 9.7l6 3.4v6.6l-6-3.4V9.7Zm8 10v-6.6l6-3.4v6.6l-6 3.4Z"/>`),
-    spoj: svgWrap(`<path d="M4 4h16v4H4zM4 10h16v4H4zM4 16h10v4H4z"/>`),
-    hackerrank: svgWrap(`<path d="M6 3h3v7.2L15.5 3H19l-6.8 8L19.2 21h-3.6L9 13.6V21H6V3Z"/>`),
-    hackerearth: svgWrap(`<path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm-3.5 6h7v2h-7zM7 11h10v2H7zM8.5 15h7v2h-7z"/>`),
-    seriousoj: strokeWrap(`<path d="M13 2 4.5 13.5H11L10 22l8.5-11.5H12L13 2Z"/>`),
-    yosupo: strokeWrap(`<path d="M5 19V5h14v14H5Zm3-9h8M8 13h8"/>`),
+  const SNAPSHOT = {
+    lastUpdated: '2026-09-17T20:23:47+00:00',
+    platforms: [
+      { id: 'codeforces', name: 'Codeforces', handle: 'Ahsan_', profileUrl: 'https://codeforces.com/profile/Ahsan_', solved: 3183, rating: 1774, rank: 'Expert', badge: 'Expert (1774)', color: '#3B82F6', accentColor: '#60A5FA', category: 'competitive', fetchType: 'codeforces_api',
+        details: 'Current 1477 • Peak 1774 (Expert) • 3,183 problems solved across official rounds & practice' },
+      { id: 'vjudge', name: 'Virtual Judge', handle: 'Ahsan_', profileUrl: 'https://vjudge.net/user/Ahsan_', solved: 583, rank: 'National Contestant', badge: '21 Sub-Judges', color: '#EC4899', accentColor: '#F472B6', category: 'competitive', fetchType: 'vjudge_api',
+        details: 'Solved across CodeForces, SPOJ, UVA, AtCoder, CSES, HDU, LightOJ & more' },
+      { id: 'leetcode', name: 'LeetCode', handle: 'Ahsanul_haque_', profileUrl: 'https://leetcode.com/u/Ahsanul_haque_/', solved: 364, rating: 2142, rank: 'Guardian', badge: 'Guardian (Top 1.24%)', color: '#F59E0B', accentColor: '#FCD34D', category: 'practice', fetchType: 'leetcode_api', breakdown: { easy: 124, medium: 168, hard: 72 },
+        details: 'Rating: 2142 • Top 1.24% worldwide • 72 Hard solves' },
+      { id: 'toph', name: 'Toph', handle: 'AhSaN.x', profileUrl: 'https://toph.co/u/AhSaN.x', solved: 364, rank: 'Rank #39', badge: 'Rank #39 National', color: '#0284C7', accentColor: '#38BDF8', category: 'national', fetchType: 'toph_scraper',
+        details: 'Mathematics (66), Easy (21), Brute Force (19), Game Theory & Nim (8)' },
+      { id: 'codechef', name: 'CodeChef', handle: 'ahsanul_haque', profileUrl: 'https://www.codechef.com/users/ahsanul_haque', solved: 265, rating: 1900, rank: '4 Stars', badge: '4 Stars (★★★★)', color: '#935424', accentColor: '#D97706', category: 'competitive', fetchType: 'codechef_scraper',
+        details: 'Max Rating 1900 • Division 2 Contestant' },
+      { id: 'cses', name: 'CSES Problem Set', handle: 'Ahsanul_Haque', profileUrl: 'https://cses.fi/problemset/stats/friends/', solved: 262, rank: 'Rank #2 Friends', badge: '262 / 400 Tasks', color: '#E11D48', accentColor: '#FB7185', category: 'national', fetchType: 'cses_cached',
+        details: '65.5% completion of the prestigious CSES algorithm suite' },
+      { id: 'atcoder', name: 'AtCoder', handle: 'AHSANx', profileUrl: 'https://atcoder.jp/users/AHSANx', solved: 148, rank: 'Rank 45,634', badge: '148 Solved', color: '#10B981', accentColor: '#34D399', category: 'competitive', fetchType: 'atcoder_api',
+        details: 'Solved on ABC, ARC & AGC contests via Kenkoooo API' },
+      { id: 'lightoj', name: 'LightOJ', handle: 'ahsanul_haque99', profileUrl: 'https://lightoj.com/user/ahsanul_haque99', solved: 133, badge: '181 AC Submissions', color: '#6366F1', accentColor: '#818CF8', category: 'national', fetchType: 'lightoj_api',
+        details: 'Classic Bangladeshi judge • 391 Submissions • 133 Distinct Problems' },
+      { id: 'beecrowd', name: 'Beecrowd (URI)', handle: 'ahsanulhaque5588', profileUrl: 'https://judge.beecrowd.com/en/', solved: 105, rank: 'Rank 26,871 (Top 1%)', badge: '316.60 Points', color: '#8B5CF6', accentColor: '#A78BFA', category: 'national', fetchType: 'beecrowd_cached',
+        details: 'Top 1% worldwide with 316.60 academic & contest points' },
+      { id: 'spoj', name: 'SPOJ', handle: 'ahsanul_haque', profileUrl: 'https://www.spoj.com/users/ahsanul_haque/', solved: 68, rank: 'World Rank #5140', badge: '68 Classical Solves', color: '#2563EB', accentColor: '#60A5FA', category: 'national', fetchType: 'spoj_cached',
+        details: '68 Classical problems • 316 Submissions • 6.9 Score Points' },
+      { id: 'hackerrank', name: 'HackerRank', handle: '_AhSaN_', profileUrl: 'https://www.hackerrank.com/profile/_AhSaN_', solved: 30, badge: 'Problem Solving ★★★', color: '#059669', accentColor: '#10B981', category: 'practice', fetchType: 'hackerrank_api',
+        details: 'C (12), Problem Solving (8), C++ (8), 30 Days of Code (2)' },
+      { id: 'hackerearth', name: 'HackerEarth', handle: 'ahsanulhaque5588', profileUrl: 'https://www.hackerearth.com/@ahsanulhaque5588/', solved: 14, badge: 'Top 18% Data Structures', color: '#1E293B', accentColor: '#38BDF8', category: 'practice', fetchType: 'hackerearth_scraper',
+        details: '280 Points • 56 Submissions • Top 18% in Data Structures' },
+      { id: 'yosupo', name: 'Library Checker', handle: '_AhSaN_', profileUrl: 'https://judge.yosupo.jp/profile', solved: 12, badge: 'Advanced Algorithms', color: '#0EA5E9', accentColor: '#38BDF8', category: 'competitive', fetchType: 'yosupo_cached',
+        details: 'Rigorous algorithm verification library for ICPC competitors' },
+      { id: 'seriousoj', name: 'Serious OJ', handle: '_ahsan_', profileUrl: 'https://serious-oj.com/user/_ahsan_', solved: 85, rating: 650, rank: 'Expert', badge: 'Expert (650)', color: '#06B6D4', accentColor: '#22D3EE', category: 'competitive', fetchType: 'seriousoj_scraper',
+        details: 'Rating: 650 Expert • 272 Submissions • 89 Accepted • Band 500-700' }
+    ]
   };
 
-  return icons[p.id] || p.name.substring(0, 2).toUpperCase();
-}
+  /* 2. Platform helpers ---------------------------------------------------- */
 
-// Render Platform Cards Grid — filter + search + sort
-function renderPlatforms() {
-  if (!gridContainerEl) return;
-  gridContainerEl.innerHTML = '';
+  const ICON_SVG = (inner) => `<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">${inner}</svg>`;
+  const ICON_STROKE = (inner) => `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${inner}</svg>`;
 
-  const q = (state.searchQuery || '').trim().toLowerCase();
+  const JUDGE_ICONS = {
+    codeforces: ICON_SVG('<rect x="2" y="9" width="4.5" height="13" rx="1.2"/><rect x="9.5" y="5" width="4.5" height="17" rx="1.2"/><rect x="17" y="2" width="4.5" height="20" rx="1.2"/>'),
+    leetcode: ICON_SVG('<path d="M13.2 2.3 4.9 10.6c-.4.4-.6.9-.6 1.5v.5c0 .6.2 1.1.6 1.5l2 2c.8.8 2.1.8 2.9 0l.4-.4 2.4 2.4-.6.6c-2 2-5.3 2-7.3 0l-2-2a5.1 5.1 0 0 1 0-7.2l8.3-8.3c.4-.4 1-.4 1.4 0l.2.2c.4.4.4 1 0 1.4Zm6.6 6.6-2.5 2.5c-.4.4-.4 1 0 1.4l1.2 1.2c.4.4.4 1 0 1.4l-4.1 4.1c-.8.8-2.1.8-2.9 0l-1.2-1.2 2.5-2.5 1.2 1.2c.4.4 1 .4 1.4 0l2.7-2.7-1.2-1.2 2.9-2.9c.4-.4 1-.4 1.4 0l.2.2c.4.4.4 1 0 1.4Z"/>'),
+    atcoder: ICON_STROKE('<path d="M12 3.5 3.5 20h17L12 3.5Zm0 5.6L15.8 17H8.2L12 9.1Z"/>'),
+    codechef: ICON_SVG('<path d="M7.4 4h9.2v2.4h-2.4v11.2h4.4v2.4H5.4v-2.4h4.4V6.4H7.4V4Z"/><path d="M18.4 7c1.4 0 2.6 2.4 2.6 5.4s-1.2 5.4-2.6 5.4" fill="none" stroke="currentColor" stroke-width="1.5"/>'),
+    toph: ICON_SVG('<path d="M4 5h16v2.6H4V5Zm2 4.4h12v2.4c0 3.3-2.5 5.8-6 5.8s-6-2.5-6-5.8V9.4Zm6 6.4a1.7 1.7 0 1 0 0-3.4 1.7 1.7 0 0 0 0 3.4Z"/>'),
+    vjudge: ICON_SVG('<path d="M3 5.5h18L12 19.5 3 5.5Zm4.4 2L12 14.4l4.6-6.9H7.4Z"/>'),
+    lightoj: ICON_STROKE('<circle cx="12" cy="12" r="8.2"/><path d="M12 7.6V12l3.1 1.9"/>'),
+    beecrowd: ICON_SVG('<path d="M12 2 3 7v10l9 5 9-5V7l-9-5Zm0 2.3L18.7 8 12 11.7 5.3 8 12 4.3ZM5 9.7l6 3.4v6.6l-6-3.4V9.7Zm8 10v-6.6l6-3.4v6.6l-6 3.4Z"/>'),
+    spoj: ICON_SVG('<path d="M4 4h16v3.6H4V4Zm0 6h16v3.6H4V10Zm0 6h10.5v3.6H4V16Z"/>'),
+    hackerrank: ICON_SVG('<path d="M6 3h2.8v6.9L15.4 3h3.4l-6.6 7.6L19.2 21h-3.5L10 13.4V21H6V3Z"/>'),
+    hackerearth: ICON_SVG('<path d="M12 2.5a9.5 9.5 0 1 0 0 19 9.5 9.5 0 0 0 0-19ZM8.6 8.6h6.8v1.8H8.6V8.6Zm-1 4h8.8v1.8H7.6v-1.8Zm1.6 4h5.6v1.8H9.2v-1.8Z"/>'),
+    seriousoj: ICON_STROKE('<path d="M13 2.5 5 13.8h5.6L9.6 21.5 18 10.2h-5.7L13 2.5Z"/>'),
+    yosupo: ICON_STROKE('<rect x="5" y="5" width="14" height="14" rx="1.6"/><path d="M9 10.5h6M9 14h6"/>')
+  };
 
-  let filtered = state.platforms.filter(p => {
-    if (state.activeFilter !== 'all' && p.category !== state.activeFilter) return false;
-    if (q) {
-      const hay = `${p.name} ${p.handle} ${p.badge || ''} ${p.rank || ''}`.toLowerCase();
-      if (!hay.includes(q)) return false;
+  const $ = (id) => document.getElementById(id);
+  const reduceMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const formatInt = (value) => Number(value || 0).toLocaleString('en-US');
+
+  function esc(value) {
+    return String(value == null ? '' : value)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function hexToRgba(hex, alpha) {
+    const raw = String(hex || '').replace('#', '');
+    const full = raw.length === 3 ? raw.split('').map((c) => c + c).join('') : raw;
+    const parsed = parseInt(full, 16);
+    if (full.length !== 6 || Number.isNaN(parsed)) return `rgba(56, 189, 248, ${alpha})`;
+    return `rgba(${(parsed >> 16) & 255}, ${(parsed >> 8) & 255}, ${parsed & 255}, ${alpha})`;
+  }
+
+  /* Badges render as plain text. Drop the parenthetical star run that just
+     repeats the rating already stated, and spell out any remaining stars so a
+     font-dependent glyph never reaches the UI. */
+  function tidyBadge(text) {
+    return String(text || '')
+      .replace(/\s*\(★+\)\s*/g, ' ')
+      .replace(/\s*★+/g, (run) => ` · ${(run.match(/★/g) || []).length} stars`)
+      .trim();
+  }
+
+  const initials = (name) => String(name || '')
+    .replace(/[^A-Za-z0-9 ]/g, ' ')
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((word) => word[0].toUpperCase())
+    .join('');
+
+  /* How a figure was obtained decides how much we trust it — surface that. */
+  function classifySource(platform) {
+    const type = String(platform.fetchType || '');
+    if (type.endsWith('_api')) return 'api';
+    if (type.endsWith('_scraper')) return 'sync';
+    if (type.endsWith('_cached')) return 'snapshot';
+    return platform.source === 'api' || platform.source === 'sync' ? platform.source : 'snapshot';
+  }
+
+  function normalize(platform) {
+    const breakdown = platform.breakdown;
+    return {
+      id: platform.id,
+      name: platform.name || platform.id,
+      handle: platform.handle || '',
+      url: platform.profileUrl || platform.url || '#',
+      solved: Number(platform.solved) || 0,
+      rating: platform.rating == null || platform.rating === '' ? null : Number(platform.rating),
+      rank: platform.rank || '',
+      badge: tidyBadge(platform.badge),
+      tint: platform.accentColor || platform.color || '#38BDF8',
+      category: platform.category || 'competitive',
+      source: classifySource(platform),
+      details: platform.details || '',
+      breakdown: breakdown && typeof breakdown === 'object'
+        ? {
+            easy: Number(breakdown.easy) || 0,
+            medium: Number(breakdown.medium) || 0,
+            hard: Number(breakdown.hard) || 0
+          }
+        : null
+    };
+  }
+
+  /* 3. State -------------------------------------------------------------- */
+
+  const state = {
+    platforms: [],
+    filter: 'all',
+    dedup: false,
+    updatedAt: null,
+    offline: false,
+    rendered: false
+  };
+
+  let baseHeroSub = '';
+
+  const visiblePlatforms = () => (state.dedup ? state.platforms.filter((p) => p.id !== 'vjudge') : state.platforms);
+  const totalSolved = () => visiblePlatforms().reduce((sum, p) => sum + p.solved, 0);
+
+  /* 4. Renderers ---------------------------------------------------------- */
+
+  function countUp(el, target) {
+    if (!el) return;
+    const from = Number(String(el.textContent).replace(/[^0-9]/g, '')) || 0;
+
+    if (el.cpRaf) cancelAnimationFrame(el.cpRaf);
+    clearTimeout(el.cpTimer);
+
+    if (reduceMotion() || from === target) {
+      el.textContent = formatInt(target);
+      return;
     }
-    return true;
-  });
 
-  // Sort
-  const by = state.sortBy || 'solved-desc';
-  filtered = [...filtered].sort((a, b) => {
-    if (by === 'solved-asc') return (a.solved || 0) - (b.solved || 0);
-    if (by === 'name-asc') return a.name.localeCompare(b.name);
-    if (by === 'rating-desc') return (b.rating || 0) - (a.rating || 0);
-    return (b.solved || 0) - (a.solved || 0); // solved-desc default
-  });
+    const started = performance.now();
+    const duration = 900;
+    const finish = () => { el.textContent = formatInt(target); };
+    const step = (now) => {
+      const progress = Math.min((now - started) / duration, 1);
+      if (progress >= 1) { finish(); return; }
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = formatInt(Math.round(from + (target - from) * eased));
+      el.cpRaf = requestAnimationFrame(step);
+    };
 
-  if (resultsCountEl) {
-    resultsCountEl.textContent = filtered.length === state.platforms.length
-      ? `${filtered.length} judges`
-      : `${filtered.length} of ${state.platforms.length} judges`;
+    el.cpRaf = requestAnimationFrame(step);
+    // Frames pause in background tabs; this guarantees the exact figure lands.
+    el.cpTimer = setTimeout(finish, duration + 300);
   }
 
-  if (filtered.length === 0) {
-    gridContainerEl.innerHTML = `
-      <div class="empty-state">
-        <div class="empty-icon">🔍</div>
-        <h3>No judges match your search</h3>
-        <p>Try a different keyword or clear filters to see all ${state.platforms.length} platforms.</p>
-        <button class="btn" id="btn-clear-search">Clear search & filters</button>
-      </div>`;
-    const clr = document.getElementById('btn-clear-search');
-    if (clr) clr.addEventListener('click', () => {
-      state.searchQuery = '';
-      state.activeFilter = 'all';
-      if (searchInputEl) searchInputEl.value = '';
-      filterPills.forEach(p => p.classList.toggle('active', p.getAttribute('data-filter') === 'all'));
-      renderPlatforms();
+  function renderHero() {
+    countUp($('hero-total'), totalSolved());
+
+    // The claim reads "Tracking N problems across M online judges", so M is how
+    // many judges are tracked, not how many contributed. Excluding Virtual Judge
+    // moves the total alone; the sub-copy below explains why.
+    const judges = $('hero-judges');
+    if (judges) judges.textContent = String(state.platforms.length);
+
+    const sub = $('hero-sub');
+    if (sub) {
+      const excluded = state.platforms.find((p) => p.id === 'vjudge');
+      sub.textContent = state.dedup && excluded
+        ? `Deduplicated total: Virtual Judge mirrors problems that already exist on the native judges, so all ${formatInt(excluded.solved)} of its solves are removed from this figure. Problems unique to Virtual Judge are dropped too, so the true unique count sits between it and the full total.`
+        : baseHeroSub;
+    }
+  }
+
+  /* Python's isoformat() emits six fractional digits and a "+00:00" offset, but
+     the spec's Date Time String Format defines three digits and "Z". Chrome
+     tolerates the extra digits and other engines need not, so normalise before
+     parsing instead of depending on a lenient fallback parser. */
+  function parseTimestamp(value) {
+    if (!value) return null;
+    const normalised = String(value).trim()
+      .replace(/\.(\d{3})\d+/, '.$1')
+      .replace(/([+-])00:00$/, 'Z');
+    const date = new Date(normalised);
+    return Number.isNaN(date.getTime()) ? null : date;
+  }
+
+  function renderUpdated() {
+    const el = $('last-updated');
+    if (!el) return;
+    const date = parseTimestamp(state.updatedAt);
+    if (!date) {
+      el.textContent = 'Not yet verified';
+      el.removeAttribute('datetime');
+      return;
+    }
+    // Stated in UTC so the figure is identical for every viewer and can be held
+    // against the documented sync schedule.
+    el.textContent = `${date.toLocaleString(undefined, {
+      year: 'numeric', month: 'short', day: 'numeric',
+      hour: '2-digit', minute: '2-digit', timeZone: 'UTC'
+    })} UTC`;
+    el.setAttribute('datetime', date.toISOString());
+  }
+
+  function renderProvenance() {
+    const counts = { api: 0, sync: 0, snapshot: 0 };
+    state.platforms.forEach((p) => { counts[p.source] += 1; });
+    const live = $('count-live');
+    const sync = $('count-sync');
+    const snap = $('count-snapshot');
+    if (live) live.textContent = String(counts.api);
+    if (sync) sync.textContent = String(counts.sync);
+    if (snap) snap.textContent = String(counts.snapshot);
+
+    // Derived from the same classification as the counts above, so the section
+    // can never claim a different freshness than the hero reports.
+    const note = $('judges-note');
+    if (note) {
+      const total = state.platforms.length;
+      const refreshed = counts.api + counts.sync;
+      const remaining = counts.snapshot === 1
+        ? 'The remaining judge is a verified snapshot.'
+        : `The remaining ${counts.snapshot} are verified snapshots.`;
+      note.textContent = `${refreshed} of ${total} judges refresh automatically — daily at 00:00 UTC and on every deploy. ${remaining}`;
+    }
+  }
+
+  const TRACKER_URL = 'https://ahsanjust.github.io/cp-tracker/';
+
+  /* The badge gets pasted into a CV or README, so it has to quote the live
+     total rather than a number frozen into the markup. */
+  function renderEmbed() {
+    const el = $('embed-code');
+    if (!el) return;
+    const total = state.platforms.reduce((sum, p) => sum + p.solved, 0);
+    el.textContent = `[![CP Tracker — ${formatInt(total)}+ problems solved](${TRACKER_URL}assets/og_preview.png)](${TRACKER_URL})`;
+  }
+
+  function renderFilterCounts() {
+    const counts = { all: state.platforms.length, competitive: 0, practice: 0, national: 0 };
+    state.platforms.forEach((p) => {
+      if (counts[p.category] != null) counts[p.category] += 1;
     });
-    return;
+    document.querySelectorAll('[data-count]').forEach((el) => {
+      const key = el.getAttribute('data-count');
+      el.textContent = counts[key] == null ? '' : String(counts[key]);
+    });
   }
 
-  const maxSolves = Math.max(...state.platforms.map(p => p.solved || 0), 1);
+  const EXTERNAL_ICON = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14 4h6v6"/><path d="M20 4 11 13"/><path d="M18 14.5V19a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 4 19V8a1.5 1.5 0 0 1 1.5-1.5H10"/></svg>';
 
-  filtered.forEach(p => {
-    const card = document.createElement('article');
-    card.className = 'platform-card';
-    card.id = `card-${p.id}`;
-    card.style.setProperty('--card-brand-color', p.color);
-    card.style.setProperty('--card-glow', `${p.color}33`);
-    card.style.setProperty('--card-border-glow', `${p.color}88`);
+  function judgeCard(platform, excluded) {
+    const badge = platform.badge.toLowerCase();
+    const showRating = platform.rating != null && !badge.includes(String(platform.rating));
+    const showRank = platform.rank !== '' && !badge.includes(platform.rank.toLowerCase());
 
-    const percent = Math.min(Math.round((p.solved / maxSolves) * 100), 100);
+    const tags = [
+      platform.badge ? `<span class="tag tag--accent">${esc(platform.badge)}</span>` : '',
+      showRating ? `<span class="tag">Rating ${esc(formatInt(platform.rating))}</span>` : '',
+      showRank ? `<span class="tag">${esc(platform.rank)}</span>` : '',
+      excluded ? '<span class="tag tag--muted">Excluded from total</span>' : ''
+    ].filter(Boolean).join('');
 
-    card.innerHTML = `
-      <div>
-        <div class="card-top">
-          <div class="platform-badge-logo">
-            <div class="platform-icon">${getPlatformIconMarkup(p)}</div>
-            <div class="platform-meta">
-              <h3>${p.name}</h3>
-              <span class="platform-handle">@${p.handle}</span>
-            </div>
-          </div>
-          <div class="card-actions">
-            <a href="${p.profileUrl}" target="_blank" rel="noopener noreferrer" class="icon-btn" title="View ${p.name} Profile">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
-            </a>
-          </div>
+    const glyph = JUDGE_ICONS[platform.id] ||
+      `<span class="judge-chip__text">${esc(initials(platform.name))}</span>`;
+
+    return `
+      <div class="judge-card__head">
+        <span class="judge-chip" aria-hidden="true" style="--chip-bg:${hexToRgba(platform.tint, 0.13)};--chip-line:${hexToRgba(platform.tint, 0.3)};--chip-fg:${esc(platform.tint)}">${glyph}</span>
+        <div class="judge-card__id">
+          <h3 class="judge-card__name">${esc(platform.name)}</h3>
+          <span class="judge-card__handle">@${esc(platform.handle)}</span>
         </div>
-
-        <div class="card-stat">
-          <div class="card-solved-number">
-            ${(p.solved || 0).toLocaleString()}
-            <span class="card-solved-label">Solved</span>
-          </div>
-          <div class="progress-bar-bg">
-            <div class="progress-bar-fill" style="width: ${percent}%;"></div>
-          </div>
-        </div>
-
-        <div class="card-tags">
-          ${p.badge ? `<span class="tag-badge accent" style="--tag-bg:${p.color}22; --tag-border:${p.color}66; --tag-color:${p.accentColor || p.color}">${p.badge}</span>` : ''}
-          ${p.rating ? `<span class="tag-badge">Rating: <strong>${p.rating}</strong></span>` : ''}
-          ${p.rank && p.rank !== p.badge ? `<span class="tag-badge">${p.rank}</span>` : ''}
-        </div>
+        <a class="judge-card__link" href="${esc(platform.url)}" target="_blank" rel="noopener noreferrer"
+           aria-label="Open the ${esc(platform.name)} profile (opens in a new tab)">${EXTERNAL_ICON}</a>
       </div>
-
-      <div class="card-details">
-        ${p.details || ''}
-      </div>
+      <p class="judge-card__count">
+        <span class="judge-card__num">${formatInt(platform.solved)}</span>
+        <span class="judge-card__unit">solved</span>
+      </p>
+      ${tags ? `<div class="judge-card__tags">${tags}</div>` : ''}
+      ${platform.details ? `<p class="judge-card__details">${esc(platform.details)}</p>` : ''}
     `;
-
-    gridContainerEl.appendChild(card);
-    if (revealObserver) revealObserver.observe(card);
-    else card.classList.add('revealed');
-  });
-}
-
-// Render Analytics Charts with Chart.js
-let chartRetryCount = 0;
-function renderCharts() {
-  if (!window.Chart) {
-    // Chart.js is deferred — retry a few times before giving up
-    if (chartRetryCount < 10) {
-      chartRetryCount += 1;
-      setTimeout(renderCharts, 400);
-    }
-    return;
   }
-  chartRetryCount = 0;
 
-  // 1. Distribution Donut Chart
-  const ctxDist = document.getElementById('platformDistributionChart');
-  if (ctxDist) {
-    const labels = state.platforms.map(p => p.name);
-    const data = state.platforms.map(p => p.solved);
-    const colors = state.platforms.map(p => p.color);
+  function renderJudges() {
+    const grid = $('judge-grid');
+    const empty = $('judges-empty');
+    if (!grid) return;
 
-    if (state.charts.distribution) {
-      state.charts.distribution.destroy();
+    const list = state.filter === 'all'
+      ? state.platforms
+      : state.platforms.filter((p) => p.category === state.filter);
+
+    if (!list.length) {
+      grid.innerHTML = '';
+      grid.classList.add('is-hidden');
+      if (empty) empty.classList.remove('is-hidden');
+      return;
     }
 
-    state.charts.distribution = new Chart(ctxDist, {
-      type: 'doughnut',
-      data: {
-        labels: labels,
-        datasets: [{
-          data: data,
-          backgroundColor: colors,
-          borderColor: '#0f172a',
-          borderWidth: 2,
-          hoverOffset: 8
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            position: window.innerWidth < 700 ? 'bottom' : 'right',
-            labels: {
-              color: '#94a3b8',
-              font: { family: 'Inter', size: 11 },
-              boxWidth: 12,
-              padding: 6
-            }
-          },
-          tooltip: {
-            callbacks: {
-              label: function(context) {
-                const val = context.raw || 0;
-                const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                const pct = ((val / total) * 100).toFixed(1);
-                return ` ${context.label}: ${val.toLocaleString()} (${pct}%)`;
-              }
-            }
-          }
-        },
-        cutout: '68%'
-      }
+    grid.classList.remove('is-hidden');
+    if (empty) empty.classList.add('is-hidden');
+
+    const fragment = document.createDocumentFragment();
+    list.forEach((platform) => {
+      const excluded = state.dedup && platform.id === 'vjudge';
+      const card = document.createElement('li');
+      card.className = `judge-card reveal${excluded ? ' is-excluded' : ''}`;
+      card.innerHTML = judgeCard(platform, excluded);
+      fragment.appendChild(card);
+      reveal(card, state.rendered);
     });
+    grid.replaceChildren(fragment);
   }
 
-  // 2. Skill Tiers & Difficulty Chart — fully driven by live state
-  const ctxSkills = document.getElementById('difficultyBreakdownChart');
-  if (ctxSkills) {
-    if (state.charts.skills) {
-      state.charts.skills.destroy();
+  function paintBars(listEl, items) {
+    if (!listEl) return;
+    listEl.innerHTML = items.map((item, index) => `
+      <li class="bar${item.emph ? ' bar--emph' : ''}" style="--i:${index}">
+        <div class="bar__row">
+          <span class="bar__label">${esc(item.label)}</span>
+          <span class="bar__val">${formatInt(item.value)}</span>
+          <span class="bar__pct">${(item.share * 100).toFixed(1)}%</span>
+        </div>
+        <div class="bar__track" aria-hidden="true">
+          <span class="bar__fill" style="--w:${item.value > 0 ? Math.max(item.share, 0.006).toFixed(4) : '0'};--bar-color:${item.color}"></span>
+        </div>
+      </li>`).join('');
+    // Bars animate themselves from CSS, so a re-render needs no reveal step.
+  }
+
+  function renderAnalytics() {
+    // Distribution — ranked, and consistent with the headline total.
+    const ranked = visiblePlatforms().slice().sort((a, b) => b.solved - a.solved);
+    const total = ranked.reduce((sum, p) => sum + p.solved, 0) || 1;
+
+    paintBars($('bars-judges'), ranked.map((p, index) => ({
+      label: p.name,
+      value: p.solved,
+      share: p.solved / total,
+      color: 'var(--accent)',
+      emph: index === 0
+    })));
+
+    const judgeNote = $('judge-bars-note');
+    if (judgeNote) {
+      judgeNote.textContent = state.dedup
+        ? `${formatInt(total)} problems · Virtual Judge excluded`
+        : `${formatInt(total)} problems across ${ranked.length} judges`;
     }
 
-    const getSolved = (id) => state.platforms.find(p => p.id === id)?.solved || 0;
-    const lcPlatform = state.platforms.find(p => p.id === 'leetcode');
-    const lcEasy = lcPlatform?.breakdown?.easy || 0;
-    const lcMed = lcPlatform?.breakdown?.medium || 0;
-    const lcHard = lcPlatform?.breakdown?.hard || 0;
+    // Difficulty mix — only LeetCode reports a per-difficulty breakdown.
+    const leetcode = state.platforms.find((p) => p.id === 'leetcode');
+    const mix = leetcode && leetcode.breakdown;
+    const diffNote = $('difficulty-bars-note');
 
-    state.charts.skills = new Chart(ctxSkills, {
-      type: 'bar',
-      data: {
-        labels: ['LC Easy', 'LC Medium', 'LC Hard', 'AtCoder', 'CSES', 'Toph'],
-        datasets: [{
-          label: 'Problems Solved',
-          data: [lcEasy, lcMed, lcHard, getSolved('atcoder'), getSolved('cses'), getSolved('toph')],
-          backgroundColor: [
-            '#10b981', // Easy - Emerald
-            '#f59e0b', // Medium - Amber
-            '#ef4444', // Hard - Red
-            '#34d399', // AtCoder
-            '#fb7185', // CSES
-            '#38bdf8'  // Toph
-          ],
-          borderRadius: 6
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            callbacks: {
-              label: (c) => ` Solved: ${c.raw.toLocaleString()}`
-            }
-          }
-        },
-        scales: {
-          x: {
-            grid: { display: false },
-            ticks: { color: '#94a3b8', font: { family: 'Inter', size: 10 } }
-          },
-          y: {
-            grid: { color: 'rgba(255,255,255,0.06)' },
-            ticks: { color: '#64748b', font: { family: 'JetBrains Mono', size: 10 } }
-          }
-        }
-      }
-    });
-  }
-}
-
-// Live Sync across platforms
-async function syncAllPlatforms() {
-  if (btnSyncAll) {
-    btnSyncAll.classList.add('syncing');
-    btnSyncAll.setAttribute('aria-busy', 'true');
-  }
-  if (syncBtnText) syncBtnText.textContent = 'Syncing...';
-
-  try {
-    const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-    
-    if (isLocal) {
-      try {
-        const res = await fetch('/api/sync', { signal: AbortSignal.timeout(8000) });
-        if (res.ok) {
-          const data = await res.json();
-          if (data.config && data.config.platforms) {
-            state.platforms = data.config.platforms;
-          }
-          if (data.config && data.config.lastUpdated) {
-            state.lastUpdated = data.config.lastUpdated;
-          }
-        }
-      } catch (e) {}
-    } else {
-      // On GitHub Pages: fetch latest config.json with cache buster
-      try {
-        const res = await fetch('config.json?t=' + Date.now(), { signal: AbortSignal.timeout(4000) });
-        if (res.ok) {
-          const data = await res.json();
-          if (data.platforms && data.platforms.length > 0) {
-            state.platforms = data.platforms;
-          }
-          if (data.lastUpdated) state.lastUpdated = data.lastUpdated;
-        }
-      } catch (e) {}
-
-      // Try quick live check for Codeforces (never regress below verified count)
-      try {
-        const cf = state.platforms.find(p => p.id === 'codeforces');
-        if (cf) {
-          const r = await fetch(`https://codeforces.com/api/user.status?handle=${encodeURIComponent(cf.handle)}`, { signal: AbortSignal.timeout(4000) });
-          const d = await r.json();
-          if (d.status === 'OK') {
-            const solved = new Set();
-            d.result.forEach(s => {
-              if (s.verdict === 'OK' && s.problem) {
-                solved.add(`${s.problem.contestId}_${s.problem.index}`);
-              }
-            });
-            // Official Codeforces profile page excludes ~15 unindexed/mashup tasks
-            const liveCount = Math.max(0, solved.size - 15);
-            const prev = parseInt(cf.solved) || 0;
-            if (liveCount > prev) {
-              cf.solved = liveCount;
-              cf.details = `${liveCount.toLocaleString()} problems solved for all time across official rounds & practice`;
-            }
-          }
-          // Refresh rating / rank too
-          try {
-            const ri = await fetch(`https://codeforces.com/api/user.info?handles=${encodeURIComponent(cf.handle)}`, { signal: AbortSignal.timeout(3000) });
-            const di = await ri.json();
-            if (di.status === 'OK' && di.result && di.result[0]) {
-              const u = di.result[0];
-              if (u.rating) cf.rating = u.rating;
-              if (u.maxRating) cf.maxRating = u.maxRating;
-              if (u.rank) {
-                const title = u.rank.charAt(0).toUpperCase() + u.rank.slice(1);
-                cf.rank = title;
-                cf.badge = `${title} (${cf.rating || u.rating})`;
-              }
-            }
-          } catch (e) {}
-        }
-      } catch (err) {}
-      if (!state.lastUpdated) state.lastUpdated = new Date().toISOString();
+    if (!mix || (!mix.easy && !mix.medium && !mix.hard)) {
+      paintBars($('bars-difficulty'), []);
+      if (diffNote) diffNote.textContent = 'Breakdown unavailable';
+      return;
     }
 
+    const sum = mix.easy + mix.medium + mix.hard;
+    paintBars($('bars-difficulty'), [
+      { label: 'Easy', value: mix.easy, share: mix.easy / sum, color: 'var(--easy)' },
+      { label: 'Medium', value: mix.medium, share: mix.medium / sum, color: 'var(--medium)' },
+      { label: 'Hard', value: mix.hard, share: mix.hard / sum, color: 'var(--hard)' }
+    ]);
+
+    if (diffNote) {
+      diffNote.textContent = `${formatInt(sum)} solved · ${Math.round((mix.hard / sum) * 100)}% hard`;
+    }
+  }
+
+  function renderNotice() {
+    const notice = $('data-notice');
+    if (notice) notice.classList.toggle('is-hidden', !state.offline);
+  }
+
+  function renderAll() {
     renderHero();
-    renderPlatforms();
-    renderCharts();
-    showToast(`⚡ All ${state.platforms.length} platforms synced & verified!`);
-  } catch (err) {
-    console.error('Sync error:', err);
-    showToast('Synced to latest verified records');
-  } finally {
-    // Guaranteed to stop spinning and reset text
-    if (btnSyncAll) {
-      btnSyncAll.classList.remove('syncing');
-      btnSyncAll.removeAttribute('aria-busy');
+    renderUpdated();
+    renderProvenance();
+    renderEmbed();
+    renderFilterCounts();
+    renderJudges();
+    renderAnalytics();
+    renderNotice();
+    state.rendered = true;
+  }
+
+  /* 5. Sync --------------------------------------------------------------- */
+
+  async function getJson(url, timeoutMs) {
+    const response = await fetch(url, { signal: AbortSignal.timeout(timeoutMs) });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    return response.json();
+  }
+
+  function codeforcesRankTitle(rating) {
+    if (rating >= 3000) return 'Legendary Grandmaster';
+    if (rating >= 2600) return 'International Grandmaster';
+    if (rating >= 2400) return 'Grandmaster';
+    if (rating >= 2300) return 'International Master';
+    if (rating >= 2100) return 'Master';
+    if (rating >= 1900) return 'Candidate Master';
+    if (rating >= 1600) return 'Expert';
+    if (rating >= 1400) return 'Specialist';
+    if (rating >= 1200) return 'Pupil';
+    return 'Newbie';
+  }
+
+  /* The headline badge tracks the PEAK, so a live dip never downgrades it. */
+  function applyCodeforcesLive(platform, info, liveSolved) {
+    if (typeof liveSolved === 'number' && liveSolved > platform.solved) {
+      platform.solved = liveSolved;
     }
-    if (syncBtnText) syncBtnText.textContent = 'Sync Live';
-  }
-}
-
-// Share helpers — copy link / embed badge
-function initShareHelpers() {
-  const btnCopy = document.getElementById('btn-copy-link');
-  const btnEmbed = document.getElementById('btn-copy-embed');
-  const url = 'https://ahsanjust.github.io/cp-tracker/';
-  if (btnCopy) {
-    btnCopy.addEventListener('click', async () => {
-      try {
-        await navigator.clipboard.writeText(url);
-        showToast('🔗 Portfolio link copied to clipboard!');
-      } catch (e) {
-        showToast(url);
-      }
-    });
-  }
-  if (btnEmbed) {
-    btnEmbed.addEventListener('click', async () => {
-      const md = `[![CP Tracker — 5,616+ Solved](${url}assets/og_preview.png)](${url})`;
-      try {
-        await navigator.clipboard.writeText(md);
-        showToast('📋 Embed markdown copied!');
-      } catch (e) {
-        showToast('Copy failed — select manually');
-      }
-    });
-  }
-}
-
-// Initialize Application
-async function init() {
-  initRevealObserver();
-
-  // Always start with default verified config immediately
-  state.platforms = [...DEFAULT_CONFIG.platforms];
-  state.user = DEFAULT_CONFIG.user;
-
-  // Check if config.json has any newer updates
-  try {
-    const res = await fetch('config.json');
-    if (res.ok) {
-      const remoteConfig = await res.json();
-      if (remoteConfig.platforms && remoteConfig.platforms.length > 0) {
-        state.platforms = remoteConfig.platforms;
-      }
-      if (remoteConfig.user) {
-        state.user = remoteConfig.user;
-      }
-      if (remoteConfig.lastUpdated) {
-        state.lastUpdated = remoteConfig.lastUpdated;
-      }
+    const peak = Math.max(Number(platform.rating) || 0, Number(info.maxRating) || 0, Number(info.rating) || 0);
+    if (peak > 0) {
+      platform.rating = peak;
+      platform.rank = codeforcesRankTitle(peak);
+      platform.badge = `${platform.rank} (${peak})`;
+      const current = info.rating ? `Current ${info.rating} • ` : '';
+      platform.details = `${current}Peak ${peak} (${platform.rank}) • ${formatInt(platform.solved)} problems solved across official rounds & practice`;
     }
-  } catch (e) {}
+  }
 
-  // Filter Pills event listeners (with aria-selected)
-  filterPills.forEach(pill => {
-    pill.addEventListener('click', () => {
-      filterPills.forEach(p => {
-        p.classList.remove('active');
-        p.setAttribute('aria-selected', 'false');
+  function applyConfig(config) {
+    if (Array.isArray(config.platforms) && config.platforms.length) {
+      state.platforms = config.platforms.map(normalize);
+    }
+    if (config.lastUpdated) state.updatedAt = config.lastUpdated;
+  }
+
+  function showToast(message, tone) {
+    const toast = $('toast');
+    const text = $('toast-text');
+    const icon = $('toast-icon');
+    if (!toast || !text) return;
+
+    text.textContent = message;
+    toast.classList.toggle('toast--ok', tone === 'ok');
+    toast.classList.toggle('toast--warn', tone === 'warn');
+
+    if (icon) {
+      icon.innerHTML = tone === 'warn'
+        ? '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.2v.1"/></svg>'
+        : '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4.5 4.5L19 7"/></svg>';
+    }
+
+    toast.classList.add('is-visible');
+    clearTimeout(showToast.timer);
+    showToast.timer = setTimeout(() => toast.classList.remove('is-visible'), 3600);
+  }
+
+  /* Identifies the rendered record, so an unchanged config refresh can skip
+     rebuilding 14 cards and 17 bars (and the scroll reveal that goes with it). */
+  const signature = () => state.platforms
+    .map((p) => [p.id, p.solved, p.rating, p.rank, p.badge, p.details].join('|'))
+    .join('#');
+
+  async function syncLive() {
+    const button = $('btn-sync');
+    const label = $('sync-label');
+    if (!button || button.getAttribute('aria-busy') === 'true') return;
+
+    button.setAttribute('aria-busy', 'true');
+    if (label) label.textContent = 'Syncing…';
+
+    const isLocalServer = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+    const before = signature();
+    let reachable = false;    // at least one live source answered
+    let configLoaded = false; // an authoritative timestamp was received
+    let liveTouched = false;  // a browser-side fetch changed the record
+
+    try {
+      if (isLocalServer) {
+        // sync_server.py performs the real per-judge fetches; the page just asks.
+        try {
+          const payload = await getJson('/api/sync', 20000);
+          if (payload && payload.config) {
+            applyConfig(payload.config);
+            reachable = true;
+            configLoaded = true;
+          }
+        } catch (error) { /* not running the sync server — use the static path */ }
+      }
+
+      if (!configLoaded) {
+        // Static hosting: refresh from the deployed config, then top up the one
+        // judge that is safe to query directly from the browser.
+        try {
+          applyConfig(await getJson(`config.json?t=${Date.now()}`, 6000));
+          reachable = true;
+          configLoaded = true;
+        } catch (error) { /* fall through to the Codeforces refresh */ }
+
+        const codeforces = state.platforms.find((p) => p.id === 'codeforces');
+        if (codeforces) {
+          const cfKey = (p) => [p.solved, p.rating, p.rank, p.badge, p.details].join('|');
+          const cfBefore = cfKey(codeforces);
+          let liveSolved;
+          try {
+            const status = await getJson(
+              `https://codeforces.com/api/user.status?handle=${encodeURIComponent(codeforces.handle)}`, 6000);
+            if (status && status.status === 'OK' && Array.isArray(status.result)) {
+              const solved = new Set();
+              status.result.forEach((submission) => {
+                if (submission.verdict === 'OK' && submission.problem) {
+                  solved.add(`${submission.problem.contestId}_${submission.problem.index}`);
+                }
+              });
+              // The public profile excludes ~15 unindexed / mashup tasks.
+              // Keep in step with the equivalent offset in sync_server.py.
+              liveSolved = Math.max(0, solved.size - 15);
+              reachable = true;
+            }
+          } catch (error) { /* best effort */ }
+
+          try {
+            const info = await getJson(
+              `https://codeforces.com/api/user.info?handles=${encodeURIComponent(codeforces.handle)}`, 5000);
+            if (info && info.status === 'OK' && info.result && info.result[0]) {
+              applyCodeforcesLive(codeforces, info.result[0], liveSolved);
+              reachable = true;
+            }
+          } catch (error) { /* best effort */ }
+
+          if (cfKey(codeforces) !== cfBefore) liveTouched = true;
+        }
+      }
+    } finally {
+      button.setAttribute('aria-busy', 'false');
+      if (label) label.textContent = 'Sync live';
+    }
+
+    if (!reachable) {
+      showToast('Live sync needs the local server (python3 sync_server.py) or the deployed site.', 'warn');
+      return;
+    }
+
+    // The timestamp has to describe the record on screen: stamp now when a
+    // browser-side fetch changed it, otherwise config.json stays authoritative.
+    if (!configLoaded || liveTouched) state.updatedAt = new Date().toISOString();
+    // Only a full record load clears the snapshot warning; refreshing one judge
+    // does not make the other thirteen current.
+    if (configLoaded) state.offline = false;
+
+    const shown = `${formatInt(totalSolved())} problems across ${visiblePlatforms().length} judges`;
+    if (signature() !== before) {
+      renderAll();
+      showToast(liveTouched ? `Codeforces refreshed — ${shown}` : `Updated — ${shown}`, 'ok');
+    } else {
+      renderUpdated();
+      renderNotice();
+      showToast(`Already up to date — ${shown}`, 'ok');
+    }
+  }
+
+  async function loadConfig() {
+    const before = signature();
+    try {
+      applyConfig(await getJson(`config.json?t=${Date.now()}`, 8000));
+      state.offline = false;
+    } catch (error) {
+      state.offline = true;
+    }
+
+    if (state.offline || signature() !== before) {
+      renderAll();
+    } else {
+      renderUpdated();
+    }
+  }
+
+  /* 6. Interaction & init ------------------------------------------------- */
+
+  let revealObserver = null;
+
+  function initReveal() {
+    if (!('IntersectionObserver' in window) || reduceMotion()) return;
+    revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-in');
+        revealObserver.unobserve(entry.target);
       });
-      pill.classList.add('active');
-      pill.setAttribute('aria-selected', 'true');
-      state.activeFilter = pill.getAttribute('data-filter');
-      renderPlatforms();
-    });
-  });
-
-  // Search
-  if (searchInputEl) {
-    let debounce = null;
-    searchInputEl.addEventListener('input', (e) => {
-      clearTimeout(debounce);
-      debounce = setTimeout(() => {
-        state.searchQuery = e.target.value || '';
-        renderPlatforms();
-      }, 160);
-    });
+    }, { threshold: 0, rootMargin: '0px 0px -8% 0px' });
   }
 
-  // Sort
-  if (sortSelectEl) {
-    sortSelectEl.addEventListener('change', (e) => {
-      state.sortBy = e.target.value;
-      renderPlatforms();
-    });
+  /* `immediate` is used for re-renders (filters, dedup) where the content must
+     appear at once — waiting a frame could leave a card invisible if frames
+     are starved. The scroll reveal is reserved for the initial paint. */
+  function reveal(el, immediate) {
+    if (!el) return;
+    if (immediate || !revealObserver) {
+      el.classList.add('is-in');
+      return;
+    }
+    el.classList.remove('is-in');
+    revealObserver.observe(el);
   }
 
-  // Deduplication toggle
-  if (toggleDedup) {
-    toggleDedup.addEventListener('change', (e) => {
-      state.deduplicateVJudge = e.target.checked;
+  function setFilter(value) {
+    state.filter = value;
+    const group = $('judge-filter');
+    if (group) {
+      group.querySelectorAll('.seg__btn').forEach((button) => {
+        button.setAttribute('aria-pressed', String(button.dataset.filter === value));
+      });
+    }
+    renderJudges();
+  }
+
+  function initFilter() {
+    const group = $('judge-filter');
+    if (group) {
+      group.addEventListener('click', (event) => {
+        const button = event.target.closest('.seg__btn');
+        if (button && group.contains(button)) setFilter(button.dataset.filter);
+      });
+
+      group.addEventListener('keydown', (event) => {
+        if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
+        const buttons = Array.from(group.querySelectorAll('.seg__btn'));
+        const index = buttons.indexOf(document.activeElement);
+        if (index === -1) return;
+        event.preventDefault();
+        const next = buttons[(index + (event.key === 'ArrowRight' ? 1 : -1) + buttons.length) % buttons.length];
+        next.focus();
+      });
+    }
+
+    const clear = document.querySelector('[data-clear-filter]');
+    if (clear) clear.addEventListener('click', () => setFilter('all'));
+  }
+
+  function initDedup() {
+    const toggle = $('toggle-dedup');
+    if (!toggle) return;
+    toggle.addEventListener('change', () => {
+      state.dedup = toggle.checked;
       renderHero();
-      renderCharts();
+      renderJudges();
+      renderAnalytics();
     });
   }
 
-  // Sync Live button
-  if (btnSyncAll) {
-    btnSyncAll.addEventListener('click', syncAllPlatforms);
+  function initHeader() {
+    const header = $('site-header');
+    if (!header) return;
+    // A single class toggle is cheap enough to run per scroll event, and doing
+    // it directly means the state can never lag behind the viewport.
+    const update = () => header.classList.toggle('is-stuck', window.scrollY > 8);
+    window.addEventListener('scroll', update, { passive: true });
+    update();
   }
 
-  initShareHelpers();
+  function initAvatar() {
+    const image = $('user-avatar');
+    if (!image) return;
+    image.addEventListener('error', () => {
+      const monogram = document.createElement('span');
+      monogram.className = 'identity__avatar identity__avatar--text';
+      monogram.setAttribute('role', 'img');
+      monogram.setAttribute('aria-label', 'Ahsanul Haque');
+      monogram.textContent = 'AH';
+      image.replaceWith(monogram);
+    }, { once: true });
+  }
 
-  // Render Everything Immediately
-  renderHero();
-  renderPlatforms();
-  setTimeout(renderCharts, 300);
-  window.addEventListener('resize', () => {
-    // Re-render charts once after resize settles so legends adapt to mobile
-    clearTimeout(window.__cpResizeT);
-    window.__cpResizeT = setTimeout(renderCharts, 250);
-  });
-}
+  async function copyText(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+      try {
+        // Bounded: a clipboard write that never settles must not leave the
+        // button silent, so fall back to the legacy path instead of hanging.
+        await Promise.race([
+          navigator.clipboard.writeText(text),
+          new Promise((_, reject) => setTimeout(() => reject(new Error('clipboard timeout')), 1200))
+        ]);
+        return true;
+      } catch (error) { /* fall through to the legacy path */ }
+    }
 
-// Run on load
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', init);
-} else {
-  init();
-}
+    try {
+      const scratch = document.createElement('textarea');
+      scratch.value = text;
+      scratch.setAttribute('readonly', '');
+      scratch.style.position = 'fixed';
+      scratch.style.top = '-1000px';
+      document.body.appendChild(scratch);
+      scratch.select();
+      const copied = document.execCommand('copy');
+      scratch.remove();
+      return copied;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  function initCopy() {
+    document.querySelectorAll('.copy-btn').forEach((button) => {
+      const original = button.innerHTML;
+      button.addEventListener('click', async () => {
+        const target = $(button.dataset.copyTarget);
+        if (!target) return;
+        const copied = await copyText(target.textContent.trim());
+        if (!copied) {
+          showToast('Copy failed — select the text manually', 'warn');
+          return;
+        }
+        showToast('Copied to clipboard', 'ok');
+        button.textContent = 'Copied';
+        clearTimeout(button.cpTimer);
+        button.cpTimer = setTimeout(() => { button.innerHTML = original; }, 1800);
+      });
+    });
+  }
+
+  function initSyncButton() {
+    const button = $('btn-sync');
+    if (button) button.addEventListener('click', syncLive);
+  }
+
+  async function init() {
+    const sub = $('hero-sub');
+    baseHeroSub = sub ? sub.textContent : '';
+
+    state.platforms = SNAPSHOT.platforms.map(normalize);
+    state.updatedAt = SNAPSHOT.lastUpdated;
+
+    initReveal();
+    initHeader();
+    initAvatar();
+    initFilter();
+    initDedup();
+    initCopy();
+    initSyncButton();
+
+    // Paint the verified snapshot immediately; refresh in the background.
+    renderAll();
+    await loadConfig();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
