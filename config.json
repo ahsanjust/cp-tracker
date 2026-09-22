@@ -13,7 +13,7 @@
       "name": "Codeforces",
       "handle": "Ahsan_",
       "profileUrl": "https://codeforces.com/profile/Ahsan_",
-      "solved": 3185,
+      "solved": 3190,
       "rating": 1774,
       "rank": "Expert",
       "maxRating": 1774,
@@ -25,7 +25,7 @@
       "category": "competitive",
       "fetchType": "codeforces_api",
       "icon": "cf",
-      "details": "Current 1478 \u2022 Peak 1774 (Expert) \u2022 3,185 problems solved across official rounds & practice"
+      "details": "Current 1478 \u2022 Peak 1774 (Expert) \u2022 3,190 problems solved across official rounds & practice"
     },
     {
       "id": "vjudge",
@@ -48,7 +48,7 @@
       "name": "LeetCode",
       "handle": "Ahsanul_haque_",
       "profileUrl": "https://leetcode.com/u/Ahsanul_haque_/",
-      "solved": 367,
+      "solved": 368,
       "rating": 2142,
       "rank": "Guardian",
       "badge": "Guardian (Top 1.24%)",
@@ -59,7 +59,7 @@
       "icon": "lc",
       "breakdown": {
         "easy": 125,
-        "medium": 169,
+        "medium": 170,
         "hard": 73
       },
       "details": "Rating: 2142 \u2022 Top 1.24% worldwide \u2022 72 Hard solves"
@@ -114,7 +114,7 @@
       "handle": "AHSANx",
       "profileUrl": "https://atcoder.jp/users/AHSANx",
       "solved": 148,
-      "rank": "Rank 45,725",
+      "rank": "Rank 45,734",
       "badge": "148 Solved",
       "color": "#10B981",
       "accentColor": "#34D399",
@@ -226,5 +226,5 @@
       "details": "Rating: 650 Expert \u2022 272 Submissions \u2022 89 Accepted \u2022 Band 500-700"
     }
   ],
-  "lastUpdated": "2026-09-21T01:52:59.534492+00:00"
+  "lastUpdated": "2026-09-22T00:25:39.645134+00:00"
 }
