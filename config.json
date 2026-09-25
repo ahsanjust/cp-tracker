@@ -13,7 +13,7 @@
       "name": "Codeforces",
       "handle": "Ahsan_",
       "profileUrl": "https://codeforces.com/profile/Ahsan_",
-      "solved": 3190,
+      "solved": 3193,
       "rating": 1774,
       "rank": "Expert",
       "maxRating": 1774,
@@ -25,7 +25,7 @@
       "category": "competitive",
       "fetchType": "codeforces_api",
       "icon": "cf",
-      "details": "Current 1545 \u2022 Peak 1774 (Expert) \u2022 3,190 problems solved across official rounds & practice"
+      "details": "Current 1545 \u2022 Peak 1774 (Expert) \u2022 3,193 problems solved across official rounds & practice"
     },
     {
       "id": "vjudge",
@@ -114,7 +114,7 @@
       "handle": "AHSANx",
       "profileUrl": "https://atcoder.jp/users/AHSANx",
       "solved": 148,
-      "rank": "Rank 45,754",
+      "rank": "Rank 45,767",
       "badge": "148 Solved",
       "color": "#10B981",
       "accentColor": "#34D399",
@@ -128,8 +128,8 @@
       "name": "LightOJ",
       "handle": "ahsanul_haque99",
       "profileUrl": "https://lightoj.com/user/ahsanul_haque99",
-      "solved": 139,
-      "badge": "187 AC Submissions",
+      "solved": 154,
+      "badge": "202 AC Submissions",
       "color": "#6366F1",
       "accentColor": "#818CF8",
       "category": "national",
@@ -226,5 +226,5 @@
       "details": "Rating: 650 Expert \u2022 272 Submissions \u2022 89 Accepted \u2022 Band 500-700"
     }
   ],
-  "lastUpdated": "2026-09-24T00:25:01.924792+00:00"
+  "lastUpdated": "2026-09-25T00:26:21.813130+00:00"
 }
