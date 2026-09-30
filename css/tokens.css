@@ -106,5 +106,10 @@
   --transition-fast: 0.18s cubic-bezier(0.16, 1, 0.3, 1);
   --transition-normal: 0.28s cubic-bezier(0.16, 1, 0.3, 1);
 
+  /* Enchanting motion rhythm (one system, five moments) */
+  --motion-blur-in: 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  --motion-split-in: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  --motion-stagger-w: 60ms;
+
   color-scheme: dark;
 }

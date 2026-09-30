@@ -91,6 +91,7 @@
            claim on each judge's published tier ladder. The scoreboard is rendered from
            config.json, so it can never drift from the numbers further down. -->
       <section class="hero" aria-labelledby="hero-title">
+        <canvas class="hero__field" id="hero-field" aria-hidden="true"></canvas>
         <div class="hero__grid">
           <div class="hero__claim">
             <h1 class="hero__title" id="hero-title">
@@ -429,5 +430,7 @@
   </div>
 
   <script defer src="app.js"></script>
+  <script defer src="js/dot-field.js"></script>
+  <script defer src="js/motion.js"></script>
 </body>
 </html>

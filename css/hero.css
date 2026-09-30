@@ -79,7 +79,8 @@
   font-size: clamp(3.5rem, 8vw, 7.8rem);
   font-weight: 700;
   line-height: 0.92;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.045em;
+  font-feature-settings: "tnum" 1, "ss01" 1;
   color: #ffffff;
   background: linear-gradient(180deg, #ffffff 15%, #cbd5e1 90%);
   -webkit-background-clip: text;

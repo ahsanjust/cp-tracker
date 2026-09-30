@@ -190,10 +190,16 @@ hidden behind an invisible horizontal scroll reads as a broken field.
 
 Motion is limited to five purposeful moments: the count-up on first paint, a single
 fade-and-rise as cards and bars enter the viewport, the sync spinner, the tab underline
-sliding between filters, and the difficulty bands growing once. Two cues loop, and both
+sliding between filters, and the difficulty bands growing once. Layered on top are
+three quiet enchantments, all vanilla ports of the PeerHive React Bits arsenal
+(`docs/reference_designs/creative_components/`): a DotField living grid behind the
+hero (`js/dot-field.js`, `css/motion.css`), word-level blur/split entrances for
+headlines and notes (`js/motion.js`), and a ±12px scroll-tied drift on section
+titles. Two cues loop, and both
 encode state rather than decorate: the live dot's slow pulse, and the sync spinner while
 a request is in flight. All of them collapse to instant under
-`prefers-reduced-motion: reduce`. Nothing floats. Hover only clarifies — a border, a
+`prefers-reduced-motion: reduce` or `?no-fx` (pixel-identical numbers, `no-fx`
+audit flag). Nothing floats. Hover only clarifies — a border, a
 surface, a 2px rule growing into the ledger row being read — and the underline is
 re-measured on resize and on `document.fonts.ready`, because a web font arriving after
 first paint would otherwise leave it too short to match its tab.

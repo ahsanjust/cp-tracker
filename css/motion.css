@@ -1,0 +1,99 @@
+/* 15. Enchanting motion (vanilla ports of React Bits) ==========================
+   DotField (02) -> .hero__field canvas | BlurText (08) -> [data-fx="blur"]
+   SplitText (07) -> [data-fx="split"] | ScrollFloat (09) -> [data-fx="float"]
+   DitherVeil (10) idea -> avatar veil. Zero dependencies, transform/opacity
+   only (no layout shift). Killed by prefers-reduced-motion or ?no-fx.
+   ========================================================================== */
+
+.hero__field {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+/* Blur-in by words (BlurText idea, CSS-only) */
+[data-fx="blur"] .fx-w {
+  display: inline-block;
+  opacity: 0;
+  filter: blur(6px);
+  transform: translateY(8px);
+  transition: opacity 0.45s var(--ease-spring), filter 0.45s var(--ease-spring),
+    transform 0.45s var(--ease-spring);
+  transition-delay: calc(var(--i, 0) * 60ms);
+  will-change: opacity, filter, transform;
+}
+
+[data-fx="blur"].is-in .fx-w {
+  opacity: 1;
+  filter: blur(0);
+  transform: none;
+}
+
+/* Split cascade for short H2s (SplitText idea) */
+[data-fx="split"] .fx-w {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(0.55em);
+  transition: opacity 0.5s var(--ease-spring), transform 0.5s var(--ease-spring);
+  transition-delay: calc(var(--i, 0) * 45ms);
+  will-change: opacity, transform;
+}
+
+[data-fx="split"].is-in .fx-w {
+  opacity: 1;
+  transform: none;
+}
+
+/* Scroll-tied drift for eyebrows/dividers (ScrollFloat idea, ±6% max) */
+[data-fx="float"] {
+  will-change: transform;
+}
+
+/* Avatar veil (DitherVeil idea, CSS-only duotone dissolve) */
+.identity__avatar {
+  filter: saturate(0.82) contrast(1.06);
+}
+
+.identity:hover .identity__avatar,
+.identity:focus-visible .identity__avatar {
+  filter: none;
+}
+
+/* Motion kill-switches: reduced motion OR ?no-fx audit flag */
+@media (prefers-reduced-motion: reduce) {
+  .hero__field {
+    display: none;
+  }
+
+  [data-fx="blur"] .fx-w,
+  [data-fx="split"] .fx-w {
+    opacity: 1;
+    filter: none;
+    transform: none;
+    transition: none;
+  }
+
+  [data-fx="float"] {
+    transform: none !important;
+  }
+}
+
+html.no-fx .hero__field {
+  display: none;
+}
+
+html.no-fx [data-fx="blur"] .fx-w,
+html.no-fx [data-fx="split"] .fx-w {
+  opacity: 1;
+  filter: none;
+  transform: none;
+  transition: none;
+}
+
+html.no-fx [data-fx="float"] {
+  transform: none !important;
+}

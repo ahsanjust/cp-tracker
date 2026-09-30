@@ -266,6 +266,14 @@
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid var(--line-subtle);
   transition: all var(--transition-fast);
+  position: relative;
+}
+
+/* 44px WCAG target via invisible hit area; visual stays 32px. */
+.judge-card__link::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
 }
 
 .judge-card__link:hover,
