@@ -102,12 +102,27 @@
   font-weight: 600;
 }
 
+/* The trust figure is a link to the Method note that defines it. */
+.distinct-link {
+  color: inherit;
+  text-decoration: underline dotted;
+  text-underline-offset: 0.25em;
+  text-decoration-color: var(--text-3);
+  border-radius: var(--r-1);
+}
+
+.distinct-link:hover {
+  color: var(--text-1);
+  text-decoration-color: var(--accent);
+}
+
 .hero__sub {
   max-width: 52ch;
   margin-top: var(--s-4);
   font-size: var(--fs-base);
   color: var(--text-3);
   line-height: 1.6;
+  text-wrap: pretty;
 }
 
 /* Editorial results preview: clean hairline rows with hover accent */

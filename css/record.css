@@ -28,10 +28,14 @@
 }
 
 .band__title {
-  font-size: var(--fs-xl);
-  font-weight: 600;
+  font-family: var(--serif);
+  font-optical-sizing: auto;
+  font-size: clamp(30px, 3vw, 36px);
+  font-weight: 400;
+  line-height: 1.15;
   color: #ffffff;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
 }
 
 .band__note {
@@ -39,6 +43,12 @@
   color: var(--text-2);
   max-width: 58ch;
   line-height: 1.5;
+  text-wrap: pretty;
+}
+
+/* Anchor target for the hero's distinct-count link: clear the sticky header. */
+#record-method {
+  scroll-margin-top: calc(var(--header-h) + 16px);
 }
 
 /* --- Record Inspector: Floating Glass HUD Card --------------------------- */

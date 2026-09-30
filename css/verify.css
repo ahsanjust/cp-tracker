@@ -113,6 +113,76 @@
   font-size: var(--fs-sm);
   color: var(--text-3);
   line-height: 1.6;
+  text-wrap: pretty;
+}
+
+/* Contact line — one mono address, one hairline, no animation. */
+.footer-contact {
+  display: block;
+  padding-bottom: var(--s-6);
+  margin-bottom: var(--s-6);
+  border-bottom: 1px solid var(--line);
+  font-family: var(--mono);
+  font-weight: 500;
+  font-size: clamp(24px, 4.5vw, 56px);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--text-2);
+  overflow-wrap: anywhere;
+}
+
+.footer-contact:hover {
+  color: var(--text-1);
+}
+
+/* Verify FAQ — hairline rows, mono +/−, no new colour. Works with JS off. */
+.faq {
+  margin-top: var(--s-8);
+  border-bottom: 1px solid var(--line);
+}
+
+.faq__row {
+  border-top: 1px solid var(--line);
+}
+
+.faq__q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-4);
+  min-height: 44px;
+  padding: var(--s-3) 0;
+  font-size: var(--fs-base);
+  font-weight: 500;
+  color: var(--text-1);
+  cursor: pointer;
+  list-style: none;
+}
+
+.faq__q::-webkit-details-marker {
+  display: none;
+}
+
+.faq__q::after {
+  content: "+";
+  flex: none;
+  font-family: var(--mono);
+  font-size: var(--fs-base);
+  color: var(--text-3);
+}
+
+.faq__row[open] .faq__q::after {
+  content: "−";
+  color: var(--accent);
+}
+
+.faq__a {
+  max-width: 70ch;
+  padding-bottom: var(--s-4);
+  font-size: var(--fs-sm);
+  color: var(--text-2);
+  line-height: 1.6;
+  text-wrap: pretty;
 }
 
 /* 13. Toast Notification =================================================== */

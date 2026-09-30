@@ -295,12 +295,13 @@
 
   /* 4. Renderers ---------------------------------------------------------- */
 
-  function countUp(el, target) {
+  function countUp(el, target, delay) {
     if (!el) return;
     const from = Number(String(el.textContent).replace(/[^0-9]/g, '')) || 0;
 
     if (el.cpRaf) cancelAnimationFrame(el.cpRaf);
     clearTimeout(el.cpTimer);
+    clearTimeout(el.cpDelay);
 
     if (reduceMotion() || from === target) {
       el.textContent = formatInt(target);
@@ -318,13 +319,23 @@
       el.cpRaf = requestAnimationFrame(step);
     };
 
-    el.cpRaf = requestAnimationFrame(step);
-    // Frames pause in background tabs; this guarantees the exact figure lands.
-    el.cpTimer = setTimeout(finish, duration + 300);
+    const run = () => {
+      el.cpRaf = requestAnimationFrame(step);
+      // Frames pause in background tabs; this guarantees the exact figure lands.
+      el.cpTimer = setTimeout(finish, duration + 300);
+    };
+
+    // First paint only: the numeral starts 120ms in, after the eyebrow and
+    // name have landed (see js/motion.js choreography).
+    if (delay > 0) el.cpDelay = setTimeout(run, delay);
+    else run();
   }
 
+  let heroFirstPaint = true;
+
   function renderHero() {
-    countUp($('hero-total'), totalSolved());
+    countUp($('hero-total'), totalSolved(), heroFirstPaint ? 120 : 0);
+    heroFirstPaint = false;
 
     // The claim reads "Tracking N problems across M online judges", so M is how
     // many judges are tracked, not how many contributed. Excluding Virtual Judge
@@ -333,7 +344,7 @@
     if (judges) judges.textContent = String(state.platforms.length);
 
     // The headline figure changes meaning with the toggle, so the line that
-    // reads it changes with it: "5,033 ... of which at least 5,033 are distinct"
+    // reads it changes with it: "N ... of which at least N are distinct"
     // would be nonsense. The method note beside the record bar explains the
     // duplication itself, which is where the question is actually asked.
     const sumUnit = $('hero-unit-sum');

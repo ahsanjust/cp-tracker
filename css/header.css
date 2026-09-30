@@ -72,10 +72,12 @@
 
 .identity__name {
   display: block;
-  font-size: var(--fs-base);
-  font-weight: 600;
-  letter-spacing: var(--track-tight);
-  line-height: 1.3;
+  font-family: var(--serif);
+  font-optical-sizing: auto;
+  font-size: 19px;
+  font-weight: 400;
+  letter-spacing: -0.005em;
+  line-height: 1.2;
   color: #ffffff;
   white-space: nowrap;
   overflow: hidden;

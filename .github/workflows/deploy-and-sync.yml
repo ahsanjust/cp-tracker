@@ -29,7 +29,7 @@ jobs:
           python-version: '3.12'
 
       - name: Install requests
-        run: pip install requests
+        run: pip install requests pillow
 
       - name: Run Live Sync Engine
         run: |
@@ -50,12 +50,20 @@ jobs:
               print('Saved updated config.json')
           "
 
+      - name: Stamp static figures & render OG card
+        run: |
+          python3 scripts/stamp_site.py
+          python3 scripts/render_og.py
+
+      - name: Verify stamped figures
+        run: python3 scripts/stamp_site.py --check
+
       - name: Commit & push updated stats
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          if [[ -n $(git status -s config.json) ]]; then
-            git add config.json
+          git add config.json index.html README.md assets/og_preview.png
+          if [[ -n $(git status -s config.json index.html README.md assets/og_preview.png) ]]; then
             git commit -m "Auto-sync CP statistics [skip ci]"
             git push
           else

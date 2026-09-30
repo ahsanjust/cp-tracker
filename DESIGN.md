@@ -9,8 +9,11 @@ Update it when the system changes so the code and the intent never drift apart.
 ## 1. The product
 
 **What it is.** A single-page, static, publicly hosted record of one competitive
-programmer's solved-problem history: 5,616 problems across 14 online judges, refreshed
+programmer's solved-problem history across 14 online judges, refreshed
 daily by automation and verifiable click-by-click against live judge profiles.
+(Live totals move daily — `config.json` is the source of truth; this document
+never hard-codes a solve count. `scripts/stamp_site.py` keeps the static
+surfaces — `<title>`, meta/OG tags, hero fallback, README — in step with it.)
 
 **Who it is for.**
 
@@ -109,25 +112,28 @@ Dark, near-neutral ink. Verified against WCAG AA on every surface.
 
 Elevation is expressed with hairline borders (`--line` is ~9% white over `--ink`) and
 a 2–3% brightness step between surfaces — never with a shadow. The only light in the
-system sits behind the hero: a 64px hairline grid and one accent wash, both under 10%
+system sits behind the hero: a 56px hairline grid and one accent wash, both under 10%
 opacity, both inert, the grid faded by a radial mask so it reads as an instrument panel
 rather than a tiled background. Verified in the rendered pixels: grid lines land at
-exactly 64px and the wash measures +7 blue over the control region.
+exactly 56px and the wash measures +7 blue over the control region.
 
 Judge brand colours appear **only** as a 14%-tinted icon chip and its glyph, using
 `accentColor` (the lighter variant) so dark brands stay legible.
 
 ### Typography
 
-Two families. `Inter` (400/500/600) for everything structural; `JetBrains Mono`
-(500/600) for every number, handle and code token, with `tabular-nums`.
-`Outfit` was removed — a third family at weights 800/900 was the main "student project"
-tell.
+Three families, each with one job. `Inter` (400/500/600) for everything structural;
+`Newsreader` (400 only, display optical size) for the owner's name and section titles —
+the editorial voice the page was missing; `JetBrains Mono` (500/600) for every number,
+handle and code token, with `tabular-nums`. `Outfit` was removed — a third family at
+weights 800/900 was the main "student project" tell — and the serif is fenced to
+display use only (`--serif` appears in exactly three selectors), so numerals and body
+never change voice. Georgia is the fallback; `display=swap` keeps CLS at zero.
 
 | Step | Size | Use |
 | :-- | :-- | :-- |
-| *hero numeral* | `clamp(60px, 12.5vw, 152px)` | The headline total (a one-off clamp, not a token) |
-| `--fs-2xl` | 28px | Section titles |
+| *hero numeral* | `clamp(3.5rem, 8vw, 7.8rem)` | The headline total (a one-off clamp, not a token) |
+| `--fs-2xl` | 28px | Section titles (serif renders at `clamp(30px, 3vw, 36px)` — larger, because serif 400 reads lighter than Inter 600) |
 | `--fs-xl` | 22px | Count-up value, panel titles |
 | `--fs-lg` | 17px | Card titles, lead text |
 | `--fs-base` | 15px | Body |
@@ -190,16 +196,25 @@ hidden behind an invisible horizontal scroll reads as a broken field.
 
 Motion is limited to five purposeful moments: the count-up on first paint, a single
 fade-and-rise as cards and bars enter the viewport, the sync spinner, the tab underline
-sliding between filters, and the difficulty bands growing once. Layered on top are
-three quiet enchantments, all vanilla ports of the PeerHive React Bits arsenal
-(`docs/reference_designs/creative_components/`): a DotField living grid behind the
-hero (`js/dot-field.js`, `css/motion.css`), word-level blur/split entrances for
-headlines and notes (`js/motion.js`), and a ±12px scroll-tied drift on section
-titles. Two cues loop, and both
+sliding between filters, and the difficulty bands growing once. Two quiet atmospheric
+effects are allowed on top, both zero-dependency vanilla ports of the PeerHive React
+Bits arsenal, both honest about the contract's "nothing floats" rule because neither
+moves content: (1) a DotField living dot-grid behind the hero (`js/dot-field.js`) that
+is idle-quiescent — no `requestAnimationFrame` loop while the pointer is still, one
+static frame otherwise, DPR capped at 1.5, masked so it frames the numeral instead of
+sitting behind it, disabled on coarse pointers and `saveData`; (2) a single hero
+entrance (`js/motion.js`) — eyebrow and name at 0ms, the count-up starting at 120ms
+for 900ms, lead/results/CTAs at 420ms — opacity plus 8px rise, no blur, H1 text
+untouched. Killed in triage for cause: word-level blur/split on H2s and notes
+(template-demo tell that delays scanning), the ±12px scroll-tied title drift (decouples
+titles from the hairline grid), the avatar veil (invisible at 54px), and every
+WebGL/GSAP piece (new failure mode on a page that sells reliability). Two cues loop,
+and both
 encode state rather than decorate: the live dot's slow pulse, and the sync spinner while
 a request is in flight. All of them collapse to instant under
 `prefers-reduced-motion: reduce` or `?no-fx` (pixel-identical numbers, `no-fx`
-audit flag). Nothing floats. Hover only clarifies — a border, a
+audit flag). With the pointer still for more than 1s the FPS meter shows no rAF
+activity. Hover only clarifies — a border, a
 surface, a 2px rule growing into the ledger row being read — and the underline is
 re-measured on resize and on `document.fonts.ready`, because a web font arriving after
 first paint would otherwise leave it too short to match its tab.
@@ -260,8 +275,9 @@ real UI and asserts the outcome of every workflow.
 
 56 assertions covering the real user paths, passing at 320 / 390 / 1440px over HTTP:
 category filters (6/3/5 cards) and the tab underline's alignment on each, the forced
-empty state and its reset, the deduplicate toggle (5,616 → 5,033, Virtual Judge flagged
-excluded, distribution drops to 13 rows and re-sums to 5,033, restored on toggle-off),
+empty state and its reset, the deduplicate toggle (total → total minus Virtual Judge,
+Virtual Judge flagged excluded, distribution drops to 13 rows and re-sums to the
+deduplicated figure, restored on toggle-off),
 the difficulty stack (3 bands, percentages summing to 100, and each drawn band matching
 its printed percentage to within 1.5%), sticky-header state, offline notice, clipboard
 feedback, and the sync button's busy → idle → outcome cycle including a double-fire guard.
@@ -269,7 +285,7 @@ feedback, and the sync button's busy → idle → outcome cycle including a doub
 ### Data integrity
 
 The inline offline snapshot is verified field-by-field against `config.json`: same order,
-same 13 rendered fields, same per-judge breakdowns, same 5,616 total.
+same 13 rendered fields, same per-judge breakdowns, same total as `config.json`.
 
 ### Known limitations
 

@@ -32,7 +32,7 @@
   /* High-Contrast Typographic Hierarchy */
   --text-1: #f8fafc; /* Purest display text */
   --text-2: #94a3b8; /* Secondary metrics & metadata */
-  --text-3: #64748b; /* Tertiary captions & notes */
+  --text-3: #8a94a6; /* Tertiary captions & notes */
   --text-accent: #38bdf8;
 
   /* Brand & Status Accents */
@@ -91,6 +91,7 @@
 
   /* Typography */
   --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --serif: "Newsreader", Georgia, "Times New Roman", serif;
   --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
   --fs-micro: 0.6875rem;
   --fs-sm: 0.8125rem;
