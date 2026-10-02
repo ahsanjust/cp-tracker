@@ -1,9 +1,9 @@
 # Competitive Programming Solved Hub ⚡
 
-> **Dynamic real-time problem-solving portfolio tracking 5,737 problems solved across 14 judge accounts — at least 5,154 of them distinct.**
+> **Dynamic real-time problem-solving portfolio tracking 5,748 problems solved across 14 judge accounts — at least 5,165 of them distinct.**
 
 [![Live Demo](https://img.shields.io/badge/Live_Demo-ahsanjust.github.io/cp--tracker-blue?style=for-the-badge&logo=githubpages&logoColor=white)](https://ahsanjust.github.io/cp-tracker/)
-[![Total Solved](https://img.shields.io/badge/Problems_Solved-5737%2B-emerald?style=for-the-badge&logo=codeforces&logoColor=white)](https://ahsanjust.github.io/cp-tracker/)
+[![Total Solved](https://img.shields.io/badge/Problems_Solved-5748%2B-emerald?style=for-the-badge&logo=codeforces&logoColor=white)](https://ahsanjust.github.io/cp-tracker/)
 [![LeetCode Guardian](https://img.shields.io/badge/LeetCode-Guardian_2142-amber?style=for-the-badge&logo=leetcode&logoColor=white)](https://leetcode.com/u/Ahsanul_haque_/)
 [![Codeforces Expert](https://img.shields.io/badge/Codeforces-Expert_1774-blue?style=for-the-badge&logo=codeforces&logoColor=white)](https://codeforces.com/profile/Ahsan_)
 
@@ -28,14 +28,14 @@
 
 | Platform | Handle | Solved Count | Rating / Rank | Status |
 | :--- | :--- | :--- | :--- | :--- |
-| **Codeforces** | [`Ahsan_`](https://codeforces.com/profile/Ahsan_) | **3,202** | 1774 (Expert) | Live REST API |
+| **Codeforces** | [`Ahsan_`](https://codeforces.com/profile/Ahsan_) | **3,203** | 1774 (Expert) | Live REST API |
 | **Virtual Judge** | [`Ahsan_`](https://vjudge.net/user/Ahsan_) | **583** | 21 Sub-Judges | Live REST API |
 | **LeetCode** | [`Ahsanul_haque_`](https://leetcode.com/u/Ahsanul_haque_/) | **378** | 2142 (Guardian) | GraphQL API |
 | **Toph** | [`AhSaN.x`](https://toph.co/u/AhSaN.x) | **364** | 364 Solved | Web Scraper / Sync |
 | **CodeChef** | [`ahsanul_haque`](https://www.codechef.com/users/ahsanul_haque) | **266** | 1900 (4★) | Web Scraper / Sync |
 | **CSES** | [`Ahsanul_Haque`](https://cses.fi/problemset/list/) | **262** | 262 Solved (65.5%) | Cached / Sync |
 | **AtCoder** | [`AHSANx`](https://atcoder.jp/users/AHSANx) | **149** | Rank 45,634 | Kenkoooo API |
-| **LightOJ** | [`ahsanul_haque99`](https://lightoj.com/user/ahsanul_haque99) | **206** | 181 ACs | Official REST API |
+| **LightOJ** | [`ahsanul_haque99`](https://lightoj.com/user/ahsanul_haque99) | **216** | 181 ACs | Official REST API |
 | **Beecrowd (URI)** | [`ahsanulhaque5588`](https://judge.beecrowd.com/en/profile/899745) | **118** | 316.60 Points (Top 4%) | Cached / Sync |
 | **Serious OJ** | [`_ahsan_`](https://serious-oj.com/user/_ahsan_) | **85** | Rating 650 (Expert) | Web Scraper / Sync |
 | **SPOJ** | [`ahsanul_haque`](https://www.spoj.com/users/ahsanul_haque/) | **68** | World Rank #5140 | Cached / Sync |
