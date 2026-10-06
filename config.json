@@ -48,7 +48,7 @@
       "name": "LeetCode",
       "handle": "Ahsanul_haque_",
       "profileUrl": "https://leetcode.com/u/Ahsanul_haque_/",
-      "solved": 378,
+      "solved": 379,
       "rating": 2142,
       "rank": "Guardian",
       "badge": "Guardian (Top 1.24%)",
@@ -59,7 +59,7 @@
       "icon": "lc",
       "breakdown": {
         "easy": 128,
-        "medium": 175,
+        "medium": 176,
         "hard": 75
       },
       "details": "Rating: 2142 \u2022 Top 1.24% worldwide \u2022 72 Hard solves"
@@ -114,7 +114,7 @@
       "handle": "AHSANx",
       "profileUrl": "https://atcoder.jp/users/AHSANx",
       "solved": 149,
-      "rank": "Rank 45,666",
+      "rank": "Rank 45,674",
       "badge": "148 Solved",
       "color": "#10B981",
       "accentColor": "#34D399",
@@ -128,8 +128,8 @@
       "name": "LightOJ",
       "handle": "ahsanul_haque99",
       "profileUrl": "https://lightoj.com/user/ahsanul_haque99",
-      "solved": 219,
-      "badge": "272 AC Submissions",
+      "solved": 230,
+      "badge": "284 AC Submissions",
       "color": "#6366F1",
       "accentColor": "#818CF8",
       "category": "national",
@@ -226,5 +226,5 @@
       "details": "Rating: 650 Expert \u2022 272 Submissions \u2022 89 Accepted \u2022 Band 500-700"
     }
   ],
-  "lastUpdated": "2026-10-05T00:30:05.947561+00:00"
+  "lastUpdated": "2026-10-06T00:27:50.739214+00:00"
 }
