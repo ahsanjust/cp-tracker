@@ -13,7 +13,7 @@
       "name": "Codeforces",
       "handle": "Ahsan_",
       "profileUrl": "https://codeforces.com/profile/Ahsan_",
-      "solved": 3203,
+      "solved": 3209,
       "rating": 1774,
       "rank": "Expert",
       "maxRating": 1774,
@@ -25,14 +25,14 @@
       "category": "competitive",
       "fetchType": "codeforces_api",
       "icon": "cf",
-      "details": "Current 1558 \u2022 Peak 1774 (Expert) \u2022 3,203 problems solved across official rounds & practice"
+      "details": "Current 1558 \u2022 Peak 1774 (Expert) \u2022 3,209 problems solved across official rounds & practice"
     },
     {
       "id": "vjudge",
       "name": "Virtual Judge",
       "handle": "Ahsan_",
       "profileUrl": "https://vjudge.net/user/Ahsan_",
-      "solved": 585,
+      "solved": 591,
       "rank": "National Contestant",
       "badge": "21 Sub-Judges",
       "color": "#EC4899",
@@ -48,7 +48,7 @@
       "name": "LeetCode",
       "handle": "Ahsanul_haque_",
       "profileUrl": "https://leetcode.com/u/Ahsanul_haque_/",
-      "solved": 379,
+      "solved": 380,
       "rating": 2142,
       "rank": "Guardian",
       "badge": "Guardian (Top 1.24%)",
@@ -59,7 +59,7 @@
       "icon": "lc",
       "breakdown": {
         "easy": 128,
-        "medium": 176,
+        "medium": 177,
         "hard": 75
       },
       "details": "Rating: 2142 \u2022 Top 1.24% worldwide \u2022 72 Hard solves"
@@ -114,7 +114,7 @@
       "handle": "AHSANx",
       "profileUrl": "https://atcoder.jp/users/AHSANx",
       "solved": 149,
-      "rank": "Rank 45,674",
+      "rank": "Rank 45,688",
       "badge": "148 Solved",
       "color": "#10B981",
       "accentColor": "#34D399",
@@ -128,8 +128,8 @@
       "name": "LightOJ",
       "handle": "ahsanul_haque99",
       "profileUrl": "https://lightoj.com/user/ahsanul_haque99",
-      "solved": 230,
-      "badge": "284 AC Submissions",
+      "solved": 231,
+      "badge": "285 AC Submissions",
       "color": "#6366F1",
       "accentColor": "#818CF8",
       "category": "national",
@@ -226,5 +226,5 @@
       "details": "Rating: 650 Expert \u2022 272 Submissions \u2022 89 Accepted \u2022 Band 500-700"
     }
   ],
-  "lastUpdated": "2026-10-06T00:27:50.739214+00:00"
+  "lastUpdated": "2026-10-07T00:28:53.678477+00:00"
 }
