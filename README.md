@@ -53,8 +53,6 @@
 - **Category filters**: contests & speed / interview & prep / national & archives, with counts computed from the data.
 - **Automated daily sync**: GitHub Actions runs daily at midnight UTC to query live APIs, update numbers, and redeploy.
 
-See [DESIGN.md](DESIGN.md) for the design system, the accessibility contract, and why each decision was made.
-
 ---
 
 ## 💻 Running Locally

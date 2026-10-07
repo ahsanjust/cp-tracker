@@ -121,13 +121,12 @@ def check(f):
     problems = []
     index = (ROOT / "index.html").read_text()
     readme = (ROOT / "README.md").read_text()
-    design = (ROOT / "DESIGN.md").read_text()
     for label, text in (("index.html", index), ("README.md", readme)):
         for want in (f["total_f"], f["distinct_f"]):
             if want not in text:
                 problems.append(f"{label} lacks {want}")
     for stale in ("5,629", "5,616", "5,033", "5,046", "Problems_Solved-5616"):
-        for label, text in (("index.html", index), ("README.md", readme), ("DESIGN.md", design)):
+        for label, text in (("index.html", index), ("README.md", readme)):
             if stale in text:
                 problems.append(f"{label} still contains stale {stale}")
     if f["stamp"] not in index or 'id="last-updated" datetime=' not in index:
