@@ -48,7 +48,7 @@
       "name": "LeetCode",
       "handle": "Ahsanul_haque_",
       "profileUrl": "https://leetcode.com/u/Ahsanul_haque_/",
-      "solved": 380,
+      "solved": 381,
       "rating": 2142,
       "rank": "Guardian",
       "badge": "Guardian (Top 1.24%)",
@@ -60,7 +60,7 @@
       "breakdown": {
         "easy": 128,
         "medium": 177,
-        "hard": 75
+        "hard": 76
       },
       "details": "Rating: 2142 \u2022 Top 1.24% worldwide \u2022 72 Hard solves"
     },
@@ -226,5 +226,5 @@
       "details": "Rating: 650 Expert \u2022 272 Submissions \u2022 89 Accepted \u2022 Band 500-700"
     }
   ],
-  "lastUpdated": "2026-10-07T00:28:53.678477+00:00"
+  "lastUpdated": "2026-10-07T01:51:06.071174+00:00"
 }
