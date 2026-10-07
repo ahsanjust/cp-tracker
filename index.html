@@ -400,15 +400,15 @@
         <div class="faq" aria-label="Verification questions">
           <details class="faq__row">
             <summary class="faq__q">How do I spot-check a number?</summary>
-            <p class="faq__a">Open any judge card and follow its outbound profile link, then compare the solve count on the live profile. Every card states its source — <a href="#judges">Live API, Profile sync or Snapshot</a> — so you know how the figure was read.</p>
+            <div class="faq__a"><p>Open any judge card and follow its outbound profile link, then compare the solve count on the live profile. Every card states its source — <a href="#judges">Live API, Profile sync or Snapshot</a> — so you know how the figure was read.</p></div>
           </details>
           <details class="faq__row">
             <summary class="faq__q">Why is the total an upper bound?</summary>
-            <p class="faq__a">Each judge counts its own account, so a problem solved on both Virtual Judge and its original judge is counted twice. Flip <a href="#judges">“Exclude Virtual Judge overlaps”</a> for the deduplicated figure; the <a href="#record">Method note</a> defines it.</p>
+            <div class="faq__a"><p>Each judge counts its own account, so a problem solved on both Virtual Judge and its original judge is counted twice. Flip <a href="#judges">“Exclude Virtual Judge overlaps”</a> for the deduplicated figure; the <a href="#record">Method note</a> defines it.</p></div>
           </details>
           <details class="faq__row">
             <summary class="faq__q">What is a snapshot, and how fresh is the data?</summary>
-            <p class="faq__a">A snapshot is a hand-checked figure stored in the repository between syncs. GitHub Actions refreshes daily at 00:00 UTC and on every deploy, and the <a href="#top">header timestamp</a> records the last successful verification.</p>
+            <div class="faq__a"><p>A snapshot is a hand-checked figure stored in the repository between syncs. GitHub Actions refreshes daily at 00:00 UTC and on every deploy, and the <a href="#top">header timestamp</a> records the last successful verification.</p></div>
           </details>
         </div>
       </section>

@@ -1310,6 +1310,81 @@
     if (button) button.addEventListener('click', syncLive);
   }
 
+  /* FAQ elegance: native <details> snaps open and shut, which reads as rude
+     next to the staged hero and eased hovers. With JS (and only when motion is
+     wanted) each toggle glides: the answer grows from 0 to its measured height
+     while fading and rising 6px into place, and collapses the same way. The
+     plus marker rotates into an × via CSS on [open]. Without JS, or under
+     reduced motion, the native instant toggle remains — content never depends
+     on the animation. */
+  const FAQ_EASE = 'cubic-bezier(0.16, 1, 0.3, 1)';
+  const FAQ_MS = 380;
+
+  function faqOpen(row, ans, body) {
+    row.dataset.animating = '1';
+    row.open = true;
+    const target = ans.offsetHeight;
+    ans.style.overflow = 'clip';
+    const grow = ans.animate(
+      [{ height: '0px', opacity: 0 }, { height: `${target}px`, opacity: 1 }],
+      { duration: FAQ_MS, easing: FAQ_EASE }
+    );
+    const rise = body.animate(
+      [{ transform: 'translateY(-6px)', opacity: 0 }, { transform: 'none', opacity: 1 }],
+      { duration: FAQ_MS, easing: FAQ_EASE }
+    );
+    Promise.all([grow.finished, rise.finished]).then(() => {
+      ans.style.overflow = '';
+      delete row.dataset.animating;
+    }).catch(() => {
+      ans.style.overflow = '';
+      delete row.dataset.animating;
+    });
+  }
+
+  function faqClose(row, ans, body) {
+    row.dataset.animating = '1';
+    const start = ans.offsetHeight;
+    ans.style.overflow = 'clip';
+    const shrink = ans.animate(
+      [{ height: `${start}px`, opacity: 1 }, { height: '0px', opacity: 0 }],
+      { duration: FAQ_MS, easing: FAQ_EASE }
+    );
+    const sink = body.animate(
+      [{ transform: 'none', opacity: 1 }, { transform: 'translateY(-6px)', opacity: 0 }],
+      { duration: FAQ_MS, easing: FAQ_EASE }
+    );
+    // The marker rotates back the moment [open] clears, so hold the close
+    // until the glide lands — then the × eases back to + on its own.
+    Promise.all([shrink.finished, sink.finished]).then(() => {
+      row.open = false;
+      ans.style.overflow = '';
+      delete row.dataset.animating;
+    }).catch(() => {
+      row.open = false;
+      ans.style.overflow = '';
+      delete row.dataset.animating;
+    });
+  }
+
+  function initFaq() {
+    const faq = document.querySelector('.faq');
+    if (!faq || reduceMotion()) return;
+    if (!('animate' in Element.prototype)) return;
+    faq.querySelectorAll('.faq__row').forEach((row) => {
+      const summary = row.querySelector('.faq__q');
+      const ans = row.querySelector('.faq__a');
+      const body = ans && ans.firstElementChild;
+      if (!summary || !ans || !body) return;
+      summary.addEventListener('click', (event) => {
+        event.preventDefault();
+        if (row.dataset.animating) return;
+        if (row.open) faqClose(row, ans, body);
+        else faqOpen(row, ans, body);
+      });
+    });
+  }
+
   async function init() {
     state.platforms = SNAPSHOT.platforms.map(normalize);
     state.updatedAt = SNAPSHOT.lastUpdated;
@@ -1321,6 +1396,7 @@
     initFilter();
     initDedup();
     initCopy();
+    initFaq();
     initSyncButton();
 
     // Wrapping changes which row a tab sits on and which bands can carry a label,

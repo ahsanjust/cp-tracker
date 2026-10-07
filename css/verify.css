@@ -150,14 +150,19 @@
   font-family: var(--mono);
   font-size: var(--fs-base);
   color: var(--text-3);
+  transition: transform 0.35s var(--ease-spring), color var(--transition-fast);
 }
 
 .faq__row[open] .faq__q::after {
-  content: "−";
+  transform: rotate(45deg);
   color: var(--accent);
 }
 
 .faq__a {
+  overflow: clip;
+}
+
+.faq__a > p {
   max-width: 70ch;
   padding-bottom: var(--s-4);
   font-size: var(--fs-sm);
