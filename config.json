@@ -32,7 +32,7 @@
       "name": "Virtual Judge",
       "handle": "Ahsan_",
       "profileUrl": "https://vjudge.net/user/Ahsan_",
-      "solved": 606,
+      "solved": 609,
       "rank": "National Contestant",
       "badge": "21 Sub-Judges",
       "color": "#EC4899",
@@ -48,7 +48,7 @@
       "name": "LeetCode",
       "handle": "Ahsanul_haque_",
       "profileUrl": "https://leetcode.com/u/Ahsanul_haque_/",
-      "solved": 388,
+      "solved": 389,
       "rating": 2142,
       "rank": "Guardian",
       "badge": "Guardian (Top 1.24%)",
@@ -59,7 +59,7 @@
       "icon": "lc",
       "breakdown": {
         "easy": 131,
-        "medium": 179,
+        "medium": 180,
         "hard": 78
       },
       "details": "Rating: 2142 \u2022 Top 1.24% worldwide \u2022 72 Hard solves"
@@ -114,7 +114,7 @@
       "handle": "AHSANx",
       "profileUrl": "https://atcoder.jp/users/AHSANx",
       "solved": 149,
-      "rank": "Rank 45,830",
+      "rank": "Rank 45,891",
       "badge": "148 Solved",
       "color": "#10B981",
       "accentColor": "#34D399",
@@ -128,8 +128,8 @@
       "name": "LightOJ",
       "handle": "ahsanul_haque99",
       "profileUrl": "https://lightoj.com/user/ahsanul_haque99",
-      "solved": 258,
-      "badge": "316 AC Submissions",
+      "solved": 269,
+      "badge": "328 AC Submissions",
       "color": "#6366F1",
       "accentColor": "#818CF8",
       "category": "national",
@@ -226,5 +226,5 @@
       "details": "Rating: 650 Expert \u2022 272 Submissions \u2022 89 Accepted \u2022 Band 500-700"
     }
   ],
-  "lastUpdated": "2026-10-17T00:23:56.029798+00:00"
+  "lastUpdated": "2026-10-18T00:26:42.532573+00:00"
 }
