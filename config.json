@@ -48,7 +48,7 @@
       "name": "LeetCode",
       "handle": "Ahsanul_haque_",
       "profileUrl": "https://leetcode.com/u/Ahsanul_haque_/",
-      "solved": 391,
+      "solved": 392,
       "rating": 2142,
       "rank": "Guardian",
       "badge": "Guardian (Top 1.24%)",
@@ -59,7 +59,7 @@
       "icon": "lc",
       "breakdown": {
         "easy": 132,
-        "medium": 180,
+        "medium": 181,
         "hard": 79
       },
       "details": "Rating: 2142 \u2022 Top 1.24% worldwide \u2022 72 Hard solves"
@@ -114,7 +114,7 @@
       "handle": "AHSANx",
       "profileUrl": "https://atcoder.jp/users/AHSANx",
       "solved": 149,
-      "rank": "Rank 45,920",
+      "rank": "Rank 45,932",
       "badge": "148 Solved",
       "color": "#10B981",
       "accentColor": "#34D399",
@@ -226,5 +226,5 @@
       "details": "Rating: 650 Expert \u2022 272 Submissions \u2022 89 Accepted \u2022 Band 500-700"
     }
   ],
-  "lastUpdated": "2026-10-21T00:23:23.305351+00:00"
+  "lastUpdated": "2026-10-22T00:24:14.773086+00:00"
 }
