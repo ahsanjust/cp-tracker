@@ -1,9 +1,9 @@
 # Competitive Programming Solved Hub ⚡
 
-> **Dynamic real-time problem-solving portfolio tracking 5,881 problems solved across 14 judge accounts — at least 5,272 of them distinct.**
+> **Dynamic real-time problem-solving portfolio tracking 5,882 problems solved across 14 judge accounts — at least 5,273 of them distinct.**
 
 [![Live Demo](https://img.shields.io/badge/Live_Demo-ahsanjust.github.io/cp--tracker-blue?style=for-the-badge&logo=githubpages&logoColor=white)](https://ahsanjust.github.io/cp-tracker/)
-[![Total Solved](https://img.shields.io/badge/Problems_Solved-5881%2B-emerald?style=for-the-badge&logo=codeforces&logoColor=white)](https://ahsanjust.github.io/cp-tracker/)
+[![Total Solved](https://img.shields.io/badge/Problems_Solved-5882%2B-emerald?style=for-the-badge&logo=codeforces&logoColor=white)](https://ahsanjust.github.io/cp-tracker/)
 [![LeetCode Guardian](https://img.shields.io/badge/LeetCode-Guardian_2142-amber?style=for-the-badge&logo=leetcode&logoColor=white)](https://leetcode.com/u/Ahsanul_haque_/)
 [![Codeforces Expert](https://img.shields.io/badge/Codeforces-Expert_1774-blue?style=for-the-badge&logo=codeforces&logoColor=white)](https://codeforces.com/profile/Ahsan_)
 
@@ -30,7 +30,7 @@
 | :--- | :--- | :--- | :--- | :--- |
 | **Codeforces** | [`Ahsan_`](https://codeforces.com/profile/Ahsan_) | **3,229** | 1774 (Expert) | Live REST API |
 | **Virtual Judge** | [`Ahsan_`](https://vjudge.net/user/Ahsan_) | **609** | 21 Sub-Judges | Live REST API |
-| **LeetCode** | [`Ahsanul_haque_`](https://leetcode.com/u/Ahsanul_haque_/) | **393** | 2142 (Guardian) | GraphQL API |
+| **LeetCode** | [`Ahsanul_haque_`](https://leetcode.com/u/Ahsanul_haque_/) | **394** | 2142 (Guardian) | GraphQL API |
 | **Toph** | [`AhSaN.x`](https://toph.co/u/AhSaN.x) | **364** | 364 Solved | Web Scraper / Sync |
 | **CodeChef** | [`ahsanul_haque`](https://www.codechef.com/users/ahsanul_haque) | **272** | 1900 (4★) | Web Scraper / Sync |
 | **CSES** | [`Ahsanul_Haque`](https://cses.fi/problemset/list/) | **262** | 262 Solved (65.5%) | Cached / Sync |
