@@ -1,9 +1,9 @@
 # Competitive Programming Solved Hub ⚡
 
-> **Dynamic real-time problem-solving portfolio tracking 5,892 problems solved across 14 judge accounts — at least 5,283 of them distinct.**
+> **Dynamic real-time problem-solving portfolio tracking 5,897 problems solved across 14 judge accounts — at least 5,288 of them distinct.**
 
 [![Live Demo](https://img.shields.io/badge/Live_Demo-ahsanjust.github.io/cp--tracker-blue?style=for-the-badge&logo=githubpages&logoColor=white)](https://ahsanjust.github.io/cp-tracker/)
-[![Total Solved](https://img.shields.io/badge/Problems_Solved-5892%2B-emerald?style=for-the-badge&logo=codeforces&logoColor=white)](https://ahsanjust.github.io/cp-tracker/)
+[![Total Solved](https://img.shields.io/badge/Problems_Solved-5897%2B-emerald?style=for-the-badge&logo=codeforces&logoColor=white)](https://ahsanjust.github.io/cp-tracker/)
 [![LeetCode Guardian](https://img.shields.io/badge/LeetCode-Guardian_2142-amber?style=for-the-badge&logo=leetcode&logoColor=white)](https://leetcode.com/u/Ahsanul_haque_/)
 [![Codeforces Expert](https://img.shields.io/badge/Codeforces-Expert_1774-blue?style=for-the-badge&logo=codeforces&logoColor=white)](https://codeforces.com/profile/Ahsan_)
 
@@ -28,7 +28,7 @@
 
 | Platform | Handle | Solved Count | Rating / Rank | Status |
 | :--- | :--- | :--- | :--- | :--- |
-| **Codeforces** | [`Ahsan_`](https://codeforces.com/profile/Ahsan_) | **3,235** | 1774 (Expert) | Live REST API |
+| **Codeforces** | [`Ahsan_`](https://codeforces.com/profile/Ahsan_) | **3,240** | 1774 (Expert) | Live REST API |
 | **Virtual Judge** | [`Ahsan_`](https://vjudge.net/user/Ahsan_) | **609** | 21 Sub-Judges | Live REST API |
 | **LeetCode** | [`Ahsanul_haque_`](https://leetcode.com/u/Ahsanul_haque_/) | **396** | 2142 (Guardian) | GraphQL API |
 | **Toph** | [`AhSaN.x`](https://toph.co/u/AhSaN.x) | **364** | 364 Solved | Web Scraper / Sync |
